@@ -6,6 +6,7 @@ public class Pruebas : MonoBehaviour
 {
     public float speed = 10f; // Velocidad de movimiento del objeto
     public float friction = 5f; // Fuerza de rozamiento del objeto
+    public AudioSource audioSource;
 
     private Rigidbody rb;
 
@@ -26,6 +27,10 @@ public class Pruebas : MonoBehaviour
         // Movimiento vertical del objeto
         float vertical = Input.GetAxis("Vertical");
         rb.AddForce(Vector3.forward * vertical * speed, ForceMode.Force);
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        audioSource.Play();
     }
 
 }
