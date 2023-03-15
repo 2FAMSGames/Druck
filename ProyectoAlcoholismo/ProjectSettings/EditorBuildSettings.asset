@@ -5,7 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/StartScreen.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Minigames/Patonary/Patonary.unity
+    guid: e224279bcb66b5a4d810450f700887cc
+  m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 5ee3e3709f127a2459ad3b0d3693fbc6, type: 2}
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: 0b7325a18a4de7b4faefe1867e6c57b5, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 901172322cdbbce499dd7de9584cf9b1, type: 2}
