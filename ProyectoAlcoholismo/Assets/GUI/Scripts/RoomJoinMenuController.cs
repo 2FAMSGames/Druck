@@ -55,6 +55,7 @@ public class RoomJoinMenuController : MonoBehaviour {
         }
         roomNameField.labelElement.style.color = Color.black;
 
+        GameState.Instance.myPlayerName = playerNameField.text;
         GameState.Instance.JoinRoom(roomNameField.text);
         
         // TODO

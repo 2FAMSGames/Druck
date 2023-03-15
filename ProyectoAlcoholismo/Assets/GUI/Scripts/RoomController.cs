@@ -25,9 +25,9 @@ public class RoomController : MonoBehaviour
         goBackButton = doc.rootVisualElement.Q<Button>("GoBackButton");
         goBackButton.clicked += GoBackButtonOnClicked;
 
-        playerList = doc.rootVisualElement.Q<ListView>("PlayerList");
-        var playerListController = new PlayerListController();
-        playerListController.InitPlayerList(listEntryTemplate, playerList);
+        //playerList = doc.rootVisualElement.Q<ListView>("PlayerList");
+        //var playerListController = new PlayerListController();
+        //playerListController.InitPlayerList(listEntryTemplate, playerList);
     }
 
     private void GoBackButtonOnClicked()

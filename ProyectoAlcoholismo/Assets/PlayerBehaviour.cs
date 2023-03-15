@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Numerics;
 using Fusion;
-using UnityEngine;
+using Unity.VisualScripting;
+using Debug = UnityEngine.Debug;
 using Vector3 = UnityEngine.Vector3;
 
 public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
@@ -17,6 +19,9 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     [Networked(OnChanged = nameof(OnPlayerColorChanged))]
     public Vector3 playerColor { get; set; }
 
+    [Networked(OnChanged = nameof(OnPlayerTimeChanged))]
+    public float playerTime { get; set; }
+    
     public string playerId { get; private set; }
     
     private void Awake()
@@ -28,27 +33,27 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     {
         this.playerName = GameState.Instance.myPlayerName;
         this.playerId = GameState.Instance.uniqueID;
-        this.playerColor = GameState.Instance.myPlayerColor;
         this.playerScore = 100;
+        this.playerTime = 0;
+        this.playerColor = new Vector3(1, 1, 1);
         
         // --- Client
         // Find the local non-networked PlayerData to read the data and communicate it to the Host via a single RPC 
         if (Object.HasInputAuthority)
         {
-            Debug.Log("enter client");
             RpcSetPlayerName(this.playerName);
             RpcSetPlayerColor(this.playerColor);
+            RpcSetPlayerScore(this.playerScore);
+            RpcSetPlayerTime(this.playerTime);
+            RpcSetPlayerId(this.playerId);
         }
 
         // --- Host
         // Initialized game specific settings
         if (Object.HasStateAuthority)
         {
-            Debug.Log("enter host");
             GameState.Instance.AddPlayer(this.playerName, this);
         }
-        
-        Debug.Log("Player " + playerName + " spawned");
     }
 
     public override void Despawned(NetworkRunner runner, bool hasState)
@@ -66,32 +71,27 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     public override void FixedUpdateNetwork()
     {
         // Get input and apply to the object.
-        //if (GetInput(out NetworkInputData data))
-        //{
-        //    data.direction.Normalize();
-        //    _cc.Move(5*data.direction*Runner.DeltaTime);
-        //}
+        // Para el juego del huevo.
     }
 
     public static void OnPlayerNameChanged(Changed<PlayerBehaviour> changedInfo)
     {
-        // Update local objects with the new name.
         Debug.Log(changedInfo.Behaviour.playerName + " OnPLayerNameChanged");
-        //changedInfo.Behaviour.playerName
     }
     
     public static void OnPlayerScoreChanged(Changed<PlayerBehaviour> changedInfo)
     {
-        // Update local objects with the new score
         Debug.Log(changedInfo.Behaviour.playerName + " OnPlayerScoreChanged");
-        //changedInfo.Behaviour.playerScore
     }
     
     public static void OnPlayerColorChanged(Changed<PlayerBehaviour> changedInfo)
     {
-        // Update local objects with the new color.
         Debug.Log(changedInfo.Behaviour.playerName + " OnPLayerColorChanged");
-        //changedInfo.Behaviour.playerColor
+    }
+
+    public static void OnPlayerTimeChanged(Changed<PlayerBehaviour> changedInfo)
+    {
+        Debug.Log(changedInfo.Behaviour.playerName + " OnPlayerTimeChanged");
     }
 
     public int CompareTo(PlayerBehaviour other)
@@ -108,18 +108,33 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     {
         if (string.IsNullOrEmpty(name)) return;
         Debug.Log("Player " + playerName + " received new name " + name);
-        playerName = name;
+        this.playerName = name;
     }
     
+    [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
     private void RpcSetPlayerColor(Vector3 color)
     {
         Debug.Log("Player " + playerName + " received color " + color.ToString());
-        playerColor = color;
+        this.playerColor = color;
     }
     
+    [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
     private void RpcSetPlayerScore(int score)
     {
         Debug.Log("Player " + playerName + " received score " + score);
-        playerScore = score;
+        this.playerScore = score;
+    }
+    
+    [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
+    private void RpcSetPlayerTime(float time)
+    {
+        Debug.Log("Player " + playerName + " received score " + time);
+        this.playerTime = time;
+    }
+    
+    [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
+    private void RpcSetPlayerId(string id)
+    {
+        this.playerId = id;
     }
 }

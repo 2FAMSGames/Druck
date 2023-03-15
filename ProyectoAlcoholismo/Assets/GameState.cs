@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ExitGames.Client.Photon.StructWrapping;
 using Fusion;
 using Fusion.Sockets;
 using Unity.VisualScripting;
@@ -39,10 +40,14 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	// Global game state, include networked players.
 	// This should be Networked Behaviour and in another class.
     public Dictionary<string, PlayerBehaviour> GameplayState = new Dictionary<string, PlayerBehaviour>();
+    
 
+    [SerializeField] private NetworkPrefabRef _playerPrefab;
+    private Dictionary<PlayerRef, NetworkObject> _spawnedObjects = new Dictionary<PlayerRef, NetworkObject>();
+    
     private void Awake()
     {
-		if (Instance != null) { Destroy(gameObject); return; }
+	    if (Instance != null) { Destroy(gameObject); return; }
 		Instance = this;
 		
 		DontDestroyOnLoad(this);
@@ -127,7 +132,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
         {
             foreach(var p in GameplayState.Values)
             {
-                Debug.Log("Name: " + p.playerName + " - id: " + p.playerId + " - score: " + p.playerScore);
+                Debug.Log("Name: " + p.playerName + " - id: " + p.playerId + " - score: " + p.playerScore + " - time " + p.playerTime);
             }
         }
         Debug.Log("= GAME STATE DEBUG END ===");
@@ -240,31 +245,34 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	
 	public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
 	{
-		Debug.Log("OnPlayerJoined");
+		Debug.Log("OnPlayerJoined: valid ? " + player.IsValid);
+		Debug.Log(("Players in session: " + runner.ActivePlayers.Count()));
+
+		if(runner.LocalPlayer.PlayerId == player.PlayerId)
+			Debug.Log("soy yo");
+		
 		if (runner.IsServer)
 		{
 			// Spawn Player related things and store them
-
-			// NetworkObject networkPlayerObject = runner.Spawn(...
-			// networkSpawnedObj.Add(player, networkPlayerObject)
+			NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
+			_spawnedObjects.Add(player, networkPlayerObject);
 		}
 	}
 
 	public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
 	{
 		Debug.Log("OnPlayerLeft");
-		// Remove player spawned related things
 		
-		//if (_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
-		//{
-		//	runner.Despawn(networkObject);
-		//	networkSpawnedObj.Remove(player);
-		//}
+		if (_spawnedObjects.TryGetValue(player, out NetworkObject networkObject))
+		{
+			runner.Despawn(networkObject);
+			_spawnedObjects.Remove(player);
+		}
 	}
 
 	public void OnInput(NetworkRunner runner, NetworkInput input)
 	{
-		Debug.Log("OnInput");
+		//Debug.Log("OnInput");
 		
 		// Collects local input for network transmission to host, like this
 		//var data = new NetworkInputData();
@@ -283,7 +291,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void OnConnectedToServer(NetworkRunner runner)
 	{
-		Debug.Log("OnConnectedToServer");
+		Debug.Log("OnConnectedToServer" + runner.SessionInfo.ToString());
 	}
 
 	public void OnDisconnectedFromServer(NetworkRunner runner)
@@ -293,17 +301,17 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token)
 	{
-		Debug.Log("OnConnectRequest");
+		Debug.Log("OnConnectRequest" + request);
 	}
 
 	public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason)
 	{
-		Debug.Log("OnConnectFailed");
+		Debug.Log("OnConnectFailed, reason: " + reason.ToString());
 	}
 
 	public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message)
 	{
-		Debug.Log("OnUserSimulationMessage");
+		Debug.Log("OnUserSimulationMessage, message: " + message.ToString());
 	}
 
 	public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
