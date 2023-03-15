@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManagerController : MonoBehaviour
 {
+    [Header("Settings")]
     [SerializeField]
     int scoreToPassLevel = 3;
     [SerializeField]
@@ -17,7 +18,13 @@ public class GameManagerController : MonoBehaviour
     GameObject cupsContainer;
     CupsController cupsController;
 
+    [Header("Debug")]
+    [SerializeField]
+    bool scoreDebug = false;
+
+    [SerializeField]
     int score = 0;
+    [SerializeField]
     int currentLevel = 0;
     int nTotalLevels;
 
@@ -47,6 +54,9 @@ public class GameManagerController : MonoBehaviour
             }
             
         }
+
+
+        OnCupEnteredDebugCheck();
     }
 
     void SetupLevel(int levelIndex)
@@ -70,5 +80,14 @@ public class GameManagerController : MonoBehaviour
     {
         score++;
         StartCoroutine(slingshotController.ResetProjectileOnHit());
+    }
+
+    public void OnCupEnteredDebugCheck()
+    {
+        if (scoreDebug)
+        {
+            score++;
+            scoreDebug = false;
+        }
     }
 }

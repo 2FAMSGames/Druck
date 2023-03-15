@@ -255,7 +255,7 @@ GameObject:
   - component: {fileID: 919944602}
   m_Layer: 0
   m_Name: LeftWall
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -398,7 +398,7 @@ GameObject:
   - component: {fileID: 1083668395}
   m_Layer: 0
   m_Name: Top
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -594,7 +594,7 @@ GameObject:
   - component: {fileID: 1224883399}
   m_Layer: 0
   m_Name: FrontWall
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1058,6 +1058,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: de55530e10b72db46b3a430ec8992266, type: 2}
   slingshot: {fileID: 1282721397}
   cupsContainer: {fileID: 1296809922}
+  scoreDebug: 0
+  score: 0
+  currentLevel: 0
 --- !u!1001 &1817917756
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1125,6 +1128,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: tableCross
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 89e322df15a119a42b5f14f127b4e27b, type: 3}
+      propertyPath: m_TagString
+      value: Floor
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 89e322df15a119a42b5f14f127b4e27b, type: 3}
 --- !u!1 &1869401618
@@ -1136,6 +1143,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1869401619}
+  - component: {fileID: 1869401620}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -1163,6 +1171,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1869401620
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869401618}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1869502821
 GameObject:
   m_ObjectHideFlags: 0
@@ -1177,7 +1201,7 @@ GameObject:
   - component: {fileID: 1869502823}
   m_Layer: 0
   m_Name: RightWall
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

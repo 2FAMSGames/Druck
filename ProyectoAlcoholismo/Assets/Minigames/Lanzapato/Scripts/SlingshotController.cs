@@ -140,7 +140,7 @@ public class SlingshotController : MonoBehaviour
 
         projectileRigidbody.AddRelativeForce(forceDirection * forceVector);
 
-        StartCoroutine(ResetProjectileOnFail());
+        //StartCoroutine(ResetProjectileOnFail());
     }
 
     //Wait times serializable?
