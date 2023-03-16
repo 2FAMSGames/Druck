@@ -23,9 +23,9 @@ public class GameManagerController : MonoBehaviour
     bool scoreDebug = false;
 
     [SerializeField]
-    int score = 0;
+    public int score = 0;
     [SerializeField]
-    int currentLevel = 0;
+    public int currentLevel = 0 ;
     int nTotalLevels;
 
     // Start is called before the first frame update
