@@ -350,7 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea34d89a7a4b0524aa0d40b1b6b382ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apuestasObject: {fileID: 0}
+  apuestasController: {fileID: 0}
 --- !u!1 &1107812569
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,4 +412,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea34d89a7a4b0524aa0d40b1b6b382ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  apuestasObject: {fileID: 994539249}
+  apuestasController: {fileID: 0}
