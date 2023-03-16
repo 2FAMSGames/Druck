@@ -21,8 +21,11 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
 
     [Networked(OnChanged = nameof(OnPlayerTimeChanged))]
     public float playerTime { get; set; }
-    
+
     public string playerId { get; private set; }
+    
+    [Networked(OnChanged = nameof(OnReadyChanged))]
+    public NetworkBool isReady { get; set; }
     
     private void Awake()
     {
@@ -36,6 +39,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
         this.playerScore = 100;
         this.playerTime = 0;
         this.playerColor = new Vector3(1, 1, 1);
+        this.isReady = false;
         
         // --- Client
         // Find the local non-networked PlayerData to read the data and communicate it to the Host via a single RPC 
@@ -46,13 +50,14 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
             RpcSetPlayerScore(this.playerScore);
             RpcSetPlayerTime(this.playerTime);
             RpcSetPlayerId(this.playerId);
+            RpcSetPlayerReady(this.isReady);
         }
 
         // --- Host
         // Initialized game specific settings
         if (Object.HasStateAuthority)
         {
-            GameState.Instance.AddPlayer(this.playerName, this);
+
         }
     }
 
@@ -63,8 +68,6 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
         // Initialized game specific settings
         if (Object.HasStateAuthority)
         {
-            // Things to do when this object despawns.
-            GameState.Instance.RemovePlayer(this.playerName);
         }
     }
     
@@ -76,22 +79,27 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
 
     public static void OnPlayerNameChanged(Changed<PlayerBehaviour> changedInfo)
     {
-        Debug.Log(changedInfo.Behaviour.playerName + " OnPLayerNameChanged");
+        Debug.Log(changedInfo.Behaviour.playerName + " OnPLayerNameChanged to " + changedInfo.Behaviour.playerName);
     }
     
     public static void OnPlayerScoreChanged(Changed<PlayerBehaviour> changedInfo)
     {
-        Debug.Log(changedInfo.Behaviour.playerName + " OnPlayerScoreChanged");
+        Debug.Log(changedInfo.Behaviour.playerName + " OnPlayerScoreChanged to " + changedInfo.Behaviour.playerScore);
     }
     
     public static void OnPlayerColorChanged(Changed<PlayerBehaviour> changedInfo)
     {
-        Debug.Log(changedInfo.Behaviour.playerName + " OnPLayerColorChanged");
+        Debug.Log(changedInfo.Behaviour.playerName + " OnPLayerColorChanged to " + changedInfo.Behaviour.playerColor);
     }
 
     public static void OnPlayerTimeChanged(Changed<PlayerBehaviour> changedInfo)
     {
-        Debug.Log(changedInfo.Behaviour.playerName + " OnPlayerTimeChanged");
+        Debug.Log(changedInfo.Behaviour.playerName + " OnPlayerTimeChanged to " + changedInfo.Behaviour.playerTime);
+    }
+
+    public static void OnReadyChanged(Changed<PlayerBehaviour> changedInfo)
+    {
+        Debug.Log(changedInfo.Behaviour.playerName + " OnReadyChanged to " + changedInfo.Behaviour.isReady);
     }
 
     public int CompareTo(PlayerBehaviour other)
@@ -128,7 +136,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
     private void RpcSetPlayerTime(float time)
     {
-        Debug.Log("Player " + playerName + " received score " + time);
+        Debug.Log("Player " + playerName + " received time " + time);
         this.playerTime = time;
     }
     
@@ -136,5 +144,11 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     private void RpcSetPlayerId(string id)
     {
         this.playerId = id;
+    }
+
+    private void RpcSetPlayerReady(NetworkBool ready)
+    {
+        Debug.Log("Player " + playerName + " ready ? " + ready);
+        this.isReady = ready;
     }
 }

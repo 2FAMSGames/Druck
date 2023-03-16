@@ -7,6 +7,7 @@ using ExitGames.Client.Photon.StructWrapping;
 using Fusion;
 using Fusion.Sockets;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class GameState : MonoBehaviour, INetworkRunnerCallbacks
@@ -14,11 +15,9 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
     // singleton
     public static GameState Instance { get; private set; }
     
-    // Local player data
+    // Local player data, not networked
     public string uniqueID = Utils.StringUtils.generateRandomString();
-    public string myPlayerName = "Nonamed";
-    public int myPlayerScore = 100;
-    public Vector3 myPlayerColor = new Vector3(1.0f, 1.0f, 1.0f);
+    public string myPlayerName = "No-named";
 
     // possible, not used right now
     public Action<ulong> OnClientConnectedCallback;
@@ -39,16 +38,20 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
     
 	// Global game state, include networked players.
 	// This should be Networked Behaviour and in another class.
-    public Dictionary<string, PlayerBehaviour> GameplayState = new Dictionary<string, PlayerBehaviour>();
+    public Dictionary<int, PlayerBehaviour> GameplayState = new Dictionary<int, PlayerBehaviour>();
     
-
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     private Dictionary<PlayerRef, NetworkObject> _spawnedObjects = new Dictionary<PlayerRef, NetworkObject>();
+    
+    // Buffer do not generate network traffic unless they change value.
+    [Networked, Capacity(64), SerializeField] private NetworkArray<float> CommonArray { get; set; }
     
     private void Awake()
     {
 	    if (Instance != null) { Destroy(gameObject); return; }
 		Instance = this;
+
+		CommonArray = new NetworkArray<float>();
 		
 		DontDestroyOnLoad(this);
 		Debug.Log("GameState.Awake() -> player unique id: " + uniqueID);
@@ -69,56 +72,187 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	    StartCoroutine(JoinSessionRoutine(roomName, successCallback));
     }
 
-    public void AddPlayer(string playerName, PlayerBehaviour playerBehaviour)
+    public void AddPlayer(PlayerRef player, PlayerBehaviour playerBehaviour)
     {
-        if (GameplayState.ContainsKey(playerName)) return;
+        if (GameplayState.ContainsKey(player.PlayerId)) return;
 
-        GameplayState[playerName] = playerBehaviour;
+        GameplayState[player.PlayerId] = playerBehaviour;
     }
 
-    public void RemovePlayer(string playerName)
+    public void RemovePlayer(int playerNum)
     {
-        if (!GameplayState.ContainsKey(playerName)) return;
+        if (!GameplayState.ContainsKey(playerNum)) return;
 
-        if(!GameplayState[playerName].IsUnityNull())
-			Destroy(GameplayState[playerName]);
+        if(!GameplayState[playerNum].IsUnityNull())
+			Destroy(GameplayState[playerNum]);
         
-        GameplayState.Remove(playerName);
+        GameplayState.Remove(playerNum);
+    }
+    
+    public void RemovePlayer(string player)
+    {
+	    if (player.IsUnityNull()) return;
+	    
+	    if (GameplayState.Values.Any(x => x.playerName == player))
+	    {
+		    var key = GameplayState.FirstOrDefault(x => x.Value.playerName == player).Key;
+		    RemovePlayer(key);
+	    }
     }
 
-    public void modifyPlayerScore(string playerName, int score)
+    public void modifyPlayerScore(int playerNum, int valueToAdd)
     {
-        if (!GameplayState.ContainsKey(playerName)) return;
-        
-        var currentScore = GameplayState[playerName].playerScore + score;
-        currentScore = Math.Min(100, Math.Max(0, currentScore));
+	    if (!GameplayState.ContainsKey(playerNum)) return;
 
-        GameplayState[playerName].playerScore = currentScore;
+	    var currentScore = GameplayState[playerNum].playerScore + valueToAdd;
+	    currentScore = Math.Min(100, Math.Max(0, currentScore));
+
+	    GameplayState[playerNum].playerScore = currentScore;
+    }
+    
+    public void modifyPlayerScore(string playerName, int valueToAdd)
+    {
+	    if (playerName.IsUnityNull()) return;
+	    
+	    if (GameplayState.Values.Any(x => x.playerName == playerName))
+	    {
+		    var key = GameplayState.FirstOrDefault(x => x.Value.playerName == playerName).Key;
+		    modifyPlayerScore(key, valueToAdd);
+	    }
+    }
+
+    public void modifyPlayerColor(int playerNum, Vector3 color)
+    {
+	    if (!GameplayState.ContainsKey(playerNum)) return;
+
+	    GameplayState[playerNum].playerColor = color;
+    }
+    
+    public void modifyPlayerColor(string playerName, Vector3 color)
+    {
+	    if (playerName.IsUnityNull()) return;
+	    
+	    if (GameplayState.Values.Any(x => x.playerName == playerName))
+	    {
+		    var key = GameplayState.FirstOrDefault(x => x.Value.playerName == playerName).Key;
+		    modifyPlayerColor(key, color);
+	    }
+    }
+	    
+    public void modifyPlayerName(int playerNum, string newName)
+    {
+	    if (GameplayState.ContainsKey(playerNum))
+	    {
+		    GameplayState[playerNum].playerName = newName;
+	    }
     }
 
     public void modifyPlayerName(string oldName, string newName)
     {
-        if (!GameplayState.ContainsKey(oldName) || GameplayState.ContainsKey(newName)) return;
+	    if (GameplayState.Values.Any(x => x.playerName == oldName))
+	    {
+		    var key = GameplayState.FirstOrDefault(x => x.Value.playerName == oldName).Key;
+		    modifyPlayerName(key, newName);
+	    }
+    }
 
-        GameplayState[newName] = GameplayState[oldName];
-        GameplayState[oldName] = null;
-        GameplayState.Remove(oldName);
+    public void modifyPlayerTime(string playerName, float time)
+    {
+	    if (playerName.IsUnityNull()) return;
+	    
+	    if (GameplayState.Values.Any(x => x.playerName == playerName))
+	    {
+		    var key = GameplayState.FirstOrDefault(x => x.Value.playerName == playerName).Key;
+		    modifyPlayerTime(key, time);
+	    }
+    }
+
+    public void modifyPlayerTime(int playerNum, float time)
+    {
+	    if (GameplayState.ContainsKey(playerNum))
+	    {
+		    GameplayState[playerNum].playerTime = time;
+	    }
+    }
+
+    public void modifyPlayerReadyValue(int playerNum, bool ready)
+    {
+	    if (GameplayState.ContainsKey(playerNum))
+	    {
+		    GameplayState[playerNum].isReady = ready;
+	    }
+    }
+
+    public void modifyPlayerReadyValue(string playerName, bool ready)
+    {
+	    if (playerName.IsUnityNull()) return;
+	    
+	    if (GameplayState.Values.Any(x => x.playerName == playerName))
+	    {
+		    var key = GameplayState.FirstOrDefault(x => x.Value.playerName == playerName).Key;
+		    modifyPlayerReadyValue(key, ready);
+	    }
     }
     
-    List<PlayerBehaviour> getScores()
+    List<PlayerBehaviour> getGlobalScores()
     {
         var results = GameplayState.Values.ToList();
         results.Sort();
 
         return results;
     }
+
+    List<PlayerBehaviour> getTimesList()
+    {
+	    var results = GameplayState.Values.ToList();
+	    results.Sort(delegate(PlayerBehaviour x, PlayerBehaviour y)
+		    {
+			    if (x.playerTime < y.playerTime) return 1;
+			    if (x.playerTime > y.playerTime) return -1;
+			    return 0;
+		    }
+	    );
+
+	    return results;
+    }
 	
 	public void ResetScores()
 	{
 		foreach(var p in GameplayState.Values)
 		{
-			GameplayState[p.playerId].playerScore = 100;
+			p.playerScore = 100;
+			p.playerTime = 0;
 		}
+	}
+
+	public void modifyMyName(string newName)
+	{
+		modifyPlayerName(Runner.LocalPlayer.PlayerId, newName);
+	}
+
+	public void modifyMyTime(float time)
+	{
+		modifyPlayerTime(Runner.LocalPlayer.PlayerId, time);
+	}
+	
+	public void modifyMyScore(int valueToAdd)
+	{
+		modifyPlayerScore(Runner.LocalPlayer.PlayerId, valueToAdd);
+	}
+
+	public void modifyMyReadyValue(bool ready)
+	{
+		modifyPlayerReadyValue(Runner.LocalPlayer.PlayerId, ready);
+	}
+
+	public void modifyMyColor(Vector3 color)
+	{
+		modifyPlayerColor(Runner.LocalPlayer.PlayerId, color);
+	}
+
+	public void modifyCommonData(int key, float value)
+	{
+		this.CommonArray.Set(key, value);
 	}
 
     public void DebugPrint()
@@ -236,6 +370,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
 	{
 		Runner = null;
+		_spawnedObjects.Clear();
 		
 		if (shutdownReason != ShutdownReason.Ok)
 		{
@@ -247,14 +382,16 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	{
 		Debug.Log("OnPlayerJoined: valid ? " + player.IsValid);
 		Debug.Log(("Players in session: " + runner.ActivePlayers.Count()));
-
-		if(runner.LocalPlayer.PlayerId == player.PlayerId)
-			Debug.Log("soy yo");
 		
+		// if(runner.LocalPlayer.PlayerId == player.PlayerId)
+		// 	Debug.Log("soy yo");
+
 		if (runner.IsServer)
 		{
 			// Spawn Player related things and store them
 			NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
+			runner.SetPlayerObject(player, networkPlayerObject);
+			this.AddPlayer(player, networkPlayerObject.GetComponent<PlayerBehaviour>());
 			_spawnedObjects.Add(player, networkPlayerObject);
 		}
 	}
@@ -262,11 +399,15 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
 	{
 		Debug.Log("OnPlayerLeft");
-		
-		if (_spawnedObjects.TryGetValue(player, out NetworkObject networkObject))
+
+		if (runner.IsServer)
 		{
-			runner.Despawn(networkObject);
-			_spawnedObjects.Remove(player);
+			if (_spawnedObjects.TryGetValue(player, out NetworkObject networkObject))
+			{
+				this.RemovePlayer(player);
+				runner.Despawn(networkObject);
+				_spawnedObjects.Remove(player);
+			}
 		}
 	}
 
