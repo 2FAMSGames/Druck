@@ -31,6 +31,7 @@ public class RoomController : MonoBehaviour
         readyButton.clicked += ReadyButtonOnClicked;
 
         GameState.Instance.PlayerChangedScore += changedScore;
+        GameState.Instance.PlayerChangedData += changedData;
         
         //playerList = doc.rootVisualElement.Q<ListView>("PlayerList");
         //var playerListController = new PlayerListController();
@@ -50,8 +51,12 @@ public class RoomController : MonoBehaviour
         var score = GameState.GetMyPlayer().playerScore;
         var ready = GameState.GetMyPlayer().isReady;
         GameState.Instance.ModifyScore(score - 5);
+        GameState.GetMyPlayer().SetData(0, GameState.GetMyPlayer().data.Get(0) + 5);
         GameState.Instance.ModifyReadyFlag(!ready);
         GameState.Instance.DebugPrint();
+        var x = PlayerRegistry.Instance.SortedScores();
+        foreach(var x2 in x)
+            Debug.Log("- player " + x2.Item1 + " score " + x2.Item2);
     }
 
     private void changedScore(int id, int score)
@@ -61,5 +66,10 @@ public class RoomController : MonoBehaviour
         var playerData = GameState.GetPlayer(id);
         Debug.Log($"player {playerData.playerName} changed score to {score}");
         var allready = PlayerRegistry.AllReady;
+    }
+
+    private void changedData(int id, NetworkDictionary<int, float> data)
+    {
+        Debug.Log("player " + id + " changed data");
     }
 }

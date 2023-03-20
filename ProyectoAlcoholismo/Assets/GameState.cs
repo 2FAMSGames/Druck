@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
 using Unity.VisualScripting;
-using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public class GameState : MonoBehaviour, INetworkRunnerCallbacks
@@ -20,7 +19,10 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
     public int myPlayerNum;
 
     public static bool AllReady => PlayerRegistry.AllReady;
-    public static int CountPlayers => PlayerRegistry.CountPlayers;
+    public static int PlayerCount => PlayerRegistry.CountPlayers;
+    public static bool Connected => Instance != null && Instance.Runner != null;
+    public static bool isServer => Instance != null && Instance.Runner.IsServer;
+    
 
     // Eventos a los que conectarse:
     // 
@@ -29,6 +31,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
     public event Action<int, string> PlayerChangedName;
     public event Action<int, bool> PlayerChangedReady;
     public event Action<int, Vector3> PlayerChangedColor;
+    public event Action<int, NetworkDictionary<int,float>> PlayerChangedData;
     
     [SerializeField, ScenePath] string gameScene;
     
@@ -48,8 +51,6 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	    if (Instance != null) { Destroy(gameObject); return; }
 		Instance = this;
 
-		CommonArray = new NetworkArray<float>();
-		
 		DontDestroyOnLoad(this);
 		Debug.Log("GameState.Awake() -> player unique id: " + uniqueID);
     }
@@ -133,38 +134,38 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
     public void ModifyScore(int value)
     {
 	    value = Math.Min(100, Math.Max(0, value));
-	    PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetScore(value);
+	    GetMyPlayer().SetScore(value);
     }
 
     public void ModifyName(string myName)
     {
-	    PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetName(myName);
+	    GetMyPlayer().SetName(myName);
     }
 
     public void ModifyTime(float time)
     {
-	    PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetTime(time);
+	    GetMyPlayer().SetTime(time);
     }
 
     public void ModifyReadyFlag(bool flag)
     {
-	    PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetReady(flag);
+	    GetMyPlayer().SetReady(flag);
     }
 
     public void ModifyColor(Vector3 color)
     {
-	    PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetColor(color);
+	    GetMyPlayer().SetColor(color);
     }
     
-	public void ResetScores()
+	public void ResetPlayerScores()
 	{
-		PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetScore(100);
-		PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetTime(0);
+		GetMyPlayer().SetScore(100);
+		GetMyPlayer().SetTime(0);
 	}
 
-	public void ModifyCommonData(int key, float value)
+	public void ResetPlayerData()
 	{
-		this.CommonArray.Set(key, value);
+		GetMyPlayer().ResetData();
 	}
 
 	private void AddToEventCallbacks(in PlayerBehaviour p)
@@ -174,6 +175,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		p.ChangedReady += this.PlayerHasChangedReady;
 		p.ChangedScore += this.PlayerHasChangedScore;
 		p.ChangedTime += this.PlayerHasChangedTime;
+		p.ChangedData += this.PlayerHasChangedData;
 	}
 	
 	private void RemoveFromEventCallbacks(in PlayerBehaviour p)
@@ -183,6 +185,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		p.ChangedReady -= this.PlayerHasChangedReady;
 		p.ChangedScore -= this.PlayerHasChangedScore;
 		p.ChangedTime -= this.PlayerHasChangedTime;
+		p.ChangedData -= this.PlayerHasChangedData;
 	}
 
 	private void PlayerHasChangedTime(int id, float time)
@@ -208,6 +211,21 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	private void PlayerHasChangedReady(int id, bool ready)
 	{
 		PlayerChangedReady?.Invoke(id, ready);
+	}
+
+	private void PlayerHasChangedData(int id, NetworkDictionary<int,float> data)
+	{
+		PlayerChangedData?.Invoke(id, data);
+	}
+	
+	public List<Tuple<int,int>> SortedScores()
+	{
+		return PlayerRegistry.Instance.SortedScores();
+	}
+	
+	public List<Tuple<int,int>> SortedTimes()
+	{
+		return PlayerRegistry.Instance.SortedTimes();
 	}
 
     public void DebugPrint()
@@ -255,6 +273,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		{
 			GameMode = GameMode.Host,
 			SessionName = roomName,
+			PlayerCount = 16,
 			SceneManager = sceneManager
 		});
 		while (!task.IsCompleted)

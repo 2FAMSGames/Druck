@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Fusion;
-using Fusion.Collections;
 using Fusion.Sockets;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -55,6 +54,35 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
         }
     }
 
+    public List<Tuple<int, int>> SortedScores()
+    {
+        var result = new List<Tuple<int, int>>();
+
+        var values = this.ObjectByRef.OrderByDescending(kp => kp.Value.playerScore);
+        foreach (var val in values)
+        {
+            result.Add(new Tuple<int,int>(val.Key, val.Value.playerScore));
+        }
+
+        return result;
+    }
+    
+    public List<Tuple<int, int>> SortedTimes()
+    {
+        var result = new List<Tuple<int, int>>();
+
+        var values = this.ObjectByRef.OrderByDescending(kp => kp.Value.playerTime);
+        foreach (var val in values)
+        {
+            result.Add(new Tuple<int,int>(val.Key, val.Value.playerScore));
+        }
+
+        return result;
+    }
+
+
+    #region INetworkRunnerCallbacks
+
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) {}
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) {}
     public void OnInput(NetworkRunner runner, NetworkInput input) {}
@@ -71,4 +99,6 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
     public void OnSceneLoadDone(NetworkRunner runner){}
     public void OnSceneLoadStart(NetworkRunner runner) {}
+    
+    #endregion
 }

@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Fusion;
+using UnityEngine;
+using NetworkBehaviour = Fusion.NetworkBehaviour;
 using Vector3 = UnityEngine.Vector3;
 
 public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
@@ -14,23 +17,28 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     public event Action<int, Vector3> ChangedColor;
     public event Action<int, bool> ChangedReady;
     
+    public event Action<int, NetworkDictionary<int,float>> ChangedData;
+    
     [Networked(OnChanged = nameof(OnPlayerNameChanged))]
-    public string playerName { get; set; }
+    public string playerName { get; private set; }
     
     [Networked(OnChanged = nameof(OnPlayerScoreChanged))]
-    public int playerScore { get; set; }
+    public int playerScore { get; private set; }
     
     [Networked(OnChanged = nameof(OnPlayerColorChanged))]
-    public Vector3 playerColor { get; set; }
+    public Vector3 playerColor { get; private set; }
 
     [Networked(OnChanged = nameof(OnPlayerTimeChanged))]
-    public float playerTime { get; set; }
+    public float playerTime { get; private set; }
 
     [Networked(OnChanged = nameof(OnPlayerIdChanged))]
     public int playerId { get; private set; }
     
     [Networked(OnChanged = nameof(OnReadyChanged))]
-    public NetworkBool isReady { get; set; }
+    public NetworkBool isReady { get; private set; }
+    
+    [Networked(OnChanged = nameof(OnPlayerDataChanged)), Capacity(10)]
+    public NetworkDictionary<int, float> data { get; } = MakeInitializer(new Dictionary<int, float> {{ 0,0 } });
     
     private void Awake()
     {
@@ -56,6 +64,8 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
             RpcSetPlayerName(this.playerName);
             RpcSetPlayerColor(this.playerColor);
             RpcSetPlayerScore(this.playerScore);
+            
+            ResetData();
         }
     }
     
@@ -114,6 +124,25 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
             RpcSetPlayerTime(pTime);
         }
     }
+
+    public void SetData(int pos, float value)
+    {
+        if (Object.HasInputAuthority)
+        {
+            this.data.Set(pos, value);
+            RpcSetPlayerData(pos, value);
+        }
+    }
+
+    public void ResetData()
+    {
+        if (Object.HasInputAuthority)
+        {
+            this.data.Clear();
+            for (int i = 0; i < 10; ++i) this.data.Set(i, 0);
+            RpcSetPlayerData(0, 0);
+        }
+    }
    
     public override void FixedUpdateNetwork()
     {
@@ -150,6 +179,11 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     {
         // nothing
     }
+    
+    public static void OnPlayerDataChanged(Changed<PlayerBehaviour> changedInfo)
+    {
+        changedInfo.Behaviour.ChangedData?.Invoke(changedInfo.Behaviour.playerId, changedInfo.Behaviour.data);
+    }
 
     public int CompareTo(PlayerBehaviour other)
     {
@@ -160,40 +194,46 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     
     // RPCs used to send player information to the Host
     //
-    [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
+    [Fusion.Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
     private void RpcSetPlayerName(string name)
     {
         if (string.IsNullOrEmpty(name)) return;
         this.playerName = name;
     }
     
-    [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
+    [Fusion.Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
     private void RpcSetPlayerColor(Vector3 color)
     {
         this.playerColor = color;
     }
     
-    [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
+    [Fusion.Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
     private void RpcSetPlayerScore(int score)
     {
         this.playerScore = score;
     }
     
-    [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
+    [Fusion.Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
     private void RpcSetPlayerTime(float time)
     {
         this.playerTime = time;
     }
     
-    [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
+    [Fusion.Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
     private void RpcSetPlayerId(int id)
     {
         this.playerId = id;
     }
 
-    [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
+    [Fusion.Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
     private void RpcSetPlayerReady(NetworkBool ready)
     {
         this.isReady = ready;
+    }
+    
+    [Fusion.Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
+    private void RpcSetPlayerData(int pos, float value)
+    {
+        this.data.Set(pos, value);
     }
 }
