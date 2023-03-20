@@ -3,11 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ExitGames.Client.Photon.StructWrapping;
 using Fusion;
 using Fusion.Sockets;
 using Unity.VisualScripting;
-using UnityEditor;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public class GameState : MonoBehaviour, INetworkRunnerCallbacks
@@ -18,34 +17,32 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
     // Local player data, not networked
     public string uniqueID = Utils.StringUtils.generateRandomString();
     public string myPlayerName = "No-named";
+    public int myPlayerNum;
 
-    // possible, not used right now
-    public Action<ulong> OnClientConnectedCallback;
-    public Action<ulong> OnClientDisconnectedCallback;
-    public Func<ulong> OnMasterClientSwitchedCallback;
-    public Action StartHostCallback;
-    public Action StartClientCallback;
-    public Action RestoreHostCallback;
-    public Action RestoreClientCallback;
-	
+    public static bool AllReady => PlayerRegistry.AllReady;
+    public static int CountPlayers => PlayerRegistry.CountPlayers;
+
+    // Eventos a los que conectarse:
+    // 
+    public event Action<int, int> PlayerChangedScore;
+    public event Action<int, float> PlayerChangedTime;
+    public event Action<int, string> PlayerChangedName;
+    public event Action<int, bool> PlayerChangedReady;
+    public event Action<int, Vector3> PlayerChangedColor;
+    
     [SerializeField, ScenePath] string gameScene;
     
     // To be created on connection.
 	public NetworkRunner runnerPrefab;
-	public Fusion.NetworkObject managerPrefab;
+	public NetworkObject managerPrefab;
 	
 	public NetworkRunner Runner { get; private set; }
+
+	[SerializeField] private NetworkPrefabRef playerPrefab;
     
-	// Global game state, include networked players.
-	// This should be Networked Behaviour and in another class.
-    public Dictionary<int, PlayerBehaviour> GameplayState = new Dictionary<int, PlayerBehaviour>();
-    
-    [SerializeField] private NetworkPrefabRef _playerPrefab;
-    private Dictionary<PlayerRef, NetworkObject> _spawnedObjects = new Dictionary<PlayerRef, NetworkObject>();
-    
-    // Buffer do not generate network traffic unless they change value.
-    [Networked, Capacity(64), SerializeField] private NetworkArray<float> CommonArray { get; set; }
-    
+    private Dictionary<PlayerRef, NetworkObject> spawnedObjects = new Dictionary<PlayerRef, NetworkObject>();
+
+   
     private void Awake()
     {
 	    if (Instance != null) { Destroy(gameObject); return; }
@@ -62,197 +59,155 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		if (Instance == this) Instance = null;
 	}
 	
-	public void CreateRoom(string roomName, System.Action successCallback = null)
+	public static void Server_Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
+	{
+		if (runner.IsServer)
+		{
+			PlayerRegistry.Server_Add(runner, pRef, pObj);
+		}
+
+		if (!pObj.HasInputAuthority)
+		{
+			Instance.AddToEventCallbacks(pObj);
+		}
+	}
+	
+	public static void Server_Remove(NetworkRunner runner, PlayerRef pRef)
+	{
+		if(!pRef.IsValid) return;
+
+		if (pRef != runner.LocalPlayer)
+		{
+			Instance.RemoveFromEventCallbacks(GetPlayer(pRef));
+		}
+		
+		if (runner.IsServer)
+		{
+			PlayerRegistry.Server_Remove(runner, pRef);
+		}
+	}
+	
+	public static bool HasPlayer(PlayerRef pRef)
+	{
+		return PlayerRegistry.Instance.ObjectByRef.ContainsKey(pRef);
+	}
+	
+	public static bool HasPlayer(int id)
+	{
+		var value = PlayerRegistry.Instance.ObjectByRef.Where(s => s.Key.PlayerId == id);
+		return !value.IsUnityNull();
+	}
+	
+	public static PlayerBehaviour GetPlayer(PlayerRef pRef)
+	{
+		if (HasPlayer(pRef))
+			return PlayerRegistry.Instance.ObjectByRef.Get(pRef);
+		return null;
+	}
+
+	public static PlayerBehaviour GetPlayer(int id)
+	{
+		if (HasPlayer(id))
+		{
+			var value = PlayerRegistry.Instance.ObjectByRef.Where(s => s.Key.PlayerId == id);
+			return value.FirstOrDefault().Value;
+		}
+		return null;
+	}
+
+	public static PlayerBehaviour GetMyPlayer()
+	{
+		return PlayerRegistry.Instance.ObjectByRef.Get(Instance.Runner.LocalPlayer);
+	}
+	
+	public void CreateRoom(string roomName, Action successCallback = null)
 	{
 	    StartCoroutine(HostSessionRoutine(roomName, successCallback));
     }
 
-    public void JoinRoom(string roomName, System.Action successCallback = null)
+    public void JoinRoom(string roomName, Action successCallback = null)
     {
 	    StartCoroutine(JoinSessionRoutine(roomName, successCallback));
     }
 
-    public void AddPlayer(PlayerRef player, PlayerBehaviour playerBehaviour)
+    public void ModifyScore(int value)
     {
-        if (GameplayState.ContainsKey(player.PlayerId)) return;
-
-        GameplayState[player.PlayerId] = playerBehaviour;
+	    value = Math.Min(100, Math.Max(0, value));
+	    PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetScore(value);
     }
 
-    public void RemovePlayer(int playerNum)
+    public void ModifyName(string myName)
     {
-        if (!GameplayState.ContainsKey(playerNum)) return;
-
-        if(!GameplayState[playerNum].IsUnityNull())
-			Destroy(GameplayState[playerNum]);
-        
-        GameplayState.Remove(playerNum);
-    }
-    
-    public void RemovePlayer(string player)
-    {
-	    if (player.IsUnityNull()) return;
-	    
-	    if (GameplayState.Values.Any(x => x.playerName == player))
-	    {
-		    var key = GameplayState.FirstOrDefault(x => x.Value.playerName == player).Key;
-		    RemovePlayer(key);
-	    }
+	    PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetName(myName);
     }
 
-    public void modifyPlayerScore(int playerNum, int valueToAdd)
+    public void ModifyTime(float time)
     {
-	    if (!GameplayState.ContainsKey(playerNum)) return;
+	    PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetTime(time);
+    }
 
-	    var currentScore = GameplayState[playerNum].playerScore + valueToAdd;
-	    currentScore = Math.Min(100, Math.Max(0, currentScore));
+    public void ModifyReadyFlag(bool flag)
+    {
+	    PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetReady(flag);
+    }
 
-	    GameplayState[playerNum].playerScore = currentScore;
+    public void ModifyColor(Vector3 color)
+    {
+	    PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetColor(color);
     }
     
-    public void modifyPlayerScore(string playerName, int valueToAdd)
-    {
-	    if (playerName.IsUnityNull()) return;
-	    
-	    if (GameplayState.Values.Any(x => x.playerName == playerName))
-	    {
-		    var key = GameplayState.FirstOrDefault(x => x.Value.playerName == playerName).Key;
-		    modifyPlayerScore(key, valueToAdd);
-	    }
-    }
-
-    public void modifyPlayerColor(int playerNum, Vector3 color)
-    {
-	    if (!GameplayState.ContainsKey(playerNum)) return;
-
-	    GameplayState[playerNum].playerColor = color;
-    }
-    
-    public void modifyPlayerColor(string playerName, Vector3 color)
-    {
-	    if (playerName.IsUnityNull()) return;
-	    
-	    if (GameplayState.Values.Any(x => x.playerName == playerName))
-	    {
-		    var key = GameplayState.FirstOrDefault(x => x.Value.playerName == playerName).Key;
-		    modifyPlayerColor(key, color);
-	    }
-    }
-	    
-    public void modifyPlayerName(int playerNum, string newName)
-    {
-	    if (GameplayState.ContainsKey(playerNum))
-	    {
-		    GameplayState[playerNum].playerName = newName;
-	    }
-    }
-
-    public void modifyPlayerName(string oldName, string newName)
-    {
-	    if (GameplayState.Values.Any(x => x.playerName == oldName))
-	    {
-		    var key = GameplayState.FirstOrDefault(x => x.Value.playerName == oldName).Key;
-		    modifyPlayerName(key, newName);
-	    }
-    }
-
-    public void modifyPlayerTime(string playerName, float time)
-    {
-	    if (playerName.IsUnityNull()) return;
-	    
-	    if (GameplayState.Values.Any(x => x.playerName == playerName))
-	    {
-		    var key = GameplayState.FirstOrDefault(x => x.Value.playerName == playerName).Key;
-		    modifyPlayerTime(key, time);
-	    }
-    }
-
-    public void modifyPlayerTime(int playerNum, float time)
-    {
-	    if (GameplayState.ContainsKey(playerNum))
-	    {
-		    GameplayState[playerNum].playerTime = time;
-	    }
-    }
-
-    public void modifyPlayerReadyValue(int playerNum, bool ready)
-    {
-	    if (GameplayState.ContainsKey(playerNum))
-	    {
-		    GameplayState[playerNum].isReady = ready;
-	    }
-    }
-
-    public void modifyPlayerReadyValue(string playerName, bool ready)
-    {
-	    if (playerName.IsUnityNull()) return;
-	    
-	    if (GameplayState.Values.Any(x => x.playerName == playerName))
-	    {
-		    var key = GameplayState.FirstOrDefault(x => x.Value.playerName == playerName).Key;
-		    modifyPlayerReadyValue(key, ready);
-	    }
-    }
-    
-    List<PlayerBehaviour> getGlobalScores()
-    {
-        var results = GameplayState.Values.ToList();
-        results.Sort();
-
-        return results;
-    }
-
-    List<PlayerBehaviour> getTimesList()
-    {
-	    var results = GameplayState.Values.ToList();
-	    results.Sort(delegate(PlayerBehaviour x, PlayerBehaviour y)
-		    {
-			    if (x.playerTime < y.playerTime) return 1;
-			    if (x.playerTime > y.playerTime) return -1;
-			    return 0;
-		    }
-	    );
-
-	    return results;
-    }
-	
 	public void ResetScores()
 	{
-		foreach(var p in GameplayState.Values)
-		{
-			p.playerScore = 100;
-			p.playerTime = 0;
-		}
+		PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetScore(100);
+		PlayerRegistry.Instance.ObjectByRef.Get(Runner.LocalPlayer).SetTime(0);
 	}
 
-	public void modifyMyName(string newName)
-	{
-		modifyPlayerName(Runner.LocalPlayer.PlayerId, newName);
-	}
-
-	public void modifyMyTime(float time)
-	{
-		modifyPlayerTime(Runner.LocalPlayer.PlayerId, time);
-	}
-	
-	public void modifyMyScore(int valueToAdd)
-	{
-		modifyPlayerScore(Runner.LocalPlayer.PlayerId, valueToAdd);
-	}
-
-	public void modifyMyReadyValue(bool ready)
-	{
-		modifyPlayerReadyValue(Runner.LocalPlayer.PlayerId, ready);
-	}
-
-	public void modifyMyColor(Vector3 color)
-	{
-		modifyPlayerColor(Runner.LocalPlayer.PlayerId, color);
-	}
-
-	public void modifyCommonData(int key, float value)
+	public void ModifyCommonData(int key, float value)
 	{
 		this.CommonArray.Set(key, value);
+	}
+
+	private void AddToEventCallbacks(in PlayerBehaviour p)
+	{
+		p.ChangedColor += this.PlayerHasChangedColor;
+		p.ChangedName += this.PlayerHasChangedName;
+		p.ChangedReady += this.PlayerHasChangedReady;
+		p.ChangedScore += this.PlayerHasChangedScore;
+		p.ChangedTime += this.PlayerHasChangedTime;
+	}
+	
+	private void RemoveFromEventCallbacks(in PlayerBehaviour p)
+	{
+		p.ChangedColor -= this.PlayerHasChangedColor;
+		p.ChangedName -= this.PlayerHasChangedName;
+		p.ChangedReady -= this.PlayerHasChangedReady;
+		p.ChangedScore -= this.PlayerHasChangedScore;
+		p.ChangedTime -= this.PlayerHasChangedTime;
+	}
+
+	private void PlayerHasChangedTime(int id, float time)
+	{
+		PlayerChangedTime?.Invoke(id, time);
+	}
+	
+	private void PlayerHasChangedScore(int id, int score)
+	{
+		PlayerChangedScore?.Invoke(id, score);	
+	}
+	
+	private void PlayerHasChangedColor(int id, Vector3 color)
+	{
+		PlayerChangedColor?.Invoke(id, color);
+	}
+	
+	private void PlayerHasChangedName(int id, string playerName)
+	{
+		PlayerChangedName?.Invoke(id, playerName);
+	}
+
+	private void PlayerHasChangedReady(int id, bool ready)
+	{
+		PlayerChangedReady?.Invoke(id, ready);
 	}
 
     public void DebugPrint()
@@ -260,19 +215,22 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
         Debug.Log("= GAME STATE DEBUG ===");
         Debug.Log("Players:");
         
-        if(GameplayState.Count == 0)
+        if(Runner.IsUnityNull() || PlayerRegistry.Instance.ObjectByRef.Count == 0)
             Debug.Log("No players");
         else
         {
-            foreach(var p in GameplayState.Values)
+            foreach(var p in PlayerRegistry.Instance.ObjectByRef)
             {
-                Debug.Log("Name: " + p.playerName + " - id: " + p.playerId + " - score: " + p.playerScore + " - time " + p.playerTime);
+	            var pl = PlayerRegistry.Instance.ObjectByRef.Get(p.Key);
+                Debug.Log("Name: " + pl.playerName + " - id: " + p.Key.PlayerId + " - score: " +
+                          pl.playerScore + " - time " + pl.playerTime + " - ready " + pl.isReady + 
+                          " - color " + pl.playerColor);
             }
         }
         Debug.Log("= GAME STATE DEBUG END ===");
     }
     
-	IEnumerator HostSessionRoutine(string roomName, System.Action successCallback)
+	IEnumerator HostSessionRoutine(string roomName, Action successCallback)
 	{
 		if (!Runner)
 		{
@@ -292,7 +250,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		{
 			sceneManager = Runner.gameObject.AddComponent<NetworkSceneManagerDefault>();
 		}
-		
+		                   
 		Task<StartGameResult> task = Runner.StartGame(new StartGameArgs()
 		{
 			GameMode = GameMode.Host,
@@ -304,7 +262,6 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			yield return null;
 		}
 		StartGameResult result = task.Result;
-
 		if (result.Ok)
 		{
 			if (successCallback != null)
@@ -323,7 +280,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		}
 	}
 
-	IEnumerator JoinSessionRoutine(string roomName, System.Action successCallback)
+	IEnumerator JoinSessionRoutine(string roomName, Action successCallback)
 	{
 		if (Runner) Runner.Shutdown();
 		Runner = Instantiate(runnerPrefab);
@@ -331,7 +288,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		var sceneManager = Runner.GetComponents(typeof(MonoBehaviour)).OfType<INetworkSceneManager>().FirstOrDefault();
 		if (sceneManager == null)
 		{
-			sceneManager = Runner.gameObject.AddComponent<NetworkSceneManagerDefault>();
+		    sceneManager = Runner.gameObject.AddComponent<NetworkSceneManagerDefault>();
 		}
 
 		Task<StartGameResult> task = Runner.StartGame(new StartGameArgs()
@@ -369,8 +326,8 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
 	{
-		Runner = null;
-		_spawnedObjects.Clear();
+		Runner  = null;
+		spawnedObjects.Clear();
 		
 		if (shutdownReason != ShutdownReason.Ok)
 		{
@@ -380,33 +337,33 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	
 	public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
 	{
-		Debug.Log("OnPlayerJoined: valid ? " + player.IsValid);
-		Debug.Log(("Players in session: " + runner.ActivePlayers.Count()));
+		Debug.Log("OnPlayerJoined");
 		
-		// if(runner.LocalPlayer.PlayerId == player.PlayerId)
-		// 	Debug.Log("soy yo");
-
 		if (runner.IsServer)
 		{
 			// Spawn Player related things and store them
-			NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
+			NetworkObject networkPlayerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player);
+			networkPlayerObject.ReleaseStateAuthority();
 			runner.SetPlayerObject(player, networkPlayerObject);
-			this.AddPlayer(player, networkPlayerObject.GetComponent<PlayerBehaviour>());
-			_spawnedObjects.Add(player, networkPlayerObject);
+			spawnedObjects.Add(player, networkPlayerObject);
 		}
+		
+		DebugPrint();
 	}
 
 	public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
 	{
 		Debug.Log("OnPlayerLeft");
 
+		Instance.RemoveFromEventCallbacks(GetPlayer(player));
+		
 		if (runner.IsServer)
 		{
-			if (_spawnedObjects.TryGetValue(player, out NetworkObject networkObject))
+			if (spawnedObjects.TryGetValue(player, out NetworkObject networkObject))
 			{
-				this.RemovePlayer(player);
 				runner.Despawn(networkObject);
-				_spawnedObjects.Remove(player);
+				spawnedObjects.Remove(player);
+				Server_Remove(runner, player);
 			}
 		}
 	}
@@ -432,7 +389,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void OnConnectedToServer(NetworkRunner runner)
 	{
-		Debug.Log("OnConnectedToServer" + runner.SessionInfo.ToString());
+		Debug.Log("OnConnectedToServer" + runner.SessionInfo);
 	}
 
 	public void OnDisconnectedFromServer(NetworkRunner runner)

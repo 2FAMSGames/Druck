@@ -138,7 +138,6 @@ GameObject:
   - component: {fileID: 2686784920786591648}
   - component: {fileID: 2686784920786591647}
   - component: {fileID: 2686784920786591646}
-  - component: {fileID: 2686784920786591650}
   m_Layer: 0
   m_Name: PlayerPrefabFusion
   m_TagString: Untagged
@@ -185,7 +184,6 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 2686784920786591646}
-  - {fileID: 2686784920786591650}
   - {fileID: 2686784919388197219}
   SimulationBehaviours: []
 --- !u!143 &2686784920786591647
@@ -242,19 +240,3 @@ MonoBehaviour:
   rotationSpeed: 15
   _IsGrounded: 0
   _Velocity: {x: 0, y: 0, z: 0}
---- !u!114 &2686784920786591650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2686784920786591645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9511bf554f2f15b4ca683e7a3adee1cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _interpolationDataSource: 0
-  _playerName: 
-  _playerScore: 0
-  _playerColor: {x: 0, y: 0, z: 0}
