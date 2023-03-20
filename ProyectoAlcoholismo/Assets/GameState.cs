@@ -157,6 +157,11 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	    GetMyPlayer().SetColor(color);
     }
     
+	public void ModifyData(int pos, float value)
+	{
+		GetMyPlayer().SetData(pos, value);
+	}
+    
 	public void ResetPlayerScores()
 	{
 		GetMyPlayer().SetScore(100);
