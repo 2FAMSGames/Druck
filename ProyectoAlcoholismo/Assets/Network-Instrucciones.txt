@@ -107,3 +107,9 @@ Hay varios prefabs necasarios para Fusion:
     var x = PlayerRegistry.Instance.SortedScores();
     foreach(var x2 in x)
        Debug.Log("- player " + x2.Item1 + " score " + x2.Item2);
+	   
+	   
+Habrá que hacer modificaciones al todo el tema de 'qué pasa si alguien se cae durante el juego' y demás que se tendrán que resolver
+durante el testing. Si necesitáis cambios en el API por lo que sea me lo decís o lo hacéis, como os convenga. Todavía falta
+sincronización de objetos 3d que habrá que hacer el método OnInput de GameState, pero yo dejaría eso para la etapa de pulir, de
+momento que funcionen los juegos y luego ya añadiremos esas cosas.
