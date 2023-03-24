@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/GUI/MenuStyles.uss?fileID=7433441132597879392&amp;guid=61874ddc3b5661a48bfb874b3fa2c714&amp;type=3#MenuStyles" />
+    <ui:ListView focusable="true" name="PlayerList" />
+    <ui:VisualElement>
+        <ui:VisualElement>
+            <ui:Button text="Ready" display-tooltip-when-elided="true" name="ReadyButton" class="menu__button" />
+            <ui:Button text="Volver" display-tooltip-when-elided="true" name="GoBackButton" class="menu__button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

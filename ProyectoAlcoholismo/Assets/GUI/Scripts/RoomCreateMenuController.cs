@@ -9,6 +9,10 @@ public class RoomCreateMenuController : MonoBehaviour {
 
     private UIDocument doc;
     private Button goBackButton;
+    private Button createRoomButton;
+
+    private TextField playerNameField;
+    private TextField roomNameField;
 
     void OnEnable()
     {
@@ -18,10 +22,52 @@ public class RoomCreateMenuController : MonoBehaviour {
 
         goBackButton = doc.rootVisualElement.Q<Button>("GoBackButton");
         goBackButton.clicked += GoBackButtonOnClicked;
+
+        createRoomButton = doc.rootVisualElement.Q<Button>("CreateButton");
+        createRoomButton.clicked += CreateRoomButtonOnClicked;
+
+        roomNameField = doc.rootVisualElement.Q<TextField>("RoomName");
+        roomNameField.RegisterValueChangedCallback(OnEnterRoomName);
+
+        playerNameField = doc.rootVisualElement.Q<TextField>("PlayerName");
+        playerNameField.RegisterValueChangedCallback(OnEnterRoomName);
     }
 
-    private void GoBackButtonOnClicked() {
-        Debug.Log("Go back button clicked");
+    private void GoBackButtonOnClicked()
+    {
         menusController.GoToMainMenu();
+    }
+
+    private void CreateRoomButtonOnClicked()
+    {
+        if (string.IsNullOrEmpty(playerNameField.text))
+        {
+            playerNameField.labelElement.style.color = Color.red;
+            return;
+        }
+        playerNameField.labelElement.style.color = Color.black;
+
+        if (string.IsNullOrEmpty(roomNameField.text))
+        {
+            roomNameField.labelElement.style.color = Color.red;
+            return;
+        }
+        roomNameField.labelElement.style.color = Color.black;
+        
+        GameState.Instance.myPlayerName = playerNameField.text;
+        GameState.Instance.CreateRoom(roomNameField.text);
+        
+        // TODO
+        menusController.GoToRoomMenu();
+    }
+
+    private void OnEnterRoomName(ChangeEvent<string> changeEvent)
+    {
+        menusController.ChangeNetworkRoomName(changeEvent.newValue);
+    }
+
+    private void OnEnterPlayerName(ChangeEvent<string> changeEvent)
+    {
+        menusController.ChangeNetworkPlayerName(changeEvent.newValue);
     }
 }

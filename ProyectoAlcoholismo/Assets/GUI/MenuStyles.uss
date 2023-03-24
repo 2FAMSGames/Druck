@@ -1,5 +1,5 @@
 .menu__button {
-    background-color: rgba(246, 185, 59, 255);
+    background-color: rgb(246, 185, 59);
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -15,5 +15,12 @@
     font-size: 24px;
     -unity-text-align: middle-center;
     -unity-font-style: bold;
-    color: rgba(0, 0, 0, 255);
+    color: rgb(0, 0, 0);
+}
+
+.menu__input-field > Label {
+    align-items: stretch;
+}
+
+.menu__input-field > #unity-text-input {
 }
