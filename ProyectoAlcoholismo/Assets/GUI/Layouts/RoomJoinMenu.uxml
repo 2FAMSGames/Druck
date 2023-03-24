@@ -1,7 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/MenuStyles.uss?fileID=7433441132597879392&amp;guid=61874ddc3b5661a48bfb874b3fa2c714&amp;type=3#MenuStyles" />
+    <Style src="project://database/Assets/GUI/MenuStyles.uss?fileID=7433441132597879392&amp;guid=61874ddc3b5661a48bfb874b3fa2c714&amp;type=3#MenuStyles" />
     <ui:VisualElement style="flex-grow: 1; justify-content: center; align-items: center;">
-        <ui:Label text="Join room menu" display-tooltip-when-elided="true" />
+        <ui:TextField picking-mode="Ignore" label="Player name" name="PlayerName" is-delayed="false" class="menu__input-field" style="width: 80%; flex-direction: column; margin-left: 10%; margin-right: 10%;" />
+        <ui:TextField picking-mode="Ignore" label="Room name" name="RoomName" is-delayed="false" class="menu__input-field" style="width: 80%; flex-direction: column; margin-left: 10%; margin-right: 10%;" />
+        <ui:Button text="Join" display-tooltip-when-elided="true" name="JoinButton" class="menu__button" />
         <ui:Button text="Volver" display-tooltip-when-elided="true" name="GoBackButton" class="menu__button" />
     </ui:VisualElement>
 </ui:UXML>

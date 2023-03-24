@@ -1,7 +1,13 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class MainMenuController : MonoBehaviour {
+public class MainMenuController : MonoBehaviour
+{
+    private void Start()
+    {
+        GameState.Instance.DebugPrint();
+    }
 
     [SerializeField]
     private GameObject menusObject;
