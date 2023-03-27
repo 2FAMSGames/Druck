@@ -292,7 +292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 2cacc3b65d40b8c4695e99e8053bf5a9, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 8e43a7538bd24264fb6eccc21510c7ed, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 1ce167317d0e99b4c82b124d3834a890, type: 3}
   m_SortingOrder: 0
 --- !u!4 &667781656
 Transform:
@@ -605,7 +605,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1900405862}
   - component: {fileID: 1900405861}
-  - component: {fileID: 1900405860}
+  - component: {fileID: 1900405863}
   m_Layer: 0
   m_Name: HelpMenu
   m_TagString: Untagged
@@ -613,19 +613,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1900405860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1900405859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6772ce1b385dc88419c7d5479db67655, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menusObject: {fileID: 2116078372}
 --- !u!114 &1900405861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -640,7 +627,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelSettings: {fileID: 11400000, guid: 2cacc3b65d40b8c4695e99e8053bf5a9, type: 2}
   m_ParentUI: {fileID: 0}
-  sourceAsset: {fileID: 9197481963319205126, guid: 8e43a7538bd24264fb6eccc21510c7ed, type: 3}
+  sourceAsset: {fileID: 9197481963319205126, guid: 80d12c7663fd7034db6290f0a0942966, type: 3}
   m_SortingOrder: 0
 --- !u!4 &1900405862
 Transform:
@@ -657,6 +644,19 @@ Transform:
   m_Father: {fileID: 2116078373}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1900405863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900405859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee24e80f4d1f66e40afe79cb4e6a8203, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menusObject: {fileID: 2116078372}
 --- !u!1 &1925470607
 GameObject:
   m_ObjectHideFlags: 0

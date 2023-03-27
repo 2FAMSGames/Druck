@@ -18,6 +18,7 @@ public class HelpMenuController : MonoBehaviour {
 
         goBackButton = doc.rootVisualElement.Q<Button>("GoBackButton");
         goBackButton.clicked += GoBackButtonOnClicked;
+
     }
 
     private void GoBackButtonOnClicked()
