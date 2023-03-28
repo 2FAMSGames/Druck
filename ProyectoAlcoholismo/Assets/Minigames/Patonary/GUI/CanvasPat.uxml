@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Minigames/Patonary/GUI/PatonaryStyle.uss?fileID=7433441132597879392&amp;guid=e4f176ffcc4cde3419d40d833c491b88&amp;type=3#PatonaryStyle" />
+    <ui:VisualElement style="height: 1136px;">
+        <ui:Button text="HECHO" display-tooltip-when-elided="true" name="DoneButton" class="button_btn bttn" />
+        <ui:Label text="Tiempo" display-tooltip-when-elided="true" name="Timer" style="top: 36px; left: 24px;" />
+    </ui:VisualElement>
+</ui:UXML>

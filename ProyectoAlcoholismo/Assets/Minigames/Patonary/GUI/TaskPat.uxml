@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Minigames/Patonary/GUI/PatonaryStyle.uss?fileID=7433441132597879392&amp;guid=e4f176ffcc4cde3419d40d833c491b88&amp;type=3#PatonaryStyle" />
+    <ui:VisualElement class="background">
+        <ui:Label text="Pinta" display-tooltip-when-elided="true" class="main_text main_txt" style="font-size: 40px; flex-wrap: nowrap; white-space: normal;" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" name="RandomWord" class="regular_text" style="font-size: 20px; -unity-text-align: middle-center; top: 40%;" />
+        <ui:Button text="EMPEZAR" display-tooltip-when-elided="true" name="EmpezarButton" class="button_btn bttn btn" style="position: absolute; top: 75%; left: 17.5%; font-size: 18px; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0;" />
+    </ui:VisualElement>
+</ui:UXML>

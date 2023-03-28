@@ -21,14 +21,14 @@ public class WordsRand : MonoBehaviour
     
     };
 
-    void Start()
+    void Awake()
     {
         wordText.text = GetRandomWord();
     }
 
     public string GetRandomWord()
     {
-        rand_row_id = UnityEngine.Random.Range(0, 7);
+        rand_row_id = UnityEngine.Random.Range(0, 6);
         rand_col_id = UnityEngine.Random.Range(0, 4);
         string rand_word = all_words[rand_row_id, rand_col_id];
         return rand_word;

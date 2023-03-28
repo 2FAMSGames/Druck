@@ -12,18 +12,6 @@ public class DrawLine : MonoBehaviour
     public float BrushSize = 5f;
     public RenderTexture RTexture;
 
-    //private IEnumerator coroutine;
-
-    //private void Start()
-    //{
-    //    // Start function WaitAndPrint as a coroutine.
-
-    //    coroutine = WaitAndPrint(2.0f);
-    //    StartCoroutine(coroutine);
-
-    //    print("Before WaitAndPrint Finishes " + Time.time);
-    //}
-
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -52,23 +40,6 @@ public class DrawLine : MonoBehaviour
 
     }
 
-
-
-
-
-
-    //private IEnumerator WaitAndPrint(float waitTime)
-    //{
-    //    while (true)
-    //    {
-    //        yield return new WaitForSeconds(waitTime);
-    //        print("WaitAndPrint " + Time.time);
-    //    }
-    //}
-
-
-
-
     public void Save()
     {
         StartCoroutine(CoSave());
@@ -78,7 +49,8 @@ public class DrawLine : MonoBehaviour
     {
         //wait for rendering
         yield return new WaitForEndOfFrame();
-        Debug.Log(Application.dataPath + "/savedImage" + Random.Range(0, 4) + ".png");
+        //Debug.Log(Application.dataPath + "/savedImage.png");
+        //Debug.Log(Application.dataPath + "/savedImage" + Random.Range(0, 4) + ".png");
 
         //set active texture
         RenderTexture.active = RTexture;
@@ -89,8 +61,12 @@ public class DrawLine : MonoBehaviour
         texture2D.Apply();
 
         //write data to file
-        var data = texture2D.EncodeToPNG();
-        File.WriteAllBytes(Application.dataPath + "/savedImage" + Random.Range(0, 4) + ".png", data);
+        var Imagedata = texture2D.EncodeToPNG();
+        //File.WriteAllBytes(Application.dataPath + "/savedImage.png", Imagedata);
+        //File.WriteAllBytes(Application.dataPath + "/savedImage" + Random.Range(0, 4) + ".png", data);
 
+        // Store the byte array as a string in PlayerPrefs
+        string imageString = System.Convert.ToBase64String(Imagedata);
+        PlayerPrefs.SetString("TransferredImage", imageString);
     }
 }
