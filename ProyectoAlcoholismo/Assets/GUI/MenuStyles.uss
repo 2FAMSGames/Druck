@@ -38,3 +38,15 @@
     border-bottom-color: rgba(253, 188, 101, 0);
     color: rgb(255, 255, 255);
 }
+
+.text_title {
+    background-color: rgba(255, 255, 255, 0);
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    font-size: 22px;
+    border-left-color: rgba(255, 255, 255, 0);
+    border-right-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-bottom-color: rgba(255, 255, 255, 0);
+    -unity-text-outline-color: rgba(255, 255, 255, 255);
+}
