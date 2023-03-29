@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class RoomController : MonoBehaviour
@@ -18,6 +21,8 @@ public class RoomController : MonoBehaviour
     private Button readyButton;
     private ListView playerList;
 
+    private bool isLoaded = false;
+
     void OnEnable()
     {
         menusController = menusObject.GetComponent<MenusController>();
@@ -32,7 +37,7 @@ public class RoomController : MonoBehaviour
 
         GameState.Instance.PlayerChangedScore += changedScore;
         GameState.Instance.PlayerChangedData += changedData;
-        
+
         //playerList = doc.rootVisualElement.Q<ListView>("PlayerList");
         //var playerListController = new PlayerListController();
         //playerListController.InitPlayerList(listEntryTemplate, playerList);
@@ -57,6 +62,27 @@ public class RoomController : MonoBehaviour
         var x = PlayerRegistry.Instance.SortedScores();
         foreach(var x2 in x)
             Debug.Log("- player " + x2.Item1 + " score " + x2.Item2);
+        
+    }
+
+    private void Update()
+    {
+       if (!isLoaded && GameState.AllReady)
+        {
+            //StartCoroutine(LoadYourAsyncScene("AHuevo"));
+            StartCoroutine(LoadYourAsyncScene("AHuevo"));
+            
+            isLoaded = true;
+        }
+    }
+
+    IEnumerator LoadYourAsyncScene(string sceneName)
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("AHuevo");
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
     }
 
     private void changedScore(int id, int score)

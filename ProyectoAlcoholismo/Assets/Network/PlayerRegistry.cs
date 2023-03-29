@@ -80,6 +80,29 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
         return result;
     }
 
+    public List<Tuple<int, int>> AHuevoScores()
+    {
+        var result = new List<Tuple<int, int>>();
+  
+        var values = this.ObjectByRef.OrderByDescending(kp => kp.Value.data[0]);
+        foreach (var val in values)
+        {
+            result.Add(new Tuple<int, int>(val.Key, val.Value.playerScore));
+        }
+
+        return result;
+    }
+
+    public void generarLista()
+    {
+        var lista = AHuevoScores();
+        foreach(var v in lista)
+        {
+            Debug.Log("Player " + GameState.GetPlayer(v.Item1).playerName + " ha sacado " + v.Item2 + " puntos");
+        }
+    }
+
+
 
     #region INetworkRunnerCallbacks
 

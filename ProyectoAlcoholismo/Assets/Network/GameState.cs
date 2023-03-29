@@ -7,59 +7,63 @@ using Fusion;
 using Fusion.Sockets;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 {
-    // singleton
-    public static GameState Instance { get; private set; }
-    
-    // Local player data, not networked
-    public string uniqueID = Utils.StringUtils.generateRandomString();
-    public string myPlayerName = "No-named";
-    public int myPlayerNum;
+	// singleton
+	public static GameState Instance { get; private set; }
 
-    public static bool AllReady => PlayerRegistry.AllReady;
-    public static int PlayerCount => PlayerRegistry.CountPlayers;
-    public static bool Connected => Instance != null && Instance.Runner != null;
-    public static bool isServer => Instance != null && Instance.Runner.IsServer;
-    
+	// Local player data, not networked
+	public string uniqueID = Utils.StringUtils.generateRandomString();
+	public string myPlayerName = "No-named";
+	public int myPlayerNum;
+
+	public static bool AllReady => PlayerRegistry.AllReady;
+	public static int PlayerCount => PlayerRegistry.CountPlayers;
+	public static bool Connected => Instance != null && Instance.Runner != null;
+	public static bool isServer => Instance != null && Instance.Runner.IsServer;
+
+	[Networked(OnChanged = nameof(OnSceneChanged))]
+	int Scene { get; set; }
 
     // Eventos a los que conectarse:
     // 
     public event Action<int, int> PlayerChangedScore;
-    public event Action<int, float> PlayerChangedTime;
-    public event Action<int, string> PlayerChangedName;
-    public event Action<int, bool> PlayerChangedReady;
-    public event Action<int, Vector3> PlayerChangedColor;
-    public event Action<int, NetworkDictionary<int,float>> PlayerChangedData;
-    
+	public event Action<int, float> PlayerChangedTime;
+	public event Action<int, string> PlayerChangedName;
+	public event Action<int, bool> PlayerChangedReady;
+	public event Action<int, Vector3> PlayerChangedColor;
+	public event Action<int, NetworkDictionary<int, float>> PlayerChangedData;
+    //public event Action<int> SceneChanged;
+
     [SerializeField, ScenePath] string gameScene;
-    
-    // To be created on connection.
+
+	// To be created on connection.
 	public NetworkRunner runnerPrefab;
 	public NetworkObject managerPrefab;
-	
+
 	public NetworkRunner Runner { get; private set; }
 
 	[SerializeField] private NetworkPrefabRef playerPrefab;
-    
-    private Dictionary<PlayerRef, NetworkObject> spawnedObjects = new Dictionary<PlayerRef, NetworkObject>();
 
-   
-    private void Awake()
-    {
-	    if (Instance != null) { Destroy(gameObject); return; }
+	private Dictionary<PlayerRef, NetworkObject> spawnedObjects = new Dictionary<PlayerRef, NetworkObject>();
+
+
+	private void Awake()
+	{
+		if (Instance != null) { Destroy(gameObject); return; }
 		Instance = this;
 
 		DontDestroyOnLoad(this);
 		Debug.Log("GameState.Awake() -> player unique id: " + uniqueID);
-    }
-	
+	}
+
 	private void OnDestroy()
 	{
 		if (Instance == this) Instance = null;
 	}
-	
+
 	public static void Server_Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
 	{
 		if (runner.IsServer)
@@ -72,23 +76,38 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			Instance.AddToEventCallbacks(pObj);
 		}
 	}
-	
+
 	public static void Server_Remove(NetworkRunner runner, PlayerRef pRef)
 	{
-		if(!pRef.IsValid) return;
+		if (!pRef.IsValid) return;
 
 		if (pRef != runner.LocalPlayer)
 		{
 			Instance.RemoveFromEventCallbacks(GetPlayer(pRef));
 		}
-		
+
 		if (runner.IsServer)
 		{
 			PlayerRegistry.Server_Remove(runner, pRef);
 		}
 	}
-	
-	public static bool HasPlayer(PlayerRef pRef)
+
+	static public void OnSceneChanged(int changed)
+	{
+			
+	}
+
+
+    //IEnumerator LoadYourAsyncScene(string sceneName)
+    //{
+    //    AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
+    //    while (!asyncLoad.isDone)
+    //    {
+    //        yield return null;
+    //    }
+    //}
+
+    public static bool HasPlayer(PlayerRef pRef)
 	{
 		return PlayerRegistry.Instance.ObjectByRef.ContainsKey(pRef);
 	}

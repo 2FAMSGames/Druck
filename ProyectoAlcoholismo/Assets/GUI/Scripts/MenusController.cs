@@ -33,6 +33,24 @@ public class MenusController : MonoBehaviour
     void Start()
     {
         Invoke("EnablePanelAfterDelay", delayTime);
+        //GameState.Instance.SceneChanged += sceneChanged;
+    }
+
+    public void sceneChanged(int sceneNum)
+    {
+        if(sceneNum == 0)
+        {
+            mainMenu.SetActive(true);
+            return;
+        }
+
+        intro.SetActive(false);
+        mainMenu.SetActive(false);
+        roomCreateMenu.SetActive(false);
+        roomJoinMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+        helpMenu.SetActive(false);
+        roomMenu.SetActive(false);
     }
 
     void EnablePanelAfterDelay()
