@@ -18,6 +18,7 @@ public class MainMenuController : MonoBehaviour
     private Button joinRoomButton;
     private Button optionsButton;
     private Button exitButton;
+    private Button helpButton;
 
     void OnEnable() {
         menusController = menusObject.GetComponent<MenusController>();
@@ -33,8 +34,8 @@ public class MainMenuController : MonoBehaviour
         optionsButton = doc.rootVisualElement.Q<Button>("OptionsButton");
         optionsButton.clicked += OptionsButtonOnClicked;
 
-        exitButton = doc.rootVisualElement.Q<Button>("ExitButton");
-        exitButton.clicked += ExitButtonOnClicked;
+        helpButton = doc.rootVisualElement.Q<Button>("HelpButton");
+        helpButton.clicked += HelpButtonOnClicked;
     }
 
     private void CreateRoomButtonOnClicked() {
@@ -55,5 +56,10 @@ public class MainMenuController : MonoBehaviour
     private void ExitButtonOnClicked() {
         Debug.Log("Exit button clicked");
         Application.Quit();
+    }
+    private void HelpButtonOnClicked()
+    {
+        Debug.Log("Help button clicked");
+        menusController.GoToHelpMenu();
     }
 }
