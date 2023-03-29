@@ -13,12 +13,15 @@ public class EsperaController : MonoBehaviour
 
     void OnEnable()
     {
-        //TODO: linkar espera 
+        apuestasController = ApuestasObject.GetComponent<ApuestasController>();
+        doc = GetComponent<UIDocument>();
+        currentPlayer = doc.rootVisualElement.Q<Label>("CurrentPlayer");
+        currentPlayer.text = apuestasController.yourPlayer;
     }
 
     private void GoToList()
     {
-        Debug.Log("GoToNada, a esperar");
+        
         //apuestasController.GoTo("List");
         //apuestasController.GoTo("espera");
         //apuestasController.GoToMainMenu();
