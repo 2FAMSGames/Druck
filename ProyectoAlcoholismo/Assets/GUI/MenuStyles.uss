@@ -48,5 +48,6 @@
     border-right-color: rgba(255, 255, 255, 0);
     border-top-color: rgba(255, 255, 255, 0);
     border-bottom-color: rgba(255, 255, 255, 0);
-    -unity-text-outline-color: rgba(255, 255, 255, 255);
+    -unity-text-outline-color: rgb(255, 255, 255);
+    -unity-text-align: upper-center;
 }

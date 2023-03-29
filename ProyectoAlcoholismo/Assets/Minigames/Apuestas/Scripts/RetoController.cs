@@ -13,6 +13,9 @@ public class RetoController : MonoBehaviour
     private Button reto1;
     private Button reto2;
     private Button reto3;
+    public string yourPlayer = "Ana";
+    public string CurrentPlayer = "Ana";
+
 
     [CreateAssetMenu]
     public class Challenge : ScriptableObject
@@ -44,22 +47,33 @@ public class RetoController : MonoBehaviour
 
         reto1 = doc.rootVisualElement.Q<Button>("Reto1");
         reto1.text = getRandomObject(challengeList.Where(x => x.chPrize == 1).ToList()).chText;
-        reto1.clicked += GoToList;//TODO: pasarle una variable como current player
+        reto1.RegisterCallback<ClickEvent>(GoToList);
+
+        //reto1.clicked += new EventHandler(GoToList);//TODO: pasarle una variable como current player
 
         reto2 = doc.rootVisualElement.Q<Button>("Reto2");
         reto2.text = getRandomObject(challengeList.Where(x => x.chPrize == 2).ToList()).chText;
-        reto2.clicked += GoToList;//TODO: pasarle una variable como current player;
+        reto2.RegisterCallback<ClickEvent>(GoToList);
+        //reto2.clicked += GoToList;//TODO: pasarle una variable como current player;
 
         reto3 = doc.rootVisualElement.Q<Button>("Reto3");
         reto3.text = getRandomObject(challengeList.Where(x => x.chPrize == 3).ToList()).chText;
-        reto3.clicked += GoToList;//TODO: pasarle una variable como current player;
+        reto3.RegisterCallback<ClickEvent>(GoToList);
+        //reto3.clicked += GoToList;//TODO: pasarle una variable como current player;
     }
 
-    private void GoToList()
+    private void GoToList(ClickEvent evt)
     {
+        var targetBox = evt.target as Button;
+        apuestasController.challenge = targetBox.text;
         Debug.Log("GoToList");
         //apuestasController.GoTo("List");
-        apuestasController.GoTo("espera");
+        string screen = "espera";
+        if (apuestasController.yourPlayer == apuestasController.CurrentPlayer)
+        {
+            screen = "lista";
+        }
+        apuestasController.GoTo(screen);
         //apuestasController.GoToMainMenu();
     }
 

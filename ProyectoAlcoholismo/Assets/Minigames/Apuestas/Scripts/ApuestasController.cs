@@ -7,31 +7,40 @@ public class ApuestasController : MonoBehaviour
 {
 
     [SerializeField]
-    //private GameObject apuestasObject;
+    private GameObject apuestasObject;
     private ApuestasController apuestasController;
 
-    //private Label CurrentPlayer;
+    public string yourPlayer = "Ana";
+    public string CurrentPlayer = "Ana";
+    public string challengedPlayer = "";
+    public string challenge = "";
 
+    private bool yourTurn;
 
     [SerializeField]
     private GameObject retoScreen;
     [SerializeField]
     private GameObject esperaScreen;
-    //[SerializeField]
-    //private GameObject roomJoinMenu;
-    //[SerializeField]
-    //private GameObject settingsMenu;
+    [SerializeField]
+    private GameObject listaScreen;
+    [SerializeField]
+    private GameObject realizandoScreen;
 
     void OnEnable()
     {
-        retoScreen.GetComponent<RetoController>();
+
+        //retoScreen.GetComponent<RetoController>();
+        //esperaScreen.GetComponent<EsperaController>();
         GoTo("reto");
     }
 
     public void GoTo(string screen)
     {
+        Debug.Log(screen);
         retoScreen.SetActive(screen == "reto");
         esperaScreen.SetActive(screen == "espera");
+        listaScreen.SetActive(screen == "lista");
+        realizandoScreen.SetActive(screen == "realizando");
         //roomJoinMenu.SetActive(false);
         //settingsMenu.SetActive(false);
     }
