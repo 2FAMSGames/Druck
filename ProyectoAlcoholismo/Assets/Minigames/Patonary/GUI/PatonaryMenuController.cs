@@ -14,10 +14,13 @@ public class PatonaryMenuController : MonoBehaviour
     private GameObject GuessPat;
     [SerializeField]
     private GameObject VotePat;
+    [SerializeField]
+    private GameObject WaitPat;
 
     void OnEnable()
     {
         GoToMenu();
+        PlayerPrefs.DeleteAll();
     }
 
     public void GoToMenu()
@@ -27,6 +30,7 @@ public class PatonaryMenuController : MonoBehaviour
         CanvasPat.SetActive(false);
         GuessPat.SetActive(false);
         VotePat.SetActive(false);
+        WaitPat.SetActive(false);
     }
 
     public void GoToTask()
@@ -36,6 +40,7 @@ public class PatonaryMenuController : MonoBehaviour
         CanvasPat.SetActive(false);
         GuessPat.SetActive(false);
         VotePat.SetActive(false);
+        WaitPat.SetActive(false);
     }
 
     public void GoToCanvas()
@@ -45,6 +50,7 @@ public class PatonaryMenuController : MonoBehaviour
         CanvasPat.SetActive(true);
         GuessPat.SetActive(false);
         VotePat.SetActive(false);
+        WaitPat.SetActive(false);
     }
 
     public void GoToGuess()
@@ -54,6 +60,7 @@ public class PatonaryMenuController : MonoBehaviour
         CanvasPat.SetActive(false);
         GuessPat.SetActive(true);
         VotePat.SetActive(false);
+        WaitPat.SetActive(false);
     }
     public void GoToVote()
     {
@@ -62,8 +69,17 @@ public class PatonaryMenuController : MonoBehaviour
         CanvasPat.SetActive(false);
         GuessPat.SetActive(false);
         VotePat.SetActive(true);
+        WaitPat.SetActive(false);
     }
-
+    public void GoToWait()
+    {
+        MenuPat.SetActive(false);
+        TaskPat.SetActive(false);
+        CanvasPat.SetActive(false);
+        GuessPat.SetActive(false);
+        VotePat.SetActive(false);
+        WaitPat.SetActive(true);
+    }
 }
 
 

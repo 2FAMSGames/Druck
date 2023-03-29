@@ -1,7 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Minigames/Patonary/GUI/PatonaryStyle.uss?fileID=7433441132597879392&amp;guid=e4f176ffcc4cde3419d40d833c491b88&amp;type=3#PatonaryStyle" />
-    <ui:VisualElement style="height: 1136px;">
-        <ui:Button text="HECHO" display-tooltip-when-elided="true" name="DoneButton" class="button_btn bttn" />
-        <ui:Label text="Tiempo" display-tooltip-when-elided="true" name="Timer" style="top: 36px; left: 24px;" />
+    <ui:VisualElement style="height: 1136px; background-color: rgba(0, 0, 0, 0);">
+        <ui:VisualElement style="height: 106px; background-color: rgb(41, 166, 176);">
+            <ui:Label text="Tiempo" display-tooltip-when-elided="true" name="Timer" style="top: 36px; left: 24px; white-space: normal;" />
+            <ui:Label text="Palabra" display-tooltip-when-elided="true" name="RndWord" style="top: 28px; left: 24px; white-space: normal; font-size: 11px; width: 94%;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement style="height: 611px; bottom: auto; top: 35px; background-color: rgba(41, 166, 176, 0);">
+        <ui:Button text="HECHO" display-tooltip-when-elided="true" name="DoneButton" class="button_btn bttn" style="top: 6%; height: 39%; -unity-background-scale-mode: scale-to-fit; width: 65%;" />
     </ui:VisualElement>
 </ui:UXML>

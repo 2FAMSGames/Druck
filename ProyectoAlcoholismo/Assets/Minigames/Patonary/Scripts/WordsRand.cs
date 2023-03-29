@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class WordsRand : MonoBehaviour
     {
-    public Text wordText;
+    public string textWord;
+    //public Text wordText;
     public int rand_row_id;
     public int rand_col_id;
 
@@ -23,7 +24,8 @@ public class WordsRand : MonoBehaviour
 
     void Awake()
     {
-        wordText.text = GetRandomWord();
+        //wordText.text = GetRandomWord();
+        textWord = GetRandomWord();
     }
 
     public string GetRandomWord()

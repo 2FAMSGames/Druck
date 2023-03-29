@@ -12,19 +12,33 @@ public class CanvasPat : MonoBehaviour
     private GameObject menusObject;
     private PatonaryMenuController menusController;
 
+    public GameObject WordsRandom;
+    private WordsRand _rndWord;
+
     private UIDocument doc;
     private Button doneButton;
-    private Label TimeTex;
 
     //timer
+    private Label TimeTex;
     private string tiempo = "Tiempo: ";
     public float timeRemaining = 40;
     public bool timerIsRunning = false;
     //public Text timeText;
+
+    //Word
+    private Label WordRnd;
+    private string palabra = "Pinta: ";
+
+    private int CanvasWaitng = 1;
+
     private void Start()
     {
         // Starts the timer automatically
         timerIsRunning = true;
+        WordRnd = doc.rootVisualElement.Q<Label>("RndWord");
+        _rndWord = WordsRandom.GetComponent<WordsRand>();
+
+        WordRnd.text = palabra + _rndWord.textWord;
     }
     void Update()
     {
@@ -55,6 +69,8 @@ public class CanvasPat : MonoBehaviour
 
     void OnEnable()
     {
+        PlayerPrefs.SetInt("WaitngScreen", CanvasWaitng);
+
         menusController = menusObject.GetComponent<PatonaryMenuController>();
         _DrawLine = SavePic.GetComponent<DrawLine>();
 
@@ -92,7 +108,16 @@ public class CanvasPat : MonoBehaviour
     private IEnumerator DelayedGoToVotar()
     {
         yield return new WaitForSeconds(0.1f);
-        menusController.GoToGuess();
+        //menusController.GoToGuess();
+
+        PlayerPrefs.SetInt("WaitngScreen", CanvasWaitng);
+
+        //if (CanvasWaitngEnded == 1)   //if everyone´s pic/guess/vote is ready then
+        //{
+        //    menusController.GoToGuess();
+        //}
+        menusController.GoToWait();
+
     }
 }
 

@@ -1,10 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Minigames/Patonary/GUI/PatonaryStyle.uss?fileID=7433441132597879392&amp;guid=e4f176ffcc4cde3419d40d833c491b88&amp;type=3#PatonaryStyle" />
     <ui:VisualElement class="background" style="width: 100%; height: 100%;">
-        <ui:Label text="¿Cuál es la respuesta más cercana ?" display-tooltip-when-elided="true" class="main_txt" style="font-size: 18px; white-space: normal;" />
-        <ui:Button text="Guess1" display-tooltip-when-elided="true" name="Guess1" class="button_btn bttn" style="top: 32%; width: 65%; left: 17.5%; height: 12%; font-size: 12px; white-space: normal; -unity-font-style: bold;" />
-        <ui:Button text="Guess2" display-tooltip-when-elided="true" name="Guess2" class="button_btn bttn" style="top: 48%; width: 65%; left: 17.5%; position: absolute; height: 12%; font-size: 12px; white-space: normal; -unity-font-style: bold;" />
-        <ui:Button text="Guess3" display-tooltip-when-elided="true" name="Guess3" class="button_btn bttn" style="top: 64%; width: 65%; left: 17.5%; height: 12%; font-size: 12px; white-space: normal; -unity-font-style: bold;" />
-        <ui:Button text="Guess4" display-tooltip-when-elided="true" name="Guess4" class="button_btn bttn" style="top: 80%; width: 65%; left: 17.5%; height: 12%; font-size: 12px; white-space: normal; -unity-font-style: bold;" />
+        <ui:Label text="¿Superada?" display-tooltip-when-elided="true" class="main_txt" style="font-size: 22px; white-space: normal;" />
+        <ui:Label text="Guess" display-tooltip-when-elided="true" name="Guess" class="regular_text" style="width: 75%;" />
+        <ui:Button text="Sí" display-tooltip-when-elided="true" name="Yes" class="button_btn bttn" style="top: 75%; width: 70px; left: 12.5%; height: 12%; font-size: 12px; white-space: normal; -unity-font-style: bold; -unity-background-scale-mode: stretch-to-fill;" />
+        <ui:Button text="No" display-tooltip-when-elided="true" name="No" class="button_btn bttn" style="top: 75%; width: 70px; left: auto; height: 12%; font-size: 12px; white-space: normal; -unity-font-style: bold; -unity-background-scale-mode: stretch-to-fill; right: 12.5%;" />
     </ui:VisualElement>
 </ui:UXML>

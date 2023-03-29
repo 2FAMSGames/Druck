@@ -16,8 +16,12 @@ public class GuessPat : MonoBehaviour
 
     public string guessWord;
 
+    private int GuessWaitng = 2;
+
     void OnEnable()
     {
+        PlayerPrefs.SetInt("WaitngScreen", GuessWaitng);
+
         menusController = menusObject.GetComponent<PatonaryMenuController>();
 
         doc = GetComponent<UIDocument>();
@@ -53,8 +57,15 @@ public class GuessPat : MonoBehaviour
         guessWord = guess.text;
         PlayerPrefs.SetString("Guess", guessWord);
         Debug.Log(guessWord);
-        
+
         //go to next menu
-        menusController.GoToVote();
+        //menusController.GoToVote();
+
+        //if (GuessWaitngEnded == 1)        //if everyone´s pic/guess/vote is ready then
+        //{
+        //    menusController.GoToVote();
+        //}
+        menusController.GoToWait();
+
     }
 }

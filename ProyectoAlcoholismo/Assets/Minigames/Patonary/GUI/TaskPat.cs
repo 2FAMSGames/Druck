@@ -33,7 +33,8 @@ public class TaskPat : MonoBehaviour
         doc = GetComponent<UIDocument>();
         randomWord = doc.rootVisualElement.Q<Label>("RandomWord");
         word = wordObject.GetComponent<WordsRand>();
-        randomWord.text = word.wordText.text;
+        randomWord.text = word.textWord;
+        //randomWord.text = word.wordText.text;
     }
 
     private void EmpezarButtonOnClicked()

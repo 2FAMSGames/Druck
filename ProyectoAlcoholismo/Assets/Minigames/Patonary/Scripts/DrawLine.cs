@@ -12,21 +12,47 @@ public class DrawLine : MonoBehaviour
     public float BrushSize = 5f;
     public RenderTexture RTexture;
 
+    public GameObject planoGO;
+    private Plane plano;
+    private MeshCollider PlaneCollider;
+
+    public GameObject RenderCam;
+    //private RectTransform
+
+    private void Start()
+    {
+        plano = new Plane(planoGO.transform.up, planoGO.transform.position);
+        PlaneCollider = planoGO.GetComponent<MeshCollider>();
+
+        Bounds canvasBounds = PlaneCollider.bounds;
+
+        Vector3 bottomLeftCameraWorld = canvasBounds.center - canvasBounds.extents; //transform a coord de la cam
+        Vector3 bottomLeftCameraScreen = Camera.main.WorldToScreenPoint(bottomLeftCameraWorld); //x&Y meter  RectTransform
+        Vector3 canvasSize;
+    }
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            GameObject drawing = Instantiate(brush);
-            lineRenderer = drawing.GetComponent<LineRenderer>();
-            Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f);
+            //si colisiona con el plano
+            if (PlaneCollider.bounds.Contains(GetClickPosOnPlane().GetValueOrDefault()))
+            {
+                GameObject drawing = Instantiate(brush);
+                lineRenderer = drawing.GetComponent<LineRenderer>();
+                Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10f);
 
-            lineRenderer.SetPosition(0, Camera.main.ScreenToWorldPoint(mousePos));
-            lineRenderer.SetPosition(1, Camera.main.ScreenToWorldPoint(mousePos));
+                lineRenderer.SetPosition(0, Camera.main.ScreenToWorldPoint(mousePos));
+                lineRenderer.SetPosition(1, Camera.main.ScreenToWorldPoint(mousePos));
+            }
         }
 
         else if (Input.GetMouseButton(0))
         {
-            FreeDraw();
+            if (PlaneCollider.bounds.Contains(GetClickPosOnPlane().GetValueOrDefault()))
+            {
+                FreeDraw();
+            }
         }
     }
 
@@ -69,4 +95,20 @@ public class DrawLine : MonoBehaviour
         string imageString = System.Convert.ToBase64String(Imagedata);
         PlayerPrefs.SetString("TransferredImage", imageString);
     }
+
+
+
+    //plano, devuelva el punto inter
+    private Vector3? GetClickPosOnPlane()
+    {
+        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        float RayDistance;
+        if (plano.Raycast(camRay, out RayDistance))
+        {
+            return camRay.GetPoint(RayDistance);
+        }
+        return null;
+    }
+
 }
