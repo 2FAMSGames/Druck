@@ -18,6 +18,7 @@
     color: rgb(0, 0, 0);
 }
 
+
 .apostar__button {
     margin-left: 10%;
     margin-right: 10%;
@@ -50,4 +51,10 @@
     border-bottom-color: rgba(255, 255, 255, 0);
     -unity-text-outline-color: rgb(255, 255, 255);
     -unity-text-align: upper-center;
+}
+.menu__input-field > Label {
+    align-items: stretch;
+}
+
+.menu__input-field > #unity-text-input {
 }
