@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/GUI/MenuStyles.uss?fileID=7433441132597879392&amp;guid=61874ddc3b5661a48bfb874b3fa2c714&amp;type=3#MenuStyles" />
+    <ui:VisualElement name="MainSection" style="justify-content: center; align-items: stretch; flex-grow: 1; width: 276px; -unity-text-align: upper-center; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto;">
+        <ui:Label display-tooltip-when-elided="true" name="winner" class="text_title" style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto; width: 190px;" />
+        <ui:Label text="ha ganado" display-tooltip-when-elided="true" class="text_title" style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto; font-size: 30%;" />
+        <ui:Label display-tooltip-when-elided="true" name="number" class="text_title" style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto; width: 156px;" />
+        <ui:Label text="tragos" display-tooltip-when-elided="true" class="text_title" style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto; -unity-text-align: upper-center; font-size: 30%;" />
+    </ui:VisualElement>
+</ui:UXML>

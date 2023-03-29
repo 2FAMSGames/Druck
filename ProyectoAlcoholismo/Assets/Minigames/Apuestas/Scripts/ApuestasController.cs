@@ -14,6 +14,7 @@ public class ApuestasController : MonoBehaviour
     public string CurrentPlayer = "Ana";
     public string challengedPlayer = "";
     public string challenge = "";
+    public string winner = "";
 
     private bool yourTurn;
 
@@ -25,6 +26,8 @@ public class ApuestasController : MonoBehaviour
     private GameObject listaScreen;
     [SerializeField]
     private GameObject realizandoScreen;
+    [SerializeField]
+    private GameObject ganadorScreen;
 
     void OnEnable()
     {
@@ -36,11 +39,11 @@ public class ApuestasController : MonoBehaviour
 
     public void GoTo(string screen)
     {
-        Debug.Log(screen);
         retoScreen.SetActive(screen == "reto");
         esperaScreen.SetActive(screen == "espera");
         listaScreen.SetActive(screen == "lista");
         realizandoScreen.SetActive(screen == "realizando");
+        ganadorScreen.SetActive(screen == "ganador");
         //roomJoinMenu.SetActive(false);
         //settingsMenu.SetActive(false);
     }

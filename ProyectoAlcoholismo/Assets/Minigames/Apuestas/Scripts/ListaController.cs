@@ -14,14 +14,6 @@ public class ListaController : MonoBehaviour
     private ListView PlayerList;
     private List<string> AllPlayers;
 
-
-    [CreateAssetMenu]
-    public class Challenge : ScriptableObject
-    {
-        public int chId { get; set; }
-        public string chText { get; set; }
-        public int chPrize { get; set; }
-    }
     void OnEnable()
     {
         apuestasController = ApuestasObject.GetComponent<ApuestasController>();

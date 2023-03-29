@@ -6,8 +6,8 @@
         <ui:Label display-tooltip-when-elided="true" name="CurrentChallenge" class="text_title" />
         <ui:Label text="¿Superado?" display-tooltip-when-elided="true" class="text_title" style="-unity-text-align: upper-center;" />
         <ui:GroupBox name="GroupBox" style="flex-direction: row; align-items: auto; justify-content: space-around;">
-            <ui:Button text="Sí" display-tooltip-when-elided="true" class="apostar__button" />
-            <ui:Button text="No" display-tooltip-when-elided="true" class="apostar__button" />
+            <ui:Button text="Sí" display-tooltip-when-elided="true" name="y" class="apostar__button" />
+            <ui:Button text="No" display-tooltip-when-elided="true" name="n" class="apostar__button" />
         </ui:GroupBox>
     </ui:VisualElement>
 </ui:UXML>

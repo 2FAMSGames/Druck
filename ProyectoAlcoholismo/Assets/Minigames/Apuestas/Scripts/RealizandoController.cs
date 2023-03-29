@@ -12,16 +12,9 @@ public class RealizandoController : MonoBehaviour
     private UIDocument doc;
     private Label player;
     private Label challenge;
-    //private Button reto1;
-    //private Button reto2;
+    private Button y;
+    private Button n;
 
-    [CreateAssetMenu]
-    public class Challenge : ScriptableObject
-    {
-        public int chId { get; set; }
-        public string chText { get; set; }
-        public int chPrize { get; set; }
-    }
     void OnEnable()
     {
         apuestasController = ApuestasObject.GetComponent<ApuestasController>();
@@ -30,14 +23,19 @@ public class RealizandoController : MonoBehaviour
         player.text = apuestasController.challengedPlayer;
         challenge = doc.rootVisualElement.Q<Label>("CurrentChallenge");
         challenge.text = apuestasController.challenge;
+        y = doc.rootVisualElement.Q<Button>("y");
+        y.RegisterCallback<ClickEvent>(GoToWinner);
+        n = doc.rootVisualElement.Q<Button>("n");
+        n.RegisterCallback<ClickEvent>(GoToWinner);
     }
 
-    private void GoToList()
+    private void GoToWinner(ClickEvent evt)
     {
-        Debug.Log("GoToList");
-        //apuestasController.GoTo("List");
-        //apuestasController.GoTo("espera");
-        //apuestasController.GoToMainMenu();
+        var targetBox = evt.target as Button;
+        var result = targetBox.name;
+        Debug.Log(result);
+        apuestasController.winner = result == "y" ? apuestasController.challengedPlayer : apuestasController.CurrentPlayer;
+        apuestasController.GoTo("ganador");
     }
 
 }

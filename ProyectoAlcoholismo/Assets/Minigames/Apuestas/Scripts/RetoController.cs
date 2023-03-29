@@ -66,7 +66,6 @@ public class RetoController : MonoBehaviour
     {
         var targetBox = evt.target as Button;
         apuestasController.challenge = targetBox.text;
-        Debug.Log("GoToList");
         //apuestasController.GoTo("List");
         string screen = "espera";
         if (apuestasController.yourPlayer == apuestasController.CurrentPlayer)
