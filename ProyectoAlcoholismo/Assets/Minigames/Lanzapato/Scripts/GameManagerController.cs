@@ -1,3 +1,4 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +29,8 @@ public class GameManagerController : MonoBehaviour
     public int currentLevel = 0 ;
     int nTotalLevels;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +38,8 @@ public class GameManagerController : MonoBehaviour
         cupsController = cupsContainer.GetComponent<CupsController>();
         nTotalLevels = gameLevelList.Count;
         SetupLevel(currentLevel);
+
+        GameState.Instance.PlayerChangedData += OnPlayerFinished;
     }
 
     // Update is called once per frame
@@ -51,6 +56,7 @@ public class GameManagerController : MonoBehaviour
             else
             {
                 Debug.Log("Ganaste");
+                GameState.GetMyPlayer().SetData(0, GetTotalScore());
             }
             
         }
@@ -89,5 +95,18 @@ public class GameManagerController : MonoBehaviour
             score++;
             scoreDebug = false;
         }
+    }
+
+    private int GetTotalScore()
+    {
+        return scoreToPassLevel * currentLevel + score;
+    }
+
+    private void OnPlayerFinished(int id, NetworkDictionary <int, float> data)
+    {
+        //Aqui va lo que se ejecuta cuando un jugador termina, se debera editar
+        Debug.Log("Un jugador gano");
+        GameState.GetMyPlayer().SetData(0, GetTotalScore());
+        //Mostrar pantalla de puntuaciones
     }
 }
