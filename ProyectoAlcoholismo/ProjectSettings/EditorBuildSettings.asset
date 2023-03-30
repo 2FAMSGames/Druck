@@ -9,7 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/StartScreen.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
   - enabled: 1
-    path: Assets/Scenes/Lanzapato.unity
-    guid: 9678110210d92ba4da8799ab970adc3d
+    path: Assets/Minigames/AHuevo/AHuevo.unity
+    guid: 6e01904a2d5b5d94cb66a9c32d9a2260
   m_configObjects:
-    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 41e775d50b4c9024c9beb253f39c4f3d, type: 2}
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 580dcdd2b19d6734797f1a9df9a47adc, type: 2}
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: e8b2278b0a397bd4599defe567ae1448, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: ec8611412f364ae4a85ae97955d595d8, type: 2}

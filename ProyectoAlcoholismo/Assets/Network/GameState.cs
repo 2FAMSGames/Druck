@@ -7,22 +7,31 @@ using Fusion;
 using Fusion.Sockets;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 {
-    // singleton
-    public static GameState Instance { get; private set; }
-    
-    // Local player data, not networked
-    public string uniqueID = Utils.StringUtils.generateRandomString();
-    public string myPlayerName = "No-named";
-    public int myPlayerNum;
+	// singleton
+	public static GameState Instance { get; private set; }
 
-    public static bool AllReady => PlayerRegistry.AllReady;
-    public static int PlayerCount => PlayerRegistry.CountPlayers;
-    public static bool Connected => Instance != null && Instance.Runner != null;
-    public static bool isServer => Instance != null && Instance.Runner.IsServer;
-    
+	// Local player data, not networked
+	public string uniqueID = Utils.StringUtils.generateRandomString();
+	public string myPlayerName = "No-named";
+	public int myPlayerNum;
+
+	private static bool AllReady => PlayerRegistry.AllReady;
+	public static int PlayerCount => PlayerRegistry.CountPlayers;
+	public static bool Connected => Instance != null && Instance.Runner != null;
+	public static bool isServer => Instance != null && Instance.Runner != null && Instance.Runner.IsServer;
+
+	// Juegos
+	private static readonly List<string> GameList = new List<String>
+	{
+		"AHuevo"
+	};
+
+	private List<string> CurrentGameList = new List<string>();
+		
 
     // Eventos a los que conectarse:
     // 
@@ -58,6 +67,11 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	private void OnDestroy()
 	{
 		if (Instance == this) Instance = null;
+	}
+
+	public void OnSceneChanged(string sceneName)
+	{
+		
 	}
 	
 	public static void Server_Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
@@ -147,9 +161,9 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	    GetMyPlayer().SetTime(time);
     }
 
-    public void ModifyReadyFlag(bool flag)
+    public static void FlipReadyFlag()
     {
-	    GetMyPlayer().SetReady(flag);
+	    GetMyPlayer().SetReady(!GetMyPlayer().isReady);
     }
 
     public void ModifyColor(Vector3 color)
@@ -177,20 +191,24 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	{
 		p.ChangedColor += this.PlayerHasChangedColor;
 		p.ChangedName += this.PlayerHasChangedName;
-		p.ChangedReady += this.PlayerHasChangedReady;
 		p.ChangedScore += this.PlayerHasChangedScore;
 		p.ChangedTime += this.PlayerHasChangedTime;
 		p.ChangedData += this.PlayerHasChangedData;
+		
+		if(isServer)
+			p.ChangedReady += this.PlayerHasChangedReady;
 	}
 	
 	private void RemoveFromEventCallbacks(in PlayerBehaviour p)
 	{
 		p.ChangedColor -= this.PlayerHasChangedColor;
 		p.ChangedName -= this.PlayerHasChangedName;
-		p.ChangedReady -= this.PlayerHasChangedReady;
 		p.ChangedScore -= this.PlayerHasChangedScore;
 		p.ChangedTime -= this.PlayerHasChangedTime;
 		p.ChangedData -= this.PlayerHasChangedData;
+		
+		if(isServer)
+			p.ChangedReady -= this.PlayerHasChangedReady;
 	}
 
 	private void PlayerHasChangedTime(int id, float time)
@@ -213,9 +231,43 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		PlayerChangedName?.Invoke(id, playerName);
 	}
 
-	private void PlayerHasChangedReady(int id, bool ready)
+	public void PlayerHasChangedReady(int id, bool ready)
 	{
+		// Only for server.
+		if (!GameState.isServer) return;
+		
+		// Por si hemos conectado algo a esta señal.
 		PlayerChangedReady?.Invoke(id, ready);
+
+		if (AllReady)
+		{
+			if (CurrentGameList.Count == 0)
+			{
+				// New game?
+				CurrentGameList = GameList;
+			}
+
+			var gameIdx = Random.Range(0, CurrentGameList.Count - 1);
+			var gameName = CurrentGameList.ElementAt(gameIdx);
+			CurrentGameList.Remove(gameName);
+			
+			Debug.Log("game idx: " + gameIdx + " name: " + gameName);
+
+			LoadScene(gameName);
+			PlayerRegistry.Instance.SetScene(gameName);
+			GameState.Instance.ResetReadyFlags();
+		}
+	}
+
+	private void LoadScene(string sceneName)
+	{
+		Runner.SetActiveScene(sceneName);
+	}
+
+	private void ResetReadyFlags()
+	{
+		foreach (var pl in PlayerRegistry.Instance.ObjectByRef)
+			pl.Value.SetReady(false);
 	}
 
 	private void PlayerHasChangedData(int id, NetworkDictionary<int,float> data)
@@ -291,8 +343,10 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			if (successCallback != null)
 				successCallback.Invoke();
 			else
+			{
 				Runner.SetActiveScene(gameScene);
-			
+			}
+				
 			Debug.Log("Host initiated: " + roomName);
 		}
 		else
@@ -345,6 +399,13 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			StartCoroutine(HostSessionRoutine(roomName, successCallback));
 		}
 	}
+
+	public void Disconnect()
+	{
+		if (Runner == null) return;
+		Runner.Shutdown();
+		Runner = null;
+	}
 	
 	#region INetworkRunnerCallbacks
 
@@ -367,11 +428,9 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		{
 			// Spawn Player related things and store them
 			NetworkObject networkPlayerObject = runner.Spawn(playerPrefab, Vector3.zero, Quaternion.identity, player);
-			networkPlayerObject.ReleaseStateAuthority();
 			runner.SetPlayerObject(player, networkPlayerObject);
 			spawnedObjects.Add(player, networkPlayerObject);
 		}
-		
 		DebugPrint();
 	}
 
@@ -458,12 +517,12 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void OnSceneLoadDone(NetworkRunner runner)
 	{
-		Debug.Log("OnSceneLoadDone");
+		Debug.Log("OnSceneLoadDone: " + PlayerRegistry.Instance.CurrentScene);
 	}
 
 	public void OnSceneLoadStart(NetworkRunner runner)
 	{
-		Debug.Log("OnSceneLoadStart");
+		Debug.Log("OnSceneLoadStart: " + PlayerRegistry.Instance.CurrentScene);
 	}
 	#endregion
 

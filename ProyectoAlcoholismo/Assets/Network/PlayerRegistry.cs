@@ -13,20 +13,32 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
     
     [Networked, Capacity(16)] public NetworkDictionary<PlayerRef, PlayerBehaviour> ObjectByRef => default;
     
+    [Networked(OnChanged = nameof(OnSceneChanged))]
+    public string CurrentScene { get; set; }
+    
+    public static event Action<string> SceneChanged;
+    
     public static int CountPlayers => Instance != null ? Instance.ObjectByRef.Count : 0;
-    public static bool AllReady => !Instance.IsUnityNull() && Instance.ObjectByRef.Count(kvp => kvp.Value && !kvp.Value.isReady) == Instance.ObjectByRef.Count;
+    public static bool AllReady => Instance != null && Instance.ObjectByRef.Count(kvp => kvp.Value && kvp.Value.isReady) == CountPlayers;
 
     public override void Spawned()
     {
         Instance = this;
         Runner.AddCallbacks(this);
         DontDestroyOnLoad(gameObject);
+        CurrentScene = "";
+        SceneChanged += GameState.Instance.OnSceneChanged;
     }
     
     public override void Despawned(NetworkRunner runner, bool hasState)
     {
         Instance = null;
         runner.RemoveCallbacks(this);
+    }
+
+    public void SetScene(string sceneName)
+    {
+        CurrentScene = sceneName;
     }
     
     public static void Server_Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
@@ -43,10 +55,15 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
             Debug.LogWarning($"Unable to register player {pRef}, player limit reached!", pObj);
         }
     }
+
+    public static void OnSceneChanged(Changed<PlayerRegistry> changedInfo)
+    {
+        SceneChanged?.Invoke(Instance.CurrentScene);	
+    }
     
     public static void Server_Remove(NetworkRunner runner, PlayerRef pRef)
     {
-        if (!runner.IsServer || !pRef.IsValid) return;
+        if (!runner.IsServer || !pRef.IsValid || !Instance) return;
 
         if (Instance.ObjectByRef.Remove(pRef) == false)
         {
