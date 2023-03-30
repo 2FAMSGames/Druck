@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Fusion;
@@ -17,6 +18,11 @@ public class RoomController : MonoBehaviour
     private Button goBackButton;
     private Button readyButton;
     private ListView playerList;
+    private Label warningLabel;
+    private List<string> ConnectedPlayers;
+
+    private readonly string WAITSTR = "Esperando...";
+    private readonly string STARTSTR = "Empezar!"; 
 
     void OnEnable()
     {
@@ -29,47 +35,56 @@ public class RoomController : MonoBehaviour
 
         readyButton = doc.rootVisualElement.Q<Button>("ReadyButton");
         readyButton.clicked += ReadyButtonOnClicked;
-
-        GameState.Instance.PlayerChangedScore += changedScore;
-        GameState.Instance.PlayerChangedData += changedData;
+        readyButton.text = STARTSTR;
         
-        //playerList = doc.rootVisualElement.Q<ListView>("PlayerList");
-        //var playerListController = new PlayerListController();
-        //playerListController.InitPlayerList(listEntryTemplate, playerList);
+        warningLabel = doc.rootVisualElement.Q<Label>("TextLabel");
+        warningLabel.text = "Espera a que todos los jugadores estén conectados a la sala para empezar.";
+
+        playerList = doc.rootVisualElement.Q<ListView>("PlayersList");
     }
 
     private void GoBackButtonOnClicked()
     {
-        Debug.Log("Go back button clicked");
+        GameState.Instance.Disconnect();
+        readyButton.SetEnabled(true);
+        readyButton.text = STARTSTR;
+        playerList.Clear();
+        
         menusController.GoToMainMenu();
-        //Desconectarse del host o eliminar la sala
     }
 
     private void ReadyButtonOnClicked()
     {
-        Debug.Log("Ready button clicked");
-        var score = GameState.GetMyPlayer().playerScore;
-        var ready = GameState.GetMyPlayer().isReady;
-        GameState.Instance.ModifyScore(score - 5);
-        GameState.GetMyPlayer().SetData(0, GameState.GetMyPlayer().data.Get(0) + 5);
-        GameState.Instance.ModifyReadyFlag(!ready);
-        GameState.Instance.DebugPrint();
-        var x = PlayerRegistry.Instance.SortedScores();
-        foreach(var x2 in x)
-            Debug.Log("- player " + x2.Item1 + " score " + x2.Item2);
+        GameState.FlipReadyFlag();
+        readyButton.text = WAITSTR;
+        readyButton.SetEnabled(false);
+        
+        // Necesario porque el server no recibe sus propios cambios.
+        if (GameState.isServer)
+        {
+            GameState.Instance.PlayerHasChangedReady(GameState.GetMyPlayer().playerId, GameState.GetMyPlayer().isReady);
+        }
     }
 
-    private void changedScore(int id, int score)
+    private void FixedUpdate()
     {
-        Debug.Assert(GameState.HasPlayer(id));
-       
-        var playerData = GameState.GetPlayer(id);
-        Debug.Log($"player {playerData.playerName} changed score to {score}");
-        var allready = PlayerRegistry.AllReady;
-    }
+        List<string> players = new List<string>();
+        if (PlayerRegistry.Instance != null && PlayerRegistry.Instance.ObjectByRef.Count > 0)
+        {
+            foreach(var pl in PlayerRegistry.Instance.ObjectByRef)
+            {
+                players.Add(pl.Value.playerName);
+            }
+            
+            playerList.itemsSource = players;
+        }
+        
+        readyButton.SetEnabled(players.Count > 0 && readyButton.text != WAITSTR);
 
-    private void changedData(int id, NetworkDictionary<int, float> data)
-    {
-        Debug.Log("player " + id + " changed data");
+        if (GameState.Instance != null && GameState.Instance.Runner != null && GameState.Instance.Runner.SessionInfo.IsValid)
+        {
+            warningLabel.text = "Espera a que todos los jugadores estén conectados a la sala \""
+                                + GameState.Instance.Runner.SessionInfo.Name + "\" para empezar.";
+        }
     }
 }
