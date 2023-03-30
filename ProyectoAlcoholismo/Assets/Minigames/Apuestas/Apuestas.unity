@@ -219,7 +219,7 @@ GameObject:
   - component: {fileID: 290661822}
   - component: {fileID: 290661824}
   m_Layer: 0
-  m_Name: "Dise\xF1o sin t\xEDtulo"
+  m_Name: Fondo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -266,7 +266,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: ff93671fa2c3ea449a970a8a7afd0ec1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e09a3ee66ab622b4a8d4247bc205dd83, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -339,6 +339,7 @@ Transform:
   - {fileID: 1910162110}
   - {fileID: 1603579852}
   - {fileID: 1706329198}
+  - {fileID: 1106605831}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -356,7 +357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   apuestasObject: {fileID: 0}
   yourPlayer: Ana
-  CurrentPlayer: Ana
+  CurrentPlayer: Marta
   challengedPlayer: 
   challenge: 
   winner: 
@@ -365,6 +366,69 @@ MonoBehaviour:
   listaScreen: {fileID: 1910162109}
   realizandoScreen: {fileID: 1603579851}
   ganadorScreen: {fileID: 1706329197}
+  inicioScreen: {fileID: 0}
+--- !u!1 &1106605830
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1106605831}
+  - component: {fileID: 1106605833}
+  - component: {fileID: 1106605832}
+  m_Layer: 0
+  m_Name: Inicio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1106605831
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1106605830}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.5393872, y: -2.7647257, z: -3.137303}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 994539250}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1106605832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1106605830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db819647a26e8be4ab967fb7f5b8b9cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ApuestasObject: {fileID: 994539249}
+--- !u!114 &1106605833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1106605830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 19102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PanelSettings: {fileID: 11400000, guid: 2cacc3b65d40b8c4695e99e8053bf5a9, type: 2}
+  m_ParentUI: {fileID: 0}
+  sourceAsset: {fileID: 9197481963319205126, guid: 25cdadcc4dd6efe4898160a50ad9b18c, type: 3}
+  m_SortingOrder: 0
 --- !u!1 &1603579851
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,7 +570,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1743450436
 MonoBehaviour:
   m_ObjectHideFlags: 0
