@@ -57,6 +57,9 @@ public class GameManagerController : MonoBehaviour
             {
                 Debug.Log("Ganaste");
                 GameState.GetMyPlayer().SetData(0, GetTotalScore());
+                GameState.Instance.PlayerChangedData -= OnPlayerFinished;
+                
+                // TODO: Ir a pantalla de puntuaciones?
             }
             
         }
@@ -104,9 +107,11 @@ public class GameManagerController : MonoBehaviour
 
     private void OnPlayerFinished(int id, NetworkDictionary <int, float> data)
     {
+        GameState.Instance.PlayerChangedData -= OnPlayerFinished;
+        
         //Aqui va lo que se ejecuta cuando un jugador termina, se debera editar
         Debug.Log("Un jugador gano");
         GameState.GetMyPlayer().SetData(0, GetTotalScore());
-        //Mostrar pantalla de puntuaciones
+        // TODO: Mostrar pantalla de puntuaciones
     }
 }

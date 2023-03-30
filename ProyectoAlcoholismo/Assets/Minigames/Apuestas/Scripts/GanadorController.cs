@@ -5,8 +5,6 @@ using System.Linq;
 
 public class GanadorController : MonoBehaviour
 {
-
-
     [SerializeField]
     private GameObject ApuestasObject;
     private ApuestasController apuestasController;
@@ -22,7 +20,9 @@ public class GanadorController : MonoBehaviour
         winner = doc.rootVisualElement.Q<Label>("winner");
         winner.text = apuestasController.challengedPlayer;
         nTragos = doc.rootVisualElement.Q<Label>("number");
+        
         //TODO: poner temporizador y que pase al turno siguiente
+        // TODO: pasar el número de tragos para que el servidor los reste en el score 
     }
 
 }
