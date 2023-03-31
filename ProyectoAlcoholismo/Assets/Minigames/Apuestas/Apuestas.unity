@@ -357,7 +357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   apuestasObject: {fileID: 0}
   yourPlayer: Ana
-  CurrentPlayer: Marta
+  CurrentPlayer: Ana
   challengedPlayer: 
   challenge: 
   winner: 
@@ -366,7 +366,7 @@ MonoBehaviour:
   listaScreen: {fileID: 1910162109}
   realizandoScreen: {fileID: 1603579851}
   ganadorScreen: {fileID: 1706329197}
-  inicioScreen: {fileID: 0}
+  inicioScreen: {fileID: 1106605830}
 --- !u!1 &1106605830
 GameObject:
   m_ObjectHideFlags: 0
