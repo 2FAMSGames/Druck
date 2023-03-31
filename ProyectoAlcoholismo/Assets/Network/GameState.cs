@@ -242,13 +242,22 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				// New game?
 				CurrentGameList = Utils.GameConstants.GameList;
 			}
+			
+			Debug.Log("Juegos en lista: " + CurrentGameList.Count);
+			foreach(var x in CurrentGameList)
+				Debug.Log("Game: " + x);
 
-			var gameIdx = Random.Range(0, CurrentGameList.Count - 1);
+			var gameIdx = Random.Range(0, CurrentGameList.Count);
 			var gameName = CurrentGameList.ElementAt(gameIdx);
 			CurrentGameList.Remove(gameName);
 			CurrentGameName = gameName;
 			
-			Debug.Log("game idx: " + gameIdx + " name: " + gameName);
+			Debug.Log("elegido " + gameIdx);
+			Debug.Log("lanzando " + gameName);
+			Debug.Log("Juegos en lista: " + CurrentGameList.Count);
+			foreach(var x in CurrentGameList)
+				Debug.Log("Game: " + x);
+
 
 			LoadScene(gameName);
 			PlayerRegistry.Instance.SetScene(gameName);
