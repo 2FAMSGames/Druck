@@ -4,6 +4,22 @@ using System.Collections.Generic;
 
 namespace Utils
 {
+    public static class GameConstants
+    {
+        public static List<string> GameList = new List<String>
+        {
+           "AHuevo",
+           "Lanzapato"
+        };
+
+        public static Dictionary<string, string> GameNames = new Dictionary<string, string>
+        {
+            {"AHuevo","A Huevo"},
+            {"Lanzapato", "Lanza Pato"}
+        };
+    }
+
+
     public static class ListUtils
     {
         private static Random rand = new Random();        
