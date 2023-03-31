@@ -20,10 +20,19 @@ public class ListaController : MonoBehaviour
         doc = GetComponent<UIDocument>();
         //doc = GetComponent<UIDocument>();
         PlayerList = doc.rootVisualElement.Q<ListView>("PlayerList");
-        AllPlayers = new List<string>() { "Ana", "Marta", "Sofía", "Miguel" };
+
+        List<string> AllPlayers = new List<string>();
+        foreach (var pl in PlayerRegistry.Instance.ObjectByRef)
+        {
+            // Si soy yo no
+            if (pl.Key.PlayerId == GameState.GetMyPlayer().playerId)
+                continue;
+            
+            AllPlayers.Add(pl.Value.playerName);
+        }
+
         PlayerList.itemsSource = AllPlayers;
         PlayerList.onSelectionChange += OnPlayerSelected;
-        
     }
 
     void OnPlayerSelected(IEnumerable<object> selectedItems)

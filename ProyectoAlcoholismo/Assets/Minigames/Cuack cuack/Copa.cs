@@ -55,14 +55,14 @@ public class Copa : MonoBehaviour
             float[] spectrum = new float[1024];
             audioSource.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
 
-            float frecuanciaTotal = 0;
+            float frecuenciaTotal = 0;
             for (int i = 1; i < spectrum.Length; i++)
             {
-                frecuanciaTotal += spectrum[i] * i;
+                frecuenciaTotal += spectrum[i] * i;
             }
 
-            float diferenciaFrecuancia = frecuanciaTotal - frecuanciaAnterior;
-            float nuevaFrecuencia = frecuanciaAnterior + (diferenciaFrecuancia / 100);
+            float diferenciaFrecuencia = frecuenciaTotal - frecuanciaAnterior;
+            float nuevaFrecuencia = frecuanciaAnterior + (diferenciaFrecuencia / 100);
             frecuanciaAnterior = nuevaFrecuencia;
 
             tono = nuevaFrecuencia - 5;
@@ -144,8 +144,8 @@ public class Copa : MonoBehaviour
 
         tonoObjetivo /= 4;
         tonoObjetivo = 1 - tonoObjetivo;
-        float tamañoCopa = (0.5f + tonoObjetivo);
+        float tamanioCopa = (0.5f + tonoObjetivo);
 
-        modeloCopa.localScale = new Vector3(tamañoCopa, 1, tamañoCopa);
+        modeloCopa.localScale = new Vector3(tamanioCopa, 1, tamanioCopa);
     }
 }

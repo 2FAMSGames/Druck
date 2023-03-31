@@ -37,5 +37,7 @@ public class RealizandoController : MonoBehaviour
         apuestasController.winner = result == "y" ? apuestasController.challengedPlayer : apuestasController.CurrentPlayer;
         apuestasController.GoTo("ganador");
     }
+    
+    // TODO: apuestan todos? Cómo se reciben los cambios y donde?
 
 }
