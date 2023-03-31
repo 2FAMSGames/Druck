@@ -17,7 +17,7 @@ public class DrawLine : MonoBehaviour
     private MeshCollider PlaneCollider;
 
     public GameObject RenderCam;
-    //private RectTransform
+    private RectTransform rTransf;
 
     private void Start()
     {
@@ -26,9 +26,12 @@ public class DrawLine : MonoBehaviour
 
         Bounds canvasBounds = PlaneCollider.bounds;
 
+        rTransf = RenderCam.GetComponent<RectTransform>();
         Vector3 bottomLeftCameraWorld = canvasBounds.center - canvasBounds.extents; //transform a coord de la cam
         Vector3 bottomLeftCameraScreen = Camera.main.WorldToScreenPoint(bottomLeftCameraWorld); //x&Y meter  RectTransform
-        Vector3 canvasSize;
+        Vector3 canvasSize = canvasBounds.size;
+        rTransf.position.Set(bottomLeftCameraScreen.x, bottomLeftCameraScreen.y, bottomLeftCameraScreen.z);
+        rTransf.sizeDelta = canvasSize;
     }
 
     void Update()

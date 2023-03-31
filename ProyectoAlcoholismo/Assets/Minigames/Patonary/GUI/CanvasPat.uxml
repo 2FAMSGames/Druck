@@ -1,12 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Minigames/Patonary/GUI/PatonaryStyle.uss?fileID=7433441132597879392&amp;guid=e4f176ffcc4cde3419d40d833c491b88&amp;type=3#PatonaryStyle" />
-    <ui:VisualElement style="height: 1136px; background-color: rgba(0, 0, 0, 0);">
-        <ui:VisualElement style="height: 106px; background-color: rgb(41, 166, 176);">
-            <ui:Label text="Tiempo" display-tooltip-when-elided="true" name="Timer" style="top: 36px; left: 24px; white-space: normal;" />
-            <ui:Label text="Palabra" display-tooltip-when-elided="true" name="RndWord" style="top: 28px; left: 24px; white-space: normal; font-size: 11px; width: 94%;" />
-        </ui:VisualElement>
-    </ui:VisualElement>
-    <ui:VisualElement style="height: 611px; bottom: auto; top: 35px; background-color: rgba(41, 166, 176, 0);">
-        <ui:Button text="HECHO" display-tooltip-when-elided="true" name="DoneButton" class="button_btn bttn" style="top: 6%; height: 39%; -unity-background-scale-mode: scale-to-fit; width: 65%;" />
+    <ui:VisualElement class="background" style="width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0); -unity-background-image-tint-color: rgb(255, 255, 255); background-image: none; align-items: auto; justify-content: flex-start;">
+        <ui:GroupBox style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto; width: 100%; height: 20%; justify-content: flex-start; align-items: auto;">
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="Timer" style="-unity-font: url(&apos;project://database/Assets/TextMesh%20Pro/Fonts/LiberationSans.ttf?fileID=12800000&amp;guid=e3265ab4bf004d28a9537516768c1c75&amp;type=3#LiberationSans&apos;); font-size: 20%; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto; top: 15%; color: rgb(255, 255, 255);" />
+            <ui:Label text="Label" display-tooltip-when-elided="true" name="RndWord" style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto; font-size: 16%; padding-left: 1px; padding-right: 1px; padding-top: 1px; padding-bottom: 1px; top: auto; color: rgb(255, 255, 255);" />
+        </ui:GroupBox>
+        <ui:VisualElement style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto; width: 100%; height: 60%;" />
+        <ui:Button text="HECHO" display-tooltip-when-elided="true" name="DoneButton" class="button_btn bttn" style="position: relative;" />
     </ui:VisualElement>
 </ui:UXML>
