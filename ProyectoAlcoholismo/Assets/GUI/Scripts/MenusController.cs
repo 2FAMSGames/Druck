@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Netcode.Transports.PhotonRealtime;
+using WebSocketSharp;
 
 public class MenusController : MonoBehaviour
 {
@@ -24,10 +25,11 @@ public class MenusController : MonoBehaviour
     private GameObject helpMenu;
 
     float delayTime = 5f;
-    public Camera newCamera; // La nueva cámara a la que queremos cambiar para que el fondo de atras sea verde
+    public Camera newCamera; // La nueva cï¿½mara a la que queremos cambiar para que el fondo de atras sea verde
 
     void OnEnable()
     {
+        PlayerRegistry.SceneChanged += OnSceneChanged;
         Intro();
     }
     void Start()
@@ -41,6 +43,17 @@ public class MenusController : MonoBehaviour
         ChangeToNewCamera();
     }
 
+    private void OnSceneChanged(string sceneName)
+    {
+        intro.SetActive(sceneName.IsNullOrEmpty());
+        mainMenu.SetActive(false);
+        roomCreateMenu.SetActive(false);
+        roomJoinMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+        helpMenu.SetActive(false);
+        roomMenu.SetActive(false);
+    }
+
     public void Intro()
     {
         intro.SetActive(true);
@@ -50,8 +63,6 @@ public class MenusController : MonoBehaviour
         settingsMenu.SetActive(false);
         helpMenu.SetActive(false);
         roomMenu.SetActive(false);
-
-
     }
     public void GoToMainMenu()
     {
@@ -110,10 +121,10 @@ public class MenusController : MonoBehaviour
 
     public void ChangeToNewCamera()
     {
-        // Desactivamos la cámara actual
+        // Desactivamos la cï¿½mara actual
         Camera.main.gameObject.SetActive(false);
 
-        // Activamos la nueva cámara
+        // Activamos la nueva cï¿½mara
         newCamera.gameObject.SetActive(true);
     }
 
