@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/GUI/MenuStyles.uss?fileID=7433441132597879392&amp;guid=61874ddc3b5661a48bfb874b3fa2c714&amp;type=3#MenuStyles" />
+    <ui:VisualElement name="MainSection" style="justify-content: center; align-items: stretch; flex-grow: 1; width: 186px;">
+        <ui:Label text="Esperando a ..." display-tooltip-when-elided="true" class="text_title" style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: 10%; background-color: rgba(0, 0, 0, 0); color: rgb(255, 255, 255); font-size: 22px;" />
+        <ui:ProgressBar value="22" title="my-progress" style="width: 124px; margin-left: auto; margin-right: auto; margin-top: 0; margin-bottom: auto; top: auto; flex-direction: column;" />
+        <ui:Label display-tooltip-when-elided="true" name="CurrentPlayer" class="text_title" style="margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: auto; height: 31px; width: 136px;" />
+    </ui:VisualElement>
+</ui:UXML>

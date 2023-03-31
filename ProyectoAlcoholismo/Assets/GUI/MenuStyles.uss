@@ -1,0 +1,60 @@
+.menu__button {
+    background-color: rgb(246, 185, 59);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 24px;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    color: rgb(0, 0, 0);
+}
+
+
+.apostar__button {
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    -unity-font-style: bold;
+    font-size: 24px;
+    background-color: rgba(55, 55, 55, 0);
+    background-image: url('project://database/Assets/Minigames/Apuestas/Images/btnap.png?fileID=2800000&guid=6436d6f19a861aa43b3102274c178a8b&type=3#btnap');
+    -unity-text-outline-color: rgb(253, 189, 102);
+    border-left-color: rgba(253, 188, 101, 0);
+    border-right-color: rgba(253, 188, 101, 0);
+    border-top-color: rgba(253, 188, 101, 0);
+    border-bottom-color: rgba(253, 188, 101, 0);
+    color: rgb(255, 255, 255);
+}
+
+.text_title {
+    background-color: rgba(255, 255, 255, 0);
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    font-size: 22px;
+    border-left-color: rgba(255, 255, 255, 0);
+    border-right-color: rgba(255, 255, 255, 0);
+    border-top-color: rgba(255, 255, 255, 0);
+    border-bottom-color: rgba(255, 255, 255, 0);
+    -unity-text-outline-color: rgb(255, 255, 255);
+    -unity-text-align: upper-center;
+}
+.menu__input-field > Label {
+    align-items: stretch;
+}
+
+.menu__input-field > #unity-text-input {
+}
