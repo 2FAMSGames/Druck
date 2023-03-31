@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/GUI/MenuStyles.uss?fileID=7433441132597879392&amp;guid=61874ddc3b5661a48bfb874b3fa2c714&amp;type=3#MenuStyles" />
+    <ui:Label text="Juego" display-tooltip-when-elided="true" name="NombreJuego" style="font-size: 35%; -unity-text-align: upper-center;" />
+    <ui:VisualElement name="Titulo" style="height: 15%; align-items: center; justify-content: flex-end;">
+        <ui:Label text="Ranking" display-tooltip-when-elided="true" name="Ranking" style="font-size: 30%;" />
+    </ui:VisualElement>
+    <ui:VisualElement name="Jugadores" style="width: 100%; height: 85%; -unity-text-align: middle-center; align-items: center; justify-content: flex-start;" />
+</ui:UXML>

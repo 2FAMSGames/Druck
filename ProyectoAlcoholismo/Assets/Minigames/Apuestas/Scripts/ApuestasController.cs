@@ -32,6 +32,8 @@ public class ApuestasController : MonoBehaviour
     private GameObject realizandoScreen;
     [SerializeField]
     private GameObject ganadorScreen;
+    [SerializeField]
+    private GameObject inicioScreen;
 
     void OnEnable()
     {
@@ -82,6 +84,7 @@ public class ApuestasController : MonoBehaviour
         listaScreen.SetActive(screen == "lista");
         realizandoScreen.SetActive(screen == "realizando");
         ganadorScreen.SetActive(screen == "ganador");
+        inicioScreen.SetActive(screen == "inicio");
         //roomJoinMenu.SetActive(false);
         //settingsMenu.SetActive(false);
     }

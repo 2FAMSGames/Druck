@@ -18,7 +18,7 @@ public class GanadorController : MonoBehaviour
         apuestasController = ApuestasObject.GetComponent<ApuestasController>();
         doc = GetComponent<UIDocument>();
         winner = doc.rootVisualElement.Q<Label>("winner");
-        winner.text = apuestasController.challengedPlayer;
+        winner.text = apuestasController.winner;
         nTragos = doc.rootVisualElement.Q<Label>("number");
         
         //TODO: poner temporizador y que pase al turno siguiente
