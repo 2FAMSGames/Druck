@@ -433,6 +433,76 @@ Transform:
   m_Father: {fileID: 2116078373}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1256132217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1256132219}
+  - component: {fileID: 1256132218}
+  - component: {fileID: 1256132220}
+  m_Layer: 0
+  m_Name: GameState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1256132218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256132217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5756fedb00f52a14ca9fa5ee39fb17d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueID: d99wePKRnZmlK1hQ
+  myPlayerName: Nonamed
+  myPlayerNum: 0
+  CurrentGameName: 
+  gameScene: Assets/Scenes/StartScreen.unity
+  runnerPrefab: {fileID: 6688489488419410081, guid: f140c3f40556a7f4fae1b233ef8d0e18, type: 3}
+  managerPrefab: {fileID: 6301904675396668821, guid: 740372165788a654a97bc936146bdf1c, type: 3}
+  playerPrefab:
+    RawGuidValue: c8cbb49bbfa941e4a88241592df305b9
+--- !u!4 &1256132219
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256132217}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.2686795, y: 0.5834317, z: 0.028573036}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1256132220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256132217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3954039349
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &1265806942
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,8 +910,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2116078373}
   - component: {fileID: 2116078374}
-  - component: {fileID: 2116078376}
-  - component: {fileID: 2116078375}
   m_Layer: 0
   m_Name: UI_Menus
   m_TagString: Untagged
@@ -892,39 +960,3 @@ MonoBehaviour:
   intro: {fileID: 234872188}
   helpMenu: {fileID: 2010466966}
   newCamera: {fileID: 64239389}
---- !u!114 &2116078375
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116078372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1748853536
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
---- !u!114 &2116078376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116078372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5756fedb00f52a14ca9fa5ee39fb17d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueID: d99wePKRnZmlK1hQ
-  myPlayerName: Nonamed
-  myPlayerNum: 0
-  gameScene: Assets/Scenes/StartScreen.unity
-  runnerPrefab: {fileID: 6688489488419410081, guid: f140c3f40556a7f4fae1b233ef8d0e18, type: 3}
-  managerPrefab: {fileID: 6301904675396668821, guid: 740372165788a654a97bc936146bdf1c, type: 3}
-  playerPrefab:
-    RawGuidValue: c8cbb49bbfa941e4a88241592df305b9
