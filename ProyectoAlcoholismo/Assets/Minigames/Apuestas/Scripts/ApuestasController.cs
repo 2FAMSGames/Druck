@@ -2,6 +2,10 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 using System.Linq;
+using Fusion;
+using Unity.Profiling;
+using Unity.VisualScripting;
+using Random = UnityEngine.Random;
 
 public class ApuestasController : MonoBehaviour
 {
@@ -33,8 +37,44 @@ public class ApuestasController : MonoBehaviour
 
     void OnEnable()
     {
+        GameState.Instance.PlayerChangedData += OnPlayerChangedData;
+        
+        if (GameState.isServer)
+        {
+            var id = Random.Range(0, GameState.CountPlayers - 1);
+            GameState.GetMyPlayer().SetData(0, id);
 
-        GoTo("inicio");
+            // El servidor no recibe "sus eventos"
+            ChooseScreen(id);
+        }
+        
+        //retoScreen.GetComponent<RetoController>();
+        //esperaScreen.GetComponent<EsperaController>();
+//        GoTo("reto");
+    }
+
+    private void ChooseScreen(int id)
+    {
+        if (id == GameState.GetMyPlayer().playerId)
+        {
+            GoTo("reto");        
+        }
+        else 
+        {
+            GoTo("espera");
+        }
+
+        CurrentPlayer = GameState.GetPlayer(id).playerName;
+    }
+    
+    private void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
+    {
+        // TODO: protocolo de valores con sentido para el juego
+        if (id == 15) // GameState.Instance.Runner.SessionInfo.MaxPlayers - 1
+        {
+            // El servidor envia el dato
+            ChooseScreen(id);
+        }
     }
 
     public void GoTo(string screen)

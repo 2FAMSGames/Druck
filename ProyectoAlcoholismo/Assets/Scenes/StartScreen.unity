@@ -927,4 +927,4 @@ MonoBehaviour:
   runnerPrefab: {fileID: 6688489488419410081, guid: f140c3f40556a7f4fae1b233ef8d0e18, type: 3}
   managerPrefab: {fileID: 6301904675396668821, guid: 740372165788a654a97bc936146bdf1c, type: 3}
   playerPrefab:
-    RawGuidValue: 00000000000000000000000000000000
+    RawGuidValue: c8cbb49bbfa941e4a88241592df305b9

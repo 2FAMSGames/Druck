@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 using System.Linq;
+using Fusion;
 
 public class RetoController : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class RetoController : MonoBehaviour
     }
     void OnEnable()
     {
+        GameState.Instance.PlayerChangedData += OnPlayerChangedData;
+        
         apuestasController = ApuestasObject.GetComponent<ApuestasController>();
 
         doc = GetComponent<UIDocument>();
@@ -60,6 +63,18 @@ public class RetoController : MonoBehaviour
         reto3.text = getRandomObject(challengeList.Where(x => x.chPrize == 3).ToList()).chText;
         reto3.RegisterCallback<ClickEvent>(GoToList);
         //reto3.clicked += GoToList;//TODO: pasarle una variable como current player;
+    }
+
+    private void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
+    {
+        // TODO: protocolo de valores con sentido para el juego
+        if (id == 15) // GameState.Instance.Runner.SessionInfo.MaxPlayers - 1
+        {
+            // El servidor envia el dato
+        }
+
+        
+        throw new System.NotImplementedException();
     }
 
     private void GoToList(ClickEvent evt)

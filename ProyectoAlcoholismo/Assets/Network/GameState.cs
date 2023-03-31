@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
@@ -20,14 +21,15 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public int myPlayerNum;
 
 	private static bool AllReady => PlayerRegistry.AllReady;
-	public static int PlayerCount => PlayerRegistry.CountPlayers;
+	public static int CountPlayers => PlayerRegistry.CountPlayers;
 	public static bool Connected => Instance != null && Instance.Runner != null;
 	public static bool isServer => Instance != null && Instance.Runner != null && Instance.Runner.IsServer;
 
 	// Juegos
 	private static readonly List<string> GameList = new List<String>
 	{
-		"AHuevo"
+		"AHuevo",
+		"Lanzapato"
 	};
 
 	private List<string> CurrentGameList = new List<string>();
@@ -71,9 +73,9 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void OnSceneChanged(string sceneName)
 	{
-		
+		// TODO
 	}
-	
+
 	public static void Server_Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
 	{
 		if (runner.IsServer)
