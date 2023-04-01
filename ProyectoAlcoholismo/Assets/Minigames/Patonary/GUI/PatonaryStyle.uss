@@ -1,0 +1,112 @@
+.button_btn {
+    background-image: none;
+    -unity-background-scale-mode: scale-to-fit;
+    top: 431px;
+    width: 428px;
+    height: 93px;
+    background-color: rgba(88, 88, 88, 0);
+    flex-basis: auto;
+    flex-shrink: 0;
+    flex-direction: column;
+    opacity: 1;
+    display: flex;
+    visibility: visible;
+    -unity-text-align: middle-center;
+    border-top-left-radius: 39px;
+    border-bottom-left-radius: 39px;
+    border-top-right-radius: 39px;
+    border-bottom-right-radius: 39px;
+    border-left-width: 92px;
+    border-right-width: 92px;
+    padding-left: 0;
+    border-left-color: rgba(48, 48, 48, 0);
+    border-right-color: rgba(48, 48, 48, 0);
+    border-top-color: rgba(48, 48, 48, 0);
+    border-bottom-color: rgba(36, 36, 36, 0);
+    border-top-width: 0;
+    border-bottom-width: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.regular_text {
+    top: 40%;
+    color: rgb(255, 255, 255);
+    -unity-text-align: middle-center;
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    background-color: rgba(75, 73, 73, 0.29);
+    height: 22%;
+    width: 75%;
+    align-items: stretch;
+    left: 12.5%;
+    font-size: 14px;
+    -unity-font: url('project://database/Assets/TextMesh%20Pro/Fonts/LiberationSans.ttf?fileID=12800000&guid=e3265ab4bf004d28a9537516768c1c75&type=3#LiberationSans');
+    white-space: normal;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    text-shadow: 0 0 0 rgb(0, 0, 0);
+    letter-spacing: 0;
+    -unity-paragraph-spacing: 50px;
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    -unity-font-style: normal;
+    position: absolute;
+}
+
+.bttn {
+    top: auto;
+    width: 65%;
+    height: 13%;
+    bottom: auto;
+    font-size: 18px;
+    -unity-font-style: bold;
+    -unity-font: url('project://database/Assets/TextMesh%20Pro/Fonts/LiberationSans.ttf?fileID=12800000&guid=e3265ab4bf004d28a9537516768c1c75&type=3#LiberationSans');
+    background-image: url('project://database/Assets/Minigames/Patonary/GUI/btn2_sin_fondo.png?fileID=2800000&guid=7fde0b21e21db83498709b4191bcb3b3&type=3#btn2_sin_fondo');
+    color: rgb(255, 255, 255);
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: 30%;
+    padding-left: 1px;
+    padding-right: 1px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-left-radius: 23px;
+    border-bottom-left-radius: 23px;
+    border-top-right-radius: 23px;
+    border-bottom-right-radius: 23px;
+    position: relative;
+    left: auto;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.background {
+    background-color: rgb(1, 148, 155);
+    width: 100%;
+    height: 100%;
+    background-image: url('project://database/Assets/Minigames/Patonary/GUI/fnd.png?fileID=2800000&guid=2636a490099947348b5fb375f967d569&type=3#fnd');
+}
+
+.main_txt {
+    -unity-font: url('project://database/Assets/TextMesh%20Pro/Fonts/LiberationSans.ttf?fileID=12800000&guid=e3265ab4bf004d28a9537516768c1c75&type=3#LiberationSans');
+    font-size: 44%;
+    -unity-text-align: middle-center;
+    top: 15%;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    width: 100%;
+    height: 15%;
+}

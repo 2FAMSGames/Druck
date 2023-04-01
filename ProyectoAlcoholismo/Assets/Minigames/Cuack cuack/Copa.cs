@@ -96,7 +96,7 @@ public class Copa : MonoBehaviour
             if (tiempoEnTono > tiempoTonoParaRomper)
             {
                 puntuacion += 1;
-                GameState.Instance.ModifyScore(puntuacion);
+                GameState.GetMyPlayer().SetData(0, puntuacion);
                 RomperCopa();
             }
         }
@@ -116,7 +116,7 @@ public class Copa : MonoBehaviour
     private void Update()
     {
         tiempoDeJuego -= Time.deltaTime;
-        if (tiempoDeJuego < 0)
+        if (tiempoDeJuego < 0 && !Empate())
         {
             AcabarJuego();
         }
@@ -168,8 +168,68 @@ public class Copa : MonoBehaviour
         modeloCopa.localScale = new Vector3(tamanioCopa, 1, tamanioCopa);
     }
 
+    private bool Empate()
+    {
+        bool empate = false;
+        float puntuacionMaxima = 0;
+
+        var result = PlayerRegistry.Instance.SortedScores();
+
+        foreach (var player in result)
+        {
+            if (GameState.GetPlayer(player.Item1).data[0] > puntuacionMaxima)
+            {
+                puntuacionMaxima = GameState.GetPlayer(player.Item1).data[0];
+            }
+        }
+
+        int empatados = 0;
+
+        foreach (var player in result)
+        {
+            if (GameState.GetPlayer(player.Item1).data[0] == puntuacionMaxima)
+            {
+                empatados++;
+            }
+        }
+
+        if (empatados > 1)
+        {
+            empate = true;
+        }
+
+        return empate;
+    }
+
+    private bool Ganador()
+    {
+        bool ganador = false;
+        float puntuacionMaxima = 0;
+
+        var result = PlayerRegistry.Instance.SortedScores();
+
+        foreach (var player in result)
+        {
+            if (GameState.GetPlayer(player.Item1).data[0] > puntuacionMaxima)
+            {
+                puntuacionMaxima = GameState.GetPlayer(player.Item1).data[0];
+            }
+        }
+
+        if (GameState.GetMyPlayer().data[0] == puntuacionMaxima)
+        {
+            ganador = true;
+        }
+
+        return ganador;
+    }
+
     private void AcabarJuego()
     {
+        if (Ganador())
+        {
+
+        }
         SceneManager.LoadScene("Ranking");
     }
 }
