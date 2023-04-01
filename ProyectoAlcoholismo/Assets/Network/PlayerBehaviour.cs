@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Fusion;
-using UnityEngine;
 using NetworkBehaviour = Fusion.NetworkBehaviour;
 using Vector3 = UnityEngine.Vector3;
 

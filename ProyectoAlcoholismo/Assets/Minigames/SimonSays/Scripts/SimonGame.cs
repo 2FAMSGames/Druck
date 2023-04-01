@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime;
-using UnityEditor.Build.Reporting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
+
+// Propios
 using NoteList = System.Collections.Generic.List<float>;
 using Cancion = System.Collections.Generic.List<System.Collections.Generic.List<float>>;
 
