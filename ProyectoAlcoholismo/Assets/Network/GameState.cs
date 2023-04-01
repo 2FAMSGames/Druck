@@ -276,7 +276,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			pl.Value.SetReady(false);
 	}
 
-	private void PlayerHasChangedData(int id, NetworkDictionary<int,float> data)
+	public void PlayerHasChangedData(int id, NetworkDictionary<int,float> data)
 	{
 		PlayerChangedData?.Invoke(id, data);
 	}
