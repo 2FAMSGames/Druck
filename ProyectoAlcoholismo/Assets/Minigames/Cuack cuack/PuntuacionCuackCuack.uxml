@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/GUI/MenuStyles.uss?fileID=7433441132597879392&amp;guid=61874ddc3b5661a48bfb874b3fa2c714&amp;type=3#MenuStyles" />
+    <ui:GroupBox style="align-items: flex-start; justify-content: space-between; height: 100%; width: auto; flex-direction: row;">
+        <ui:VisualElement name="TiempoBox" style="height: 41px; width: 52px; background-color: rgb(203, 120, 50); border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; margin-right: 4px; align-items: center; justify-content: center;">
+            <ui:Label text="60" display-tooltip-when-elided="true" name="Tiempo" style="font-size: 20%;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="PuntuacionBox" style="height: 41px; width: 52px; background-color: rgb(203, 120, 50); border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; margin-right: 4px; align-items: center; justify-content: center;">
+            <ui:Label text="0" display-tooltip-when-elided="true" name="Puntuacion" style="font-size: 20%;" />
+        </ui:VisualElement>
+    </ui:GroupBox>
+</ui:UXML>

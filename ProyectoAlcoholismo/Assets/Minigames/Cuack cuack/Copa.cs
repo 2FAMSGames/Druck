@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class Copa : MonoBehaviour
 {
@@ -19,11 +21,14 @@ public class Copa : MonoBehaviour
     public RectTransform actual;
     public bool copaActiva;
     public float distanciaEntreCopas = 5;
+    public float tiempoDeJuego = 60;
 
     public float tono;
     float posicion;
     float tiempoEnTono;
     float frecuanciaAnterior;
+    int puntuacion;
+    VisualElement root;
     AudioSource audioSource;
 
     Vector3 posInicial;
@@ -44,6 +49,9 @@ public class Copa : MonoBehaviour
         }
 
         posInicialCamara = camara.transform.position;
+        puntuacion = 0;
+
+        root = FindObjectOfType<UIDocument>().rootVisualElement;
     }
 
     private void FixedUpdate()
@@ -87,6 +95,8 @@ public class Copa : MonoBehaviour
 
             if (tiempoEnTono > tiempoTonoParaRomper)
             {
+                puntuacion += 1;
+                GameState.Instance.ModifyScore(puntuacion);
                 RomperCopa();
             }
         }
@@ -105,6 +115,12 @@ public class Copa : MonoBehaviour
 
     private void Update()
     {
+        tiempoDeJuego -= Time.deltaTime;
+        if (tiempoDeJuego < 0)
+        {
+            AcabarJuego();
+        }
+
         if (tiempoEnTono > 0)
         {
             camara.transform.position = posInicialCamara + new Vector3(Mathf.Sin(Time.time * 50) * 0.02f * tiempoEnTono, Mathf.Sin(Time.time * 40) * 0.02f * tiempoEnTono, 0.0f);
@@ -113,6 +129,9 @@ public class Copa : MonoBehaviour
         {
             camara.transform.position = posInicialCamara;
         }
+
+        root.Q<Label>("Puntuacion").text = puntuacion.ToString();
+        root.Q<Label>("Tiempo").text = Mathf.Ceil(tiempoDeJuego).ToString();
     }
 
     public void RomperCopa()
@@ -147,5 +166,10 @@ public class Copa : MonoBehaviour
         float tamanioCopa = (0.5f + tonoObjetivo);
 
         modeloCopa.localScale = new Vector3(tamanioCopa, 1, tamanioCopa);
+    }
+
+    private void AcabarJuego()
+    {
+        SceneManager.LoadScene("Ranking");
     }
 }
