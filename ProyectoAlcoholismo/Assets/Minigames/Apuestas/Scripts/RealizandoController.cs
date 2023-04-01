@@ -33,6 +33,8 @@ public class RealizandoController : MonoBehaviour
     {
         var targetBox = evt.target as Button;
         var result = targetBox.name;
+        //TODO: habría que guardar el result en una variable comun para todos y contabilizar los "y" y los "n"
+        //si hay más y, winner será apuestasController.challengedPlayer(el jugador retado) si no apuestasController.CurrentPlayer, el jugador con el turno
         Debug.Log(result);
         apuestasController.winner = result == "y" ? apuestasController.challengedPlayer : apuestasController.CurrentPlayer;
         apuestasController.GoTo("ganador");

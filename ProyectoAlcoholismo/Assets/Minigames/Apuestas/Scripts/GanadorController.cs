@@ -22,7 +22,7 @@ public class GanadorController : MonoBehaviour
         nTragos = doc.rootVisualElement.Q<Label>("number");
         nTragos.text = apuestasController.prize;
         //TODO: poner temporizador y que pase al turno siguiente
-        // TODO: pasar el número de tragos para que el servidor los reste en el score 
+        // TODO: pasar el número de tragos para que el servidor los reste en el score //El número de tragos sería apuestasController.prize y apuestasController.winner el jugador que los gana
     }
 
 }
