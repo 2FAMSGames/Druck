@@ -18,7 +18,6 @@ public class ListaController : MonoBehaviour
     {
         apuestasController = ApuestasObject.GetComponent<ApuestasController>();
         doc = GetComponent<UIDocument>();
-        //doc = GetComponent<UIDocument>();
         PlayerList = doc.rootVisualElement.Q<ListView>("PlayerList");
 
         List<string> AllPlayers = new List<string>();

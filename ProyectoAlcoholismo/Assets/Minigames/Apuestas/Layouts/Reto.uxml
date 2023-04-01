@@ -2,10 +2,25 @@
     <Style src="project://database/Assets/GUI/MenuStyles.uss?fileID=7433441132597879392&amp;guid=61874ddc3b5661a48bfb874b3fa2c714&amp;type=3#MenuStyles" />
     <ui:VisualElement name="MainSection" style="justify-content: center; align-items: stretch; flex-grow: 1;">
         <ui:VisualElement name="Buttons" style="flex-grow: 1; justify-content: center;">
-            <ui:Label text="Elige un reto:" display-tooltip-when-elided="true" class="text_title" />
-            <ui:Button text="Reto1" display-tooltip-when-elided="true" enable-rich-text="true" name="Reto1" class="apostar__button" style="background-image: url(&apos;project://database/Assets/GUI/Icons/IconButton.png?fileID=2800000&amp;guid=49c7868404aab7a469b5d396757e7693&amp;type=3#IconButton&apos;);" />
-            <ui:Button text="Reto2" display-tooltip-when-elided="true" name="Reto2" class="apostar__button" style="background-image: url(&apos;project://database/Assets/GUI/Icons/IconButton.png?fileID=2800000&amp;guid=49c7868404aab7a469b5d396757e7693&amp;type=3#IconButton&apos;);" />
-            <ui:Button text="Reto3" display-tooltip-when-elided="true" name="Reto3" class="apostar__button" style="background-image: url(&apos;project://database/Assets/GUI/Icons/IconButton.png?fileID=2800000&amp;guid=49c7868404aab7a469b5d396757e7693&amp;type=3#IconButton&apos;);" />
+            <ui:Label text="No hay huevos a:" display-tooltip-when-elided="true" class="text_title" style="font-size: 14%;" />
+            <ui:GroupBox style="flex-direction: row; -unity-text-align: upper-center; justify-content: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 1px; padding-right: 1px; padding-top: 1px; padding-bottom: 1px;">
+                <ui:Label text="x " display-tooltip-when-elided="true" style="white-space: nowrap; color: rgb(255, 254, 254); -unity-font-style: bold; font-size: 10%;" />
+                <ui:Label display-tooltip-when-elided="true" name="Prize1" style="font-size: 10%; color: rgb(255, 255, 255);" />
+                <ui:IMGUIContainer style="background-color: rgba(187, 187, 187, 0); background-image: url(&apos;project://database/Assets/Minigames/Apuestas/Images/trago.png?fileID=2800000&amp;guid=db5d848e12d8b2c4c9c37c86eaf00b83&amp;type=3#trago&apos;); width: 25px; height: 19px;" />
+            </ui:GroupBox>
+            <ui:Button display-tooltip-when-elided="true" enable-rich-text="true" name="Reto1" class="apostar__button" style="background-image: url(&apos;project://database/Assets/GUI/Icons/IconButton.png?fileID=2800000&amp;guid=49c7868404aab7a469b5d396757e7693&amp;type=3#IconButton&apos;); font-size: 10%; white-space: normal; margin-left: 5%; margin-right: 5%; margin-top: 0; margin-bottom: 0;" />
+            <ui:GroupBox style="flex-direction: row; -unity-text-align: upper-center; justify-content: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 1px; padding-right: 1px; padding-top: 1px; padding-bottom: 1px;">
+                <ui:Label text="x " display-tooltip-when-elided="true" style="white-space: nowrap; color: rgb(255, 254, 254); -unity-font-style: bold; font-size: 10%;" />
+                <ui:Label display-tooltip-when-elided="true" name="Prize2" style="font-size: 10%; color: rgb(255, 255, 255);" />
+                <ui:IMGUIContainer style="background-color: rgba(187, 187, 187, 0); background-image: url(&apos;project://database/Assets/Minigames/Apuestas/Images/trago.png?fileID=2800000&amp;guid=db5d848e12d8b2c4c9c37c86eaf00b83&amp;type=3#trago&apos;); width: 25px; height: 19px;" />
+            </ui:GroupBox>
+            <ui:Button display-tooltip-when-elided="true" name="Reto2" class="apostar__button" style="background-image: url(&apos;project://database/Assets/GUI/Icons/IconButton.png?fileID=2800000&amp;guid=49c7868404aab7a469b5d396757e7693&amp;type=3#IconButton&apos;); font-size: 10%; white-space: normal; margin-left: 5%; margin-right: 5%; margin-top: 0; margin-bottom: 0;" />
+            <ui:GroupBox style="flex-direction: row; -unity-text-align: upper-center; justify-content: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 1px; padding-right: 1px; padding-top: 1px; padding-bottom: 1px;">
+                <ui:Label text="x " display-tooltip-when-elided="true" style="white-space: nowrap; color: rgb(255, 254, 254); -unity-font-style: bold; font-size: 10%;" />
+                <ui:Label display-tooltip-when-elided="true" name="Prize3" style="font-size: 10%; color: rgb(255, 255, 255);" />
+                <ui:IMGUIContainer style="background-color: rgba(187, 187, 187, 0); background-image: url(&apos;project://database/Assets/Minigames/Apuestas/Images/trago.png?fileID=2800000&amp;guid=db5d848e12d8b2c4c9c37c86eaf00b83&amp;type=3#trago&apos;); width: 25px; height: 19px;" />
+            </ui:GroupBox>
+            <ui:Button display-tooltip-when-elided="true" name="Reto3" class="apostar__button" style="background-image: url(&apos;project://database/Assets/GUI/Icons/IconButton.png?fileID=2800000&amp;guid=49c7868404aab7a469b5d396757e7693&amp;type=3#IconButton&apos;); font-size: 10%; white-space: normal; margin-left: 5%; margin-right: 5%; margin-top: 0; margin-bottom: 0;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

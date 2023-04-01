@@ -13,7 +13,7 @@ public class ApuestasController : MonoBehaviour
     [SerializeField]
     private GameObject apuestasObject;
     private ApuestasController apuestasController;
-
+    public string prize = "0";
     public string yourPlayer = "Ana";
     public string CurrentPlayer = "Ana";
     public string challengedPlayer = "";
@@ -47,10 +47,7 @@ public class ApuestasController : MonoBehaviour
             // El servidor no recibe "sus eventos"
             ChooseScreen(id);
         }
-        
-        //retoScreen.GetComponent<RetoController>();
-        //esperaScreen.GetComponent<EsperaController>();
-//        GoTo("reto");
+        //GoTo("inicio");
     }
 
     private void ChooseScreen(int id)
@@ -85,33 +82,7 @@ public class ApuestasController : MonoBehaviour
         realizandoScreen.SetActive(screen == "realizando");
         ganadorScreen.SetActive(screen == "ganador");
         inicioScreen.SetActive(screen == "inicio");
-        //roomJoinMenu.SetActive(false);
-        //settingsMenu.SetActive(false);
+
     }
 
-
-
-    //private void CreateRoomButtonOnClicked()
-    //{
-    //    Debug.Log("Create button clicked");
-    //    //menusController.GoToRoomCreateMenu();
-    //}
-
-    //private void JoinRoomButtonOnClicked()
-    //{
-    //    Debug.Log("Join button clicked");
-    //    menusController.GoToRoomJoinMenu();
-    //}
-
-    //private void OptionsButtonOnClicked()
-    //{
-    //    Debug.Log("Options button clicked");
-    //    menusController.GoToSettingsMenu();
-    //}
-
-    //private void ExitButtonOnClicked()
-    //{
-    //    Debug.Log("Exit button clicked");
-    //    Application.Quit();
-    //}
 }
