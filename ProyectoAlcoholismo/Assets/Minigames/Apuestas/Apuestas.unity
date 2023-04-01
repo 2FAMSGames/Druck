@@ -356,6 +356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   apuestasObject: {fileID: 0}
+  prize: 0
   yourPlayer: Ana
   CurrentPlayer: Ana
   challengedPlayer: 
