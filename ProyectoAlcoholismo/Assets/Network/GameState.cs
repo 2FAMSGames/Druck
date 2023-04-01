@@ -2,13 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
 using Unity.VisualScripting;
 using UnityEngine;
-using WebSocketSharp;
+
+// Propios
 using Random = UnityEngine.Random;
 
 public class GameState : MonoBehaviour, INetworkRunnerCallbacks
@@ -276,7 +276,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			pl.Value.SetReady(false);
 	}
 
-	private void PlayerHasChangedData(int id, NetworkDictionary<int,float> data)
+	public void PlayerHasChangedData(int id, NetworkDictionary<int,float> data)
 	{
 		PlayerChangedData?.Invoke(id, data);
 	}
