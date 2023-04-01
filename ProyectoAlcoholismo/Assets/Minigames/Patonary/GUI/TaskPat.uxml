@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Minigames/Patonary/GUI/PatonaryStyle.uss?fileID=7433441132597879392&amp;guid=e4f176ffcc4cde3419d40d833c491b88&amp;type=3#PatonaryStyle" />
+    <ui:VisualElement class="background" style="background-image: url(&apos;project://database/Assets/Minigames/Patonary/GUI/fnd.png?fileID=2800000&amp;guid=2636a490099947348b5fb375f967d569&amp;type=3#fnd&apos;);">
+        <ui:Label text="Pinta" display-tooltip-when-elided="true" class="main_text main_txt" style="font-size: 40px; flex-wrap: nowrap; white-space: normal;" />
+        <ui:Label text="Label" display-tooltip-when-elided="true" name="RandomWord" class="regular_text" style="font-size: 20%; -unity-text-align: middle-center; top: auto; position: relative; left: auto; margin-left: auto; margin-right: auto; margin-top: 40%; margin-bottom: auto;" />
+        <ui:Button text="EMPEZAR" display-tooltip-when-elided="true" name="EmpezarButton" class="button_btn bttn btn" style="position: relative; top: auto; left: auto; font-size: 18px; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; margin-left: auto; margin-right: auto; margin-top: auto; margin-bottom: 30%;" />
+    </ui:VisualElement>
+</ui:UXML>
