@@ -5,7 +5,12 @@
 
 
 ## 2FAMS
-Somos un estudio...
+Somos un estudio formado en la URJC gracias al máster de Informática Gráfica, Juegos y Realidad Virtual.
+Síguenos en nuestras redes sociales para descubrir nuestro primer proyecto.
+https://linktr.ee/2fams
+
+¡Te va a dejar PATIDIFUSO!
+
 ### Equipo
 - Ana Chicote Villar
 - Darío Muñoz Rostami
