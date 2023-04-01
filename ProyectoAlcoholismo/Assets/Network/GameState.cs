@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
 using Unity.VisualScripting;
 using UnityEngine;
+
+// Propios
 using Random = UnityEngine.Random;
 
 public class GameState : MonoBehaviour, INetworkRunnerCallbacks
@@ -25,16 +26,9 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public static bool Connected => Instance != null && Instance.Runner != null;
 	public static bool isServer => Instance != null && Instance.Runner != null && Instance.Runner.IsServer;
 
-	// Juegos
-	private static readonly List<string> GameList = new List<String>
-	{
-		"AHuevo",
-		"Lanzapato"
-	};
-
 	private List<string> CurrentGameList = new List<string>();
+	public string CurrentGameName;
 		
-
     // Eventos a los que conectarse:
     // 
     public event Action<int, int> PlayerChangedScore;
@@ -246,14 +240,24 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			if (CurrentGameList.Count == 0)
 			{
 				// New game?
-				CurrentGameList = GameList;
+				CurrentGameList = Utils.GameConstants.GameList;
 			}
+			
+			Debug.Log("Juegos en lista: " + CurrentGameList.Count);
+			foreach(var x in CurrentGameList)
+				Debug.Log("Game: " + x);
 
-			var gameIdx = Random.Range(0, CurrentGameList.Count - 1);
+			var gameIdx = Random.Range(0, CurrentGameList.Count);
 			var gameName = CurrentGameList.ElementAt(gameIdx);
 			CurrentGameList.Remove(gameName);
+			CurrentGameName = gameName;
 			
-			Debug.Log("game idx: " + gameIdx + " name: " + gameName);
+			Debug.Log("elegido " + gameIdx);
+			Debug.Log("lanzando " + gameName);
+			Debug.Log("Juegos en lista: " + CurrentGameList.Count);
+			foreach(var x in CurrentGameList)
+				Debug.Log("Game: " + x);
+
 
 			LoadScene(gameName);
 			PlayerRegistry.Instance.SetScene(gameName);
@@ -272,14 +276,33 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			pl.Value.SetReady(false);
 	}
 
-	private void PlayerHasChangedData(int id, NetworkDictionary<int,float> data)
+	public void PlayerHasChangedData(int id, NetworkDictionary<int,float> data)
 	{
 		PlayerChangedData?.Invoke(id, data);
 	}
 	
+	/** \brief Devueve la lista de tuplas <id_jugador, score> ordenada por score.
+	 * 
+	 */
 	public List<Tuple<int,int>> SortedScores()
 	{
-		return PlayerRegistry.Instance.SortedScores();
+		List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+		
+		// TODO: Actualizar cuando se añadan los juegos.
+		switch (CurrentGameName)
+		{
+			case "AHuevo":
+				result = PlayerRegistry.Instance.SortedScoresData0();
+				break;
+			case "Lanzapato":
+				result = PlayerRegistry.Instance.SortedScoresData0();
+				break;
+			default: // por defecto los scores globales.
+				result = PlayerRegistry.Instance.SortedScores();
+				break;
+		}
+
+		return result;
 	}
 	
 	public List<Tuple<int,int>> SortedTimes()
