@@ -109,6 +109,19 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
 
         return result;
     }
+    
+    public List<Tuple<int, int>> SortedScoresApuestas()
+    {
+        var result = new List<Tuple<int, int>>();
+
+        var values = this.ObjectByRef.OrderByDescending(kp => kp.Value.data[5]);
+        foreach (var val in values)
+        {
+            result.Add(new Tuple<int,int>(val.Key, (int)(val.Value.data[0])));
+        }
+
+        return result;
+    }
 
 
 

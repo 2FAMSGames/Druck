@@ -23,7 +23,7 @@ public class ColliderManager : MonoBehaviour
         Debug.Log("¡HAS LLEGADO A LA META!");
         GameState.GetMyPlayer().SetData(0, score);
         GameState.Instance.PlayerChangedData -= OnPlayerDataChanged;
-        
-        // TODO: ir a escena de puntuaciones.
+
+        StartCoroutine(Utils.GameUtils.GoToRankings());
     }
 }

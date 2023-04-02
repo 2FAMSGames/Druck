@@ -1,6 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
+using Random = System.Random;
 
 namespace Utils
 {
@@ -9,20 +13,33 @@ namespace Utils
         public static List<string> GameList = new List<String>
         {
            "AHuevo",
-           "Lanzapato",
+           "Apuestas",
            "CuakCuak",
-           "Apuestas"
+           "Lanzapato",
+           "Panonary",
+           "SimonSays"
         };
 
         public static Dictionary<string, string> GameNames = new Dictionary<string, string>
         {
             {"AHuevo","A huevo"},
-            {"Lanzapato", "Lanza Pato"},
+            {"Apuestas", "No hay huevos"},
             {"CuakCuak", "Cuak Cuak"},
-            {"Apuestas", "No hay huevos"}
+            {"Lanzapato", "Lanza Pato"},
+            {"Patonary", "Patonary"},
+            {"SimonSays", "Pato Dice..."}
+        };
+
+        public static Dictionary<string, string> GameSuffix = new Dictionary<string, string>
+        {
+            {"AHuevo"," puntos"},
+            {"Apuestas", ""},
+            {"CuakCuak", ""},
+            {"Lanzapato", " aciertos"},
+            {"SimonSays", " fallos"},
+            {"Patonary", ""}
         };
     }
-
 
     public static class ListUtils
     {
@@ -52,6 +69,16 @@ namespace Utils
             }
             
             return str;
+        }
+    }
+
+    public static class GameUtils
+    {
+        public static IEnumerator GoToRankings()
+        {
+            yield return new WaitForSeconds(3);
+            AsyncOperation async = SceneManager.LoadSceneAsync("Ranking");
+            yield return async; //Wait for your level to load
         }
     }
 }

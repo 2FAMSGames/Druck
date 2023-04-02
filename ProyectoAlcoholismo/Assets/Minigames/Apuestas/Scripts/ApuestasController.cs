@@ -21,6 +21,10 @@ public class ApuestasController : MonoBehaviour
     public string winner = "";
 
     private bool yourTurn;
+    private int rondas = 0;
+    private readonly int NUMRONDAS = 3;
+
+    public bool Votando = false;
 
     [SerializeField]
     private GameObject retoScreen;
@@ -37,21 +41,35 @@ public class ApuestasController : MonoBehaviour
 
     void OnEnable()
     {
+        yourPlayer = GameState.GetMyPlayer().playerName;
         GameState.Instance.PlayerChangedData += OnPlayerChangedData;
-        
-        if (GameState.isServer)
-        {
-            var id = Random.Range(0, GameState.CountPlayers - 1);
-            GameState.GetMyPlayer().SetData(0, id);
 
-            // El servidor no recibe "sus eventos"
-            ChooseScreen(id);
+        ChooseRandomPlayer();
+    }
+
+    public void ChooseRandomPlayer()
+    {
+        if (rondas < NUMRONDAS)
+        {
+            ++rondas;
+            if (GameState.isServer)
+            {
+                // TODO: comprobar que no sea muchas veces el mismo??
+                var id = Random.Range(0, GameState.CountPlayers - 1);
+                GameState.GetMyPlayer().SetData(0, id);
+
+                ChooseScreen(id);
+            }
         }
-        //GoTo("inicio");
+        else
+        {
+            StartCoroutine(Utils.GameUtils.GoToRankings());
+        }
     }
 
     private void ChooseScreen(int id)
     {
+        CurrentPlayer = GameState.GetPlayer(id).playerName;
         if (id == GameState.GetMyPlayer().playerId)
         {
             GoTo("reto");        
@@ -60,16 +78,14 @@ public class ApuestasController : MonoBehaviour
         {
             GoTo("espera");
         }
-
-        CurrentPlayer = GameState.GetPlayer(id).playerName;
     }
     
-    private void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
+    public void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
     {
+        if (Votando) return;
         // TODO: protocolo de valores con sentido para el juego
-        if (id == 15) // GameState.Instance.Runner.SessionInfo.MaxPlayers - 1
+        if (id == 15) // host es GameState.Instance.Runner.SessionInfo.MaxPlayers - 1
         {
-            // El servidor envia el dato
             ChooseScreen(id);
         }
     }
@@ -82,7 +98,5 @@ public class ApuestasController : MonoBehaviour
         realizandoScreen.SetActive(screen == "realizando");
         ganadorScreen.SetActive(screen == "ganador");
         inicioScreen.SetActive(screen == "inicio");
-
     }
-
 }

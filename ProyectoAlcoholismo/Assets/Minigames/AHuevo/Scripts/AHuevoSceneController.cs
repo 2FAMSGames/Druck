@@ -19,7 +19,6 @@ public class AHuevoSceneController : MonoBehaviour {
     {
         InfoAHuevo.SetActive(true);
         AHuevoScene.SetActive(false);
-
     }
 
     public void GoToTask()
@@ -27,7 +26,6 @@ public class AHuevoSceneController : MonoBehaviour {
         InfoAHuevo.SetActive(false);
         AHuevoScene.SetActive(true);
     }
-
 }
 
 

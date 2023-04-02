@@ -58,9 +58,8 @@ public class SimonMessages : MonoBehaviour
             
             if(GameState.isServer)
                 GameState.Instance.PlayerHasChangedData(GameState.GetMyPlayer().playerId, GameState.GetMyPlayer().data);
-            
-            return;
-            // TODO: ir a rankings
+
+            StartCoroutine(Utils.GameUtils.GoToRankings());
         }
         
         menusController.Jugar();

@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.Collections.Generic;
-using System.Linq;
 
 public class RealizandoController : MonoBehaviour
 {
@@ -33,13 +31,15 @@ public class RealizandoController : MonoBehaviour
     {
         var targetBox = evt.target as Button;
         var result = targetBox.name;
-        //TODO: habría que guardar el result en una variable común para todos (podría ser +1 para los "y" y -1 para los "n" y si es <0, sería no superado. En caso de empate, se dará por bueno (mayoría de y)
-        //si es >-1, winner será apuestasController.challengedPlayer(el jugador retado) si no apuestasController.CurrentPlayer, el jugador con el turno
+        
         Debug.Log(result);
+        
+        // si es >-1, winner será apuestasController.challengedPlayer(el jugador retado) si no apuestasController.CurrentPlayer, el jugador con el turno
+        int value = (result == "y") ? 1 : -1; // yes: 1 - no: -1
+        GameState.GetMyPlayer().SetData(0, value);
+        
+        // No debería saberse el ganador hasta que hayan votado todos? Hecho en "ganadorController"
         apuestasController.winner = result == "y" ? apuestasController.challengedPlayer : apuestasController.CurrentPlayer;
         apuestasController.GoTo("ganador");
     }
-    
-    // TODO: apuestan todos? Cómo se reciben los cambios y donde?
-
 }

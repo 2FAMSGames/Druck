@@ -254,9 +254,13 @@ public class SimonGame : MonoBehaviour
     
     public IEnumerator SingleRound()
     {
-        // TODO:
-        if(CurrentSong.Count == 0)
+        if (CurrentSong.Count == 0)
+        {
+            finished = true;
+            messagesController.texto = "Enhorabuena!\n\nCanción completada!";
+            menusController.ShowMessage();
             yield break;
+        }
 
         ++RoundNumber;
         CurrentRound = CurrentSong.First();

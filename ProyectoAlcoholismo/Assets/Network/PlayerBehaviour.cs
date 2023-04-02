@@ -81,7 +81,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
 
     public void SetScore(int pScore)
     {
-        if (Object.HasInputAuthority)
+        if (Object.HasInputAuthority || Object.HasStateAuthority)
         {
             this.playerScore = pScore;
             RpcSetPlayerScore(pScore);
@@ -90,7 +90,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
 
     public void SetName(string pName)
     {
-        if (Object.HasInputAuthority)
+        if (Object.HasInputAuthority || Object.HasStateAuthority)
         {
             this.playerName = pName;
             RpcSetPlayerName(pName);
@@ -99,7 +99,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
 
     public void SetColor(Vector3 pColor)
     {
-        if (Object.HasInputAuthority)
+        if (Object.HasInputAuthority || Object.HasStateAuthority)
         {
             this.playerColor = pColor;
             RpcSetPlayerColor(pColor);
@@ -108,7 +108,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
 
     public void SetReady(bool pReady)
     {
-        if (Object.HasInputAuthority)
+        if (Object.HasInputAuthority || Object.HasStateAuthority)
         {
             this.isReady = pReady;
             RpcSetPlayerReady(pReady);
@@ -117,7 +117,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
 
     public void SetTime(float pTime)
     {
-        if (Object.HasInputAuthority)
+        if (Object.HasInputAuthority || Object.HasStateAuthority)
         {
             this.playerTime = pTime;
             RpcSetPlayerTime(pTime);
@@ -126,7 +126,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
 
     public void SetData(int pos, float value)
     {
-        if (Object.HasInputAuthority)
+        if (Object.HasInputAuthority || Object.HasStateAuthority)
         {
             this.data.Set(pos, value);
             RpcSetPlayerData(pos, value);
@@ -135,7 +135,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
 
     public void ResetData()
     {
-        if (Object.HasInputAuthority)
+        if (Object.HasInputAuthority || Object.HasStateAuthority)
         {
             this.data.Clear();
             for (int i = 0; i < 10; ++i) this.data.Set(i, 0);

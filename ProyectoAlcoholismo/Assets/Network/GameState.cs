@@ -19,7 +19,6 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	// Local player data, not networked
 	public string uniqueID = Utils.StringUtils.generateRandomString();
 	public string myPlayerName = "No-named";
-	public int myPlayerNum;
 
 	private static bool AllReady => PlayerRegistry.AllReady;
 	public static int CountPlayers => PlayerRegistry.CountPlayers;
@@ -68,6 +67,11 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public void OnSceneChanged(string sceneName)
 	{
 		// TODO
+	}
+
+	public int RemainingGamesCount()
+	{
+		return CurrentGameList.Count;
 	}
 
 	public static void Server_Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
@@ -183,6 +187,15 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		GetMyPlayer().ResetData();
 	}
 
+	public void ResetAllPlayersData()
+	{
+		if (!isServer) return;
+		foreach (var player in PlayerRegistry.Instance.ObjectByRef)
+		{
+			player.Value.ResetData();
+		}
+	}
+
 	private void AddToEventCallbacks(in PlayerBehaviour p)
 	{
 		p.ChangedColor += this.PlayerHasChangedColor;
@@ -258,7 +271,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			foreach(var x in CurrentGameList)
 				Debug.Log("Game: " + x);
 
-
+			ResetAllPlayersData();
 			LoadScene(gameName);
 			PlayerRegistry.Instance.SetScene(gameName);
 			GameState.Instance.ResetReadyFlags();
@@ -294,7 +307,19 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			case "AHuevo":
 				result = PlayerRegistry.Instance.SortedScoresData0();
 				break;
+			case "Apuestas":
+				result = PlayerRegistry.Instance.SortedScoresApuestas();
+				break;
+			case "CuakCuak":
+				// TODO:
+				break;
 			case "Lanzapato":
+				result = PlayerRegistry.Instance.SortedScoresData0();
+				break;
+			case "Patonary":
+				// TODO:
+				break;
+			case "SimonSays":
 				result = PlayerRegistry.Instance.SortedScoresData0();
 				break;
 			default: // por defecto los scores globales.
