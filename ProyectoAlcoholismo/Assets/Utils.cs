@@ -13,10 +13,10 @@ namespace Utils
         public static List<string> GameList = new List<String>
         {
 //           "AHuevo",
-//           "Apuestas",
+           "Apuestas"
 //           "CuakCuak",
 //           "Lanzapato",
-           "Patonary"
+//           "Patonary",
 //           "SimonSays"
         };
 

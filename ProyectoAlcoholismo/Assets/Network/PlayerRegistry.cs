@@ -75,23 +75,23 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
     {
         var result = new List<Tuple<int, int>>();
 
-        var values = this.ObjectByRef.OrderByDescending(kp => kp.Value.playerScore);
-        foreach (var val in values)
+        var values = Instance.ObjectByRef.OrderByDescending(kp => kp.Value.playerScore);
+        foreach (var (key, player) in values)
         {
-            result.Add(new Tuple<int,int>(val.Key, val.Value.playerScore));
+            result.Add(new Tuple<int,int>(player.playerId, player.playerScore));
         }
 
         return result;
     }
     
-    public List<Tuple<int, int>> SortedTimes()
+    public List<Tuple<int, float>> SortedTimes()
     {
-        var result = new List<Tuple<int, int>>();
+        var result = new List<Tuple<int, float>>();
 
-        var values = this.ObjectByRef.OrderByDescending(kp => kp.Value.playerTime);
-        foreach (var val in values)
+        var values = Instance.ObjectByRef.OrderByDescending(kp => kp.Value.playerTime);
+        foreach (var (key, player) in values)
         {
-            result.Add(new Tuple<int,int>(val.Key, val.Value.playerScore));
+            result.Add(new Tuple<int,float>(player.playerId, player.playerTime));
         }
 
         return result;
@@ -101,10 +101,10 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
     {
         var result = new List<Tuple<int, int>>();
 
-        var values = this.ObjectByRef.OrderByDescending(kp => kp.Value.data[0]);
-        foreach (var val in values)
+        var values = Instance.ObjectByRef.OrderByDescending(kp => kp.Value.data[0]);
+        foreach (var (key, player) in values)
         {
-            result.Add(new Tuple<int,int>(val.Key, (int)(val.Value.data[0])));
+            result.Add(new Tuple<int,int>(player.playerId, (int)(player.data[0])));
         }
 
         return result;
@@ -114,10 +114,10 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
     {
         var result = new List<Tuple<int, int>>();
 
-        var values = this.ObjectByRef.OrderByDescending(kp => kp.Value.data[5]);
-        foreach (var val in values)
+        var values = Instance.ObjectByRef.OrderByDescending(kp => kp.Value.data[5]);
+        foreach (var (key, player) in values)
         {
-            result.Add(new Tuple<int,int>(val.Key, (int)(val.Value.data[0])));
+            result.Add(new Tuple<int,int>(player.playerId, (int)(player.data[0])));
         }
 
         return result;

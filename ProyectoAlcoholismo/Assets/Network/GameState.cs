@@ -182,17 +182,13 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		GetMyPlayer().SetTime(0);
 	}
 
-	public void ResetPlayerData()
-	{
-		GetMyPlayer().ResetData();
-	}
-
 	public void ResetAllPlayersData()
 	{
 		if (!isServer) return;
-		foreach (var player in PlayerRegistry.Instance.ObjectByRef)
+		foreach (var (key, player) in PlayerRegistry.Instance.ObjectByRef)
 		{
-			player.Value.ResetData();
+			player.ResetData();
+			player.SetReady(false);
 		}
 	}
 
@@ -262,24 +258,14 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				CurrentGameList = Utils.GameConstants.GameList;
 			}
 			
-			Debug.Log("Juegos en lista: " + CurrentGameList.Count);
-			foreach(var x in CurrentGameList)
-				Debug.Log("Game: " + x);
-
 			var gameIdx = Random.Range(0, CurrentGameList.Count);
 			var gameName = CurrentGameList.ElementAt(gameIdx);
 			CurrentGameList.Remove(gameName);
 			
-			Debug.Log("elegido " + gameIdx);
-			Debug.Log("lanzando " + gameName);
-			Debug.Log("Juegos en lista: " + CurrentGameList.Count);
-			foreach(var x in CurrentGameList)
-				Debug.Log("Game: " + x);
-
 			ResetAllPlayersData();
 			PlayerRegistry.Instance.SetScene(gameName);
 			LoadScene(gameName);
-			GameState.Instance.ResetReadyFlags();
+			ResetReadyFlags();
 		}
 	}
 
@@ -291,8 +277,8 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 
 	private void ResetReadyFlags()
 	{
-		foreach (var pl in PlayerRegistry.Instance.ObjectByRef)
-			pl.Value.SetReady(false);
+		foreach (var (key, player) in PlayerRegistry.Instance.ObjectByRef)
+			player.SetReady(false);
 	}
 
 	public void PlayerHasChangedData(int id, NetworkDictionary<int,float> data)
@@ -334,7 +320,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		return result;
 	}
 	
-	public List<Tuple<int,int>> SortedTimes()
+	public List<Tuple<int,float>> SortedTimes()
 	{
 		return PlayerRegistry.Instance.SortedTimes();
 	}

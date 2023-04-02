@@ -17,6 +17,8 @@ public class PatonaryMenuController : MonoBehaviour
 
     void OnEnable()
     {
+        GameState.GetMyPlayer().ResetData();
+        
         GoToMenu();
         PlayerPrefs.DeleteAll();
     }

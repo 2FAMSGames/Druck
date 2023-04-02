@@ -138,8 +138,11 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
         if (Object.HasInputAuthority)
         {
             this.data.Clear();
-            for (int i = 0; i < 10; ++i) this.data.Set(i, 0);
-            RpcSetPlayerData(0, 0);
+            for (int i = 0; i < 10; ++i)
+            {
+                this.data.Set(i, 0);
+                RpcSetPlayerData(i, 0);
+            }
         }
     }
    

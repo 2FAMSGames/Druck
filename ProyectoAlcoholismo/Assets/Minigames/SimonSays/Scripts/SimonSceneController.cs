@@ -11,6 +11,8 @@ public class SimonSceneController: MonoBehaviour
 
     void OnEnable()
     {
+        GameState.GetMyPlayer().ResetData();
+        
         InfoScreen.SetActive(true);
         SceneScreen.SetActive(false);
         MessageScreen.SetActive(false);

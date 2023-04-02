@@ -29,11 +29,11 @@ public class GameManagerController : MonoBehaviour
     public int currentLevel = 0 ;
     int nTotalLevels;
 
-
-
     // Start is called before the first frame update
     void Start()
     {
+        GameState.GetMyPlayer().ResetData();
+        
         slingshotController = slingshot.GetComponent<SlingshotController>();
         cupsController = cupsContainer.GetComponent<CupsController>();
         nTotalLevels = gameLevelList.Count;
