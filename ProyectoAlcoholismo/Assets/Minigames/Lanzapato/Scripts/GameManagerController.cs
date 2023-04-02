@@ -58,13 +58,10 @@ public class GameManagerController : MonoBehaviour
                 Debug.Log("Ganaste");
                 GameState.GetMyPlayer().SetData(0, GetTotalScore());
                 GameState.Instance.PlayerChangedData -= OnPlayerFinished;
-                
-                // TODO: Ir a pantalla de puntuaciones?
+
+                StartCoroutine(Utils.GameUtils.GoToRankings());
             }
-            
         }
-
-
         OnCupEnteredDebugCheck();
     }
 
@@ -109,9 +106,9 @@ public class GameManagerController : MonoBehaviour
     {
         GameState.Instance.PlayerChangedData -= OnPlayerFinished;
         
-        //Aqui va lo que se ejecuta cuando un jugador termina, se debera editar
+        // Aqui va lo que se ejecuta cuando un jugador termina, se debera editar
         Debug.Log("Un jugador gano");
         GameState.GetMyPlayer().SetData(0, GetTotalScore());
-        // TODO: Mostrar pantalla de puntuaciones
+        StartCoroutine(Utils.GameUtils.GoToRankings());
     }
 }

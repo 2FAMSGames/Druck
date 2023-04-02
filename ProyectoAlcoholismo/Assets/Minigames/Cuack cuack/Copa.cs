@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 public class Copa : MonoBehaviour
 {
@@ -170,35 +172,22 @@ public class Copa : MonoBehaviour
 
     private bool Empate()
     {
-        bool empate = false;
         float puntuacionMaxima = 0;
 
-        var result = PlayerRegistry.Instance.SortedScores();
+        var result = PlayerRegistry.Instance.SortedScoresData0();
+        puntuacionMaxima = result[0].Item2; // es sorted de mas a manos
 
+        bool empatados = false;
         foreach (var player in result)
         {
-            if (GameState.GetPlayer(player.Item1).data[0] > puntuacionMaxima)
-            {
-                puntuacionMaxima = GameState.GetPlayer(player.Item1).data[0];
-            }
+            if (player.Item1 == 0) continue;
+
+            empatados = (GameState.GetPlayer(player.Item1).data[0] == puntuacionMaxima);
+            if (empatados)
+                break;
         }
 
-        int empatados = 0;
-
-        foreach (var player in result)
-        {
-            if (GameState.GetPlayer(player.Item1).data[0] == puntuacionMaxima)
-            {
-                empatados++;
-            }
-        }
-
-        if (empatados > 1)
-        {
-            empate = true;
-        }
-
-        return empate;
+        return empatados;
     }
 
     private bool Ganador()
@@ -206,7 +195,7 @@ public class Copa : MonoBehaviour
         bool ganador = false;
         float puntuacionMaxima = 0;
 
-        var result = PlayerRegistry.Instance.SortedScores();
+        var result = PlayerRegistry.Instance.SortedScoresData0();
 
         foreach (var player in result)
         {
@@ -226,10 +215,7 @@ public class Copa : MonoBehaviour
 
     private void AcabarJuego()
     {
-        if (Ganador())
-        {
-
-        }
-        SceneManager.LoadScene("Ranking");
+        // El ganador se mira en rankings.
+        StartCoroutine(Utils.GameUtils.GoToRankings());
     }
 }

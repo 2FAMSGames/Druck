@@ -53,12 +53,9 @@ public class SimonMessages : MonoBehaviour
     {
         if (gameController.finished)
         {
-            GameState.GetMyPlayer().SetData(0, gameController.failedRounds);
+            GameState.GetMyPlayer().SetData(0, gameController.failedRounds == 0 ? -1 : gameController.failedRounds);
             GameState.GetMyPlayer().SetData(1, gameController.totalTime);
             
-            if(GameState.isServer)
-                GameState.Instance.PlayerHasChangedData(GameState.GetMyPlayer().playerId, GameState.GetMyPlayer().data);
-
             StartCoroutine(Utils.GameUtils.GoToRankings());
         }
         

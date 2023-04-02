@@ -25,7 +25,6 @@ public class TaskPat : MonoBehaviour
         //button
         empezarButton = doc.rootVisualElement.Q<Button>("EmpezarButton");
         empezarButton.clicked += EmpezarButtonOnClicked;
-
     }
 
     void Start()

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fusion;
+using Unity.VisualScripting;
 using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -45,6 +46,7 @@ public class Ranking : MonoBehaviour
         boton = root.Q<Button>("Boton");
         boton.clicked += ReadyButtonOnClicked;
         boton.text = STARTSTR;
+        boton.SetEnabled(false);
         
         GameTitle.visible = !gameName.IsNullOrEmpty();
         if (GameTitle.visible)
@@ -60,6 +62,7 @@ public class Ranking : MonoBehaviour
         // Castigos
         jugadoresUI.onSelectionChange += OnSelectionChanged;
         jugadoresUI.selectionType = SelectionType.None;
+        GameState.Instance.PlayerChangedData += OnPlayerChangedData;
     }
 
     private void OnSelectionChanged(IEnumerable<object> obj)
@@ -73,6 +76,14 @@ public class Ranking : MonoBehaviour
 
     private void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
     {
+        if (modo == Modo.Rankings)
+        {
+            // Actualizar la lista si alguien "llega a rankings tarde"
+            jugadoresUI.Clear();
+            fillPlayers();
+            return;
+        }
+        
         var castigador = GameState.GetPlayer(id).playerName;
         var myId = GameState.GetMyPlayer().playerId;
 
@@ -137,11 +148,19 @@ public class Ranking : MonoBehaviour
 
                 TemplateContainer jugadorContainer = jugadorTemplate.Instantiate();
                 jugadorContainer.Q<Label>("Nombre").text = name;
-                jugadorContainer.Q<Label>("Puntuacion").text = score.ToString() + sufijo;
+                jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString()) + sufijo;
                 //jugadorContainer.Q<VisualElement>("Icono").style.color = color;
                 jugadorContainer.Q<VisualElement>("Icono").visible = false;
                 jugadoresUI.Add(jugadorContainer);
             }
+
+            bool allIn = true;
+            foreach (var (id, score) in scores)
+            {
+                allIn &= score != 0;
+            }
+            
+            boton.SetEnabled(allIn);
         }
         else // Castigos modo = Modo.Castigador || Modo.Fin
         {
@@ -179,7 +198,6 @@ public class Ranking : MonoBehaviour
         switch (modo)
         {
             case Modo.Rankings:
-                GameState.Instance.PlayerChangedData += OnPlayerChangedData;
                 var soyCastigador = GameState.GetMyPlayer().playerId == winnerIndex;
                 jugadoresUI.visible = soyCastigador;
                 var GameTitle = root.Q<Label>("NombreJuego");

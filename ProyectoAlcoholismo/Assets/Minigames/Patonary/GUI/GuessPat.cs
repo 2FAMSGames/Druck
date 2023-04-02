@@ -61,11 +61,10 @@ public class GuessPat : MonoBehaviour
         //go to next menu
         //menusController.GoToVote();
 
-        //if (GuessWaitngEnded == 1)        //if everyone´s pic/guess/vote is ready then
+        //if (GuessWaitngEnded == 1)        //if everyoneï¿½s pic/guess/vote is ready then
         //{
         //    menusController.GoToVote();
         //}
         menusController.GoToWait();
-
     }
 }

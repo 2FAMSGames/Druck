@@ -42,12 +42,16 @@ public class VotePat : MonoBehaviour
     private void YesVoteButtonOnClicked()
     {
         Debug.Log("Yes button clicked");
-        //add point to the person who drew the drawing and who answered
+        GameState.GetMyPlayer().SetData(0, 1);
+        
+        // TODO: después de votar a donde vamos?
     }
 
     private void NoVoteButtonOnClicked()
     {
         Debug.Log("No button clicked");
-        //do not add points
+        GameState.GetMyPlayer().SetData(0, -1);
+        
+        // TODO: después de votar a donde vamos?
     }
 }

@@ -80,6 +80,11 @@ public class PatonaryMenuController : MonoBehaviour
         VotePat.SetActive(false);
         WaitPat.SetActive(true);
     }
+
+    public void GoToRankings()
+    {
+        StartCoroutine(Utils.GameUtils.GoToRankings());
+    }
 }
 
 
