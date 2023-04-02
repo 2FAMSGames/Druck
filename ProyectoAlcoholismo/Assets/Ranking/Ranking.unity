@@ -269,3 +269,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jugadorTemplate: {fileID: 9197481963319205126, guid: 94aed2cd33e5127458ff9a3f1e129d0a, type: 3}
+  jugadorTemplateRadioButton: {fileID: 9197481963319205126, guid: 929da1a3a9cc4e24384e42b5c9014619, type: 3}
