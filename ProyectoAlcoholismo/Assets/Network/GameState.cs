@@ -27,7 +27,9 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 
 	private List<string> CurrentGameList = new List<string>();
 	public string CurrentGameName;
-		
+	private int PlayedGames = 0;	
+	
+	
     // Eventos a los que conectarse:
     // 
     public event Action<int, int> PlayerChangedScore;
@@ -252,7 +254,13 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		{
 			if (CurrentGameList.Count == 0)
 			{
-				// New game?
+				if (PlayedGames > 0) // terminar e ir al menu
+				{
+					LoadScene("Start");
+					return;
+				}
+
+				// Cargar lista y randomizar.
 				CurrentGameList = Utils.GameConstants.GameList;
 			}
 			
@@ -280,6 +288,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 
 	private void LoadScene(string sceneName)
 	{
+		++PlayedGames;
 		Runner.SetActiveScene(sceneName);
 	}
 
