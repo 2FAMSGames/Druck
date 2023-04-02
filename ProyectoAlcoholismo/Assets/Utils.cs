@@ -12,12 +12,12 @@ namespace Utils
     {
         public static List<string> GameList = new List<String>
         {
-           "AHuevo",
-           "Apuestas",
-           "CuakCuak",
-           "Lanzapato",
-           "Panonary",
-           "SimonSays"
+//           "AHuevo",
+//           "Apuestas",
+//           "CuakCuak",
+//           "Lanzapato",
+           "Patonary"
+//           "SimonSays"
         };
 
         public static Dictionary<string, string> GameNames = new Dictionary<string, string>
@@ -37,7 +37,7 @@ namespace Utils
             {"CuakCuak", ""},
             {"Lanzapato", " aciertos"},
             {"SimonSays", " fallos"},
-            {"Patonary", ""}
+            {"Patonary", " aciertos"}
         };
     }
 
@@ -76,7 +76,7 @@ namespace Utils
     {
         public static IEnumerator GoToRankings()
         {
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(1);
             AsyncOperation async = SceneManager.LoadSceneAsync("Ranking");
             yield return async; //Wait for your level to load
         }

@@ -37,7 +37,7 @@ public class VotePat : MonoBehaviour
         YesVoteButton.clicked += YesVoteButtonOnClicked;
         NoVoteButton.clicked += NoVoteButtonOnClicked;
         
-        GameState.Instance.PlayerChangedData += OnPlayerChangedData;
+        //GameState.Instance.PlayerChangedData += OnPlayerChangedData;
     }
     
     private void OnPlayerChangedData(int arg1, NetworkDictionary<int, float> arg2)
@@ -75,8 +75,8 @@ public class VotePat : MonoBehaviour
     {
         Debug.Log("Yes button clicked");
         GameState.GetMyPlayer().SetData(0, 1);
-        
-        // TODO: después de votar a donde vamos?
+
+        StartCoroutine(Utils.GameUtils.GoToRankings());
     }
 
     private void NoVoteButtonOnClicked()
@@ -84,6 +84,6 @@ public class VotePat : MonoBehaviour
         Debug.Log("No button clicked");
         GameState.GetMyPlayer().SetData(0, -1);
         
-        // TODO: después de votar a donde vamos?
+        StartCoroutine(Utils.GameUtils.GoToRankings());
     }
 }

@@ -11,7 +11,6 @@ public class Ranking : MonoBehaviour
 {
     public VisualTreeAsset jugadorTemplate;
     
-    private Button readyButton;
     private string gameName;
     private int winnerIndex = -1;
 
@@ -50,10 +49,11 @@ public class Ranking : MonoBehaviour
         if (GameTitle.visible)
         {
             GameTitle.text = Utils.GameConstants.GameNames[gameName];
-            readyButton.text = STARTSTR;
+            boton.text = STARTSTR;
         }
         else
-            readyButton.text = ENDSTR;
+            boton.text = ENDSTR;
+            boton.text = ENDSTR;
 
         fillPlayers();
 
@@ -146,10 +146,13 @@ public class Ranking : MonoBehaviour
 
                 TemplateContainer jugadorContainer = jugadorTemplate.Instantiate();
                 jugadorContainer.Q<Label>("Nombre").text = name;
+                jugadorContainer.Q<Label>("Nombre").style.fontSize = 14;
                 jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString()) + sufijo;
+                jugadorContainer.Q<Label>("Puntuacion").style.fontSize = 14;
+                jugadorContainer.Q<Label>("Separador").style.fontSize = 14;
                 //jugadorContainer.Q<VisualElement>("Icono").style.color = color;
                 jugadorContainer.Q<VisualElement>("Icono").visible = false;
-                jugadoresUI.Add(jugadorContainer);
+                jugadoresUI.hierarchy.Add(jugadorContainer);
             }
 
             bool allIn = true;
@@ -176,7 +179,7 @@ public class Ranking : MonoBehaviour
                 jugadorContainer.Q<Label>("Puntuacion").text = GameState.GetPlayer(id).playerScore.ToString();
                 //jugadorContainer.Q<VisualElement>("Icono").style.color = color;
                 jugadorContainer.Q<VisualElement>("Icono").visible = false;
-                jugadoresUI.Add(jugadorContainer);
+                jugadoresUI.hierarchy.Add(jugadorContainer);
             }
         }
     }
@@ -255,8 +258,8 @@ public class Ranking : MonoBehaviour
                 break;
             case Modo.Fin:
                 GameState.FlipReadyFlag();
-                readyButton.text = WAITSTR;
-                readyButton.SetEnabled(false);
+                boton.text = WAITSTR;
+                boton.SetEnabled(false);
         
                 // Necesario porque el server no recibe sus propios cambios.
                 if (GameState.isServer)
