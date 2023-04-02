@@ -152,8 +152,8 @@ public class Ranking : MonoBehaviour
                 //var color = GetStyledColor(playerValues.playerColor);
 
                 var jugadorContainer = jugadorTemplateRadioButton.Instantiate();
-                jugadorContainer.Q<Label>("Jugador").text = name;
-                jugadorContainer.Q<Label>("Jugador").style.fontSize = 14;
+                jugadorContainer.Q<Toggle>("Jugador").text = name;
+                jugadorContainer.Q<Toggle>("Jugador").style.fontSize = 14;
                 jugadorContainer.Q<Toggle>("Jugador").value = false;
                 jugadorContainer.Q<Toggle>("Jugador").visible = false;
 
@@ -185,8 +185,8 @@ public class Ranking : MonoBehaviour
                 if (id == GameState.GetMyPlayer().playerId) continue;
 
                 var jugadorContainer = jugadorTemplateRadioButton.Instantiate();
-                jugadorContainer.Q<Label>("Jugador").text = name;
-                jugadorContainer.Q<Label>("Jugador").style.fontSize = 14;
+                jugadorContainer.Q<Toggle>("Jugador").text = name;
+                jugadorContainer.Q<Toggle>("Jugador").style.fontSize = 14;
                 jugadorContainer.Q<Toggle>("Jugador").value = false;
                 jugadorContainer.Q<Toggle>("Jugador").visible = true;
 
