@@ -81,7 +81,7 @@ public class Ranking : MonoBehaviour
         if (modo == Modo.Rankings)
         {
             // Actualizar la lista si alguien "llega a rankings tarde"
-            jugadoresUI.Clear();
+            jugadoresUI.hierarchy.Clear();
             fillPlayers();
             return;
         }
@@ -137,6 +137,7 @@ public class Ranking : MonoBehaviour
     {
         if (modo == Modo.Rankings) // GameTitle.visible = true
         {
+            jugadoresUI.hierarchy.Clear();
             Utils.GameConstants.GameSuffix.TryGetValue(gameName, out string sufijo);
             var scores = GameState.Instance.SortedScores();
             var GameTitle = root.Q<Label>("NombreJuego");
@@ -171,7 +172,7 @@ public class Ranking : MonoBehaviour
         {
             if (!PlayerRegistry.Instance || PlayerRegistry.Instance.ObjectByRef.Count == 0) return;
             
-            jugadoresUI.Clear();
+            jugadoresUI.hierarchy.Clear();
             foreach (var (id, player)  in PlayerRegistry.Instance.ObjectByRef)
             {
                 //var color = GetStyledColor(player.playerColor);
@@ -215,7 +216,7 @@ public class Ranking : MonoBehaviour
                 {
                     modo = Modo.Castigador;
                     Texto.text = "Has ganado!!\nSelecciona\nhasta 3 miembros de\nla bandada\npara castigar.";
-                    jugadoresUI.Clear();
+                    jugadoresUI.hierarchy.Clear();
                     jugadoresUI.selectionType = SelectionType.Multiple;
                     fillPlayers();    
                 }
@@ -245,7 +246,7 @@ public class Ranking : MonoBehaviour
                 boton.visible = true;
                 boton.text = GameState.Instance.RemainingGamesCount() > 0 ? STARTSTR : ENDSTR;
                 Texto.text = "La bandada\nHa recibido\nsu castigo!";
-                jugadoresUI.Clear();
+                jugadoresUI.hierarchy.Clear();
                 jugadoresUI.selectionType = SelectionType.None;
                 fillPlayers(); // TODO: Puede que no aparezcan los castigos -> test!    
                 break;
@@ -255,7 +256,7 @@ public class Ranking : MonoBehaviour
                 boton.visible = true;
                 boton.text = GameState.Instance.RemainingGamesCount() > 0 ? STARTSTR : ENDSTR;
                 Texto.text = haSidoCastigado ? "Has recibido\ntu castigo!" : "Te has librado\nesta vez!";
-                jugadoresUI.Clear();
+                jugadoresUI.hierarchy.Clear();
                 jugadoresUI.visible = true;
                 jugadoresUI.selectionType = SelectionType.None;
                 fillPlayers(); // Mostrar puntuaciones de castigados    

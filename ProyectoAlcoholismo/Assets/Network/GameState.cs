@@ -502,7 +502,10 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		{
 			if (spawnedObjects.TryGetValue(player, out NetworkObject networkObject))
 			{
-				runner.Despawn(networkObject);
+				if (networkObject != null)
+				{
+					runner.Despawn(networkObject);
+				}
 				spawnedObjects.Remove(player);
 				Server_Remove(runner, player);
 			}
