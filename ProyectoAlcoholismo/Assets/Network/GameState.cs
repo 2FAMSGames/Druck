@@ -93,10 +93,12 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 
 		if (pRef != runner.LocalPlayer)
 		{
-			Instance.RemoveFromEventCallbacks(GetPlayer(pRef));
+			var playerRef = GetPlayer(pRef);
+			if(!playerRef.IsUnityNull())
+				Instance.RemoveFromEventCallbacks(playerRef);
 		}
 		
-		if (runner.IsServer)
+//		if (runner.IsServer)
 		{
 			PlayerRegistry.Server_Remove(runner, pRef);
 		}
@@ -477,7 +479,9 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	{
 		Debug.Log("OnPlayerLeft");
 
-		Instance.RemoveFromEventCallbacks(GetPlayer(player));
+		var playerRef = GetPlayer(player);
+		if(!playerRef.IsUnityNull())
+			Instance.RemoveFromEventCallbacks(GetPlayer(player));
 		
 		if (runner.IsServer)
 		{

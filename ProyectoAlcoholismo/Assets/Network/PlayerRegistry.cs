@@ -61,7 +61,7 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
     
     public static void Server_Remove(NetworkRunner runner, PlayerRef pRef)
     {
-        if (!runner.IsServer || !pRef.IsValid || !Instance) return;
+        if (!pRef.IsValid || !Instance) return;
 
         if (Instance.ObjectByRef.Remove(pRef) == false)
         {

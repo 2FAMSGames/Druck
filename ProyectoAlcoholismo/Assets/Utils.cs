@@ -13,11 +13,11 @@ namespace Utils
         public static List<string> GameList = new List<String>
         {
 //           "AHuevo",
-           "Apuestas"
-//           "CuakCuak",
-//           "Lanzapato",
+//           "Apuestas",
+           "CuakCuak",
+           "Lanzapato",
 //           "Patonary",
-//           "SimonSays"
+           "SimonSays"
         };
 
         public static Dictionary<string, string> GameNames = new Dictionary<string, string>
