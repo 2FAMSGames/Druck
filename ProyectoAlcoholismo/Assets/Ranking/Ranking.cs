@@ -12,7 +12,8 @@ using Color32 = UnityEngine.Color32;
 public class Ranking : MonoBehaviour
 {
     public VisualTreeAsset jugadorTemplate;
-    
+    public VisualTreeAsset jugadorTemplateRadioButton;
+
     private string gameName;
     private int winnerIndex = -1;
 
@@ -30,7 +31,7 @@ public class Ranking : MonoBehaviour
     private VisualElement root;
     private ListView jugadoresUI;
     private Button boton;
-    
+
     private readonly string WAITSTR = "Esperando...";
     private readonly string STARTSTR = "Continuar!"; // quizá "Siguiente!"
     private readonly string ENDSTR = "Terminar!"; // quizá 2 botones con "Otra ronda!"
@@ -46,7 +47,7 @@ public class Ranking : MonoBehaviour
         boton.clicked += ReadyButtonOnClicked;
         boton.text = STARTSTR;
         boton.SetEnabled(false);
-        
+
         GameTitle.visible = !gameName.IsNullOrEmpty();
         if (GameTitle.visible)
         {
@@ -85,7 +86,7 @@ public class Ranking : MonoBehaviour
             fillPlayers();
             return;
         }
-        
+
         var castigador = GameState.GetPlayer(id).playerName;
         var myId = GameState.GetMyPlayer().playerId;
 
@@ -96,14 +97,14 @@ public class Ranking : MonoBehaviour
         {
             var valor = data[i];
             if (valor == 0) continue;
-            
+
             int castigado = (int)data[i] - 1;
             if (GameState.isServer) // debería tener todos los castigos y aplicarlos 1 vez.
             {
                 var player = GameState.GetPlayer(castigado);
                 player.SetScore(player.playerScore - 5);
             }
-            
+
             ++count;
             haSidoCastigado = (myId == castigado);
 
@@ -115,7 +116,7 @@ public class Ranking : MonoBehaviour
             return;
 
         if (count < maxIter) return;
-        
+
         var Texto = root.Q<Label>("Ranking");
         Texto.style.fontSize = 18;
 
@@ -127,7 +128,7 @@ public class Ranking : MonoBehaviour
         {
             Texto.text = "Parece que\nte has librado\nesta vez!!";
         }
-        
+
         boton.SetEnabled(true);
         boton.visible = true;
         boton.text = STARTSTR;
@@ -142,7 +143,7 @@ public class Ranking : MonoBehaviour
             var scores = GameState.Instance.SortedScores();
             var GameTitle = root.Q<Label>("NombreJuego");
             winnerIndex = scores[0].Item1;
-            
+
             foreach (var (id, score) in scores)
             {
                 var playerValues = GameState.GetPlayer(id);
@@ -165,20 +166,20 @@ public class Ranking : MonoBehaviour
             {
                 allIn &= score != 0;
             }
-            
+
             boton.SetEnabled(allIn);
         }
         else // Castigos modo = Modo.Castigador || Modo.Fin
         {
             if (!PlayerRegistry.Instance || PlayerRegistry.Instance.ObjectByRef.Count == 0) return;
-            
+
             jugadoresUI.hierarchy.Clear();
-            foreach (var (id, player)  in PlayerRegistry.Instance.ObjectByRef)
+            foreach (var (id, player) in PlayerRegistry.Instance.ObjectByRef)
             {
                 //var color = GetStyledColor(player.playerColor);
                 // no me voy a castigar a mi mismo.
-                if (id == GameState.GetMyPlayer().playerId) continue; 
-               
+                if (id == GameState.GetMyPlayer().playerId) continue;
+
                 TemplateContainer jugadorContainer = jugadorTemplate.Instantiate();
                 jugadorContainer.Q<Label>("Nombre").text = player.playerName;
                 jugadorContainer.Q<Label>("Puntuacion").text = GameState.GetPlayer(id).playerScore.ToString();
@@ -200,7 +201,7 @@ public class Ranking : MonoBehaviour
     {
         var Texto = root.Q<Label>("Ranking");
         Texto.style.fontSize = 18;
-        
+
         switch (modo)
         {
             case Modo.Rankings:
@@ -208,17 +209,17 @@ public class Ranking : MonoBehaviour
                 jugadoresUI.visible = soyCastigador;
                 var GameTitle = root.Q<Label>("NombreJuego");
                 GameTitle.text = "Castigos";
-        
+
                 boton.SetEnabled(false);
                 boton.visible = soyCastigador;
-            
+
                 if (soyCastigador)
                 {
                     modo = Modo.Castigador;
                     Texto.text = "Has ganado!!\nSelecciona\nhasta 3 miembros de\nla bandada\npara castigar.";
                     jugadoresUI.hierarchy.Clear();
                     jugadoresUI.selectionType = SelectionType.Multiple;
-                    fillPlayers();    
+                    fillPlayers();
                 }
                 else
                 {
@@ -234,7 +235,7 @@ public class Ranking : MonoBehaviour
                 foreach (int index in indices)
                 {
                     // Castigar jugador index.
-                    GameState.GetMyPlayer().SetData(idx++, index+1);
+                    GameState.GetMyPlayer().SetData(idx++, index + 1);
                     if (GameState.isServer)
                     {
                         var player = GameState.GetMyPlayer();
@@ -265,7 +266,7 @@ public class Ranking : MonoBehaviour
                 GameState.FlipReadyFlag();
                 boton.text = WAITSTR;
                 boton.SetEnabled(false);
-        
+
                 // Necesario porque el server no recibe sus propios cambios.
                 if (GameState.isServer)
                 {
