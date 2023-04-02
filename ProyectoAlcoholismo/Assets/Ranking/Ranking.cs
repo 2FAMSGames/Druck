@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fusion;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEditor.Tilemaps;
 using UnityEngine;
@@ -150,14 +151,17 @@ public class Ranking : MonoBehaviour
                 var name = playerValues.playerName;
                 //var color = GetStyledColor(playerValues.playerColor);
 
-                TemplateContainer jugadorContainer = jugadorTemplate.Instantiate();
-                jugadorContainer.Q<Label>("Nombre").text = name;
-                jugadorContainer.Q<Label>("Nombre").style.fontSize = 14;
-                jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString()) + sufijo;
-                jugadorContainer.Q<Label>("Puntuacion").style.fontSize = 14;
-                jugadorContainer.Q<Label>("Separador").style.fontSize = 14;
+                var jugadorContainer = jugadorTemplateRadioButton.Instantiate();
+                jugadorContainer.Q<Label>("Jugador").text = name;
+                jugadorContainer.Q<Label>("Jugador").style.fontSize = 14;
+                jugadorContainer.Q<Toggle>("Jugador").value = false;
+                jugadorContainer.Q<Toggle>("Jugador").visible = false;
+
+//                jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString()) + sufijo;
+  //              jugadorContainer.Q<Label>("Puntuacion").style.fontSize = 14;
+    //            jugadorContainer.Q<Label>("Separador").style.fontSize = 14;
                 //jugadorContainer.Q<VisualElement>("Icono").style.color = color;
-                jugadorContainer.Q<VisualElement>("Icono").visible = false;
+      //          jugadorContainer.Q<VisualElement>("Icono").visible = false;
                 jugadoresUI.hierarchy.Add(jugadorContainer);
             }
 
@@ -180,11 +184,17 @@ public class Ranking : MonoBehaviour
                 // no me voy a castigar a mi mismo.
                 if (id == GameState.GetMyPlayer().playerId) continue;
 
-                TemplateContainer jugadorContainer = jugadorTemplate.Instantiate();
-                jugadorContainer.Q<Label>("Nombre").text = player.playerName;
-                jugadorContainer.Q<Label>("Puntuacion").text = GameState.GetPlayer(id).playerScore.ToString();
-                //jugadorContainer.Q<VisualElement>("Icono").style.color = color;
-                jugadorContainer.Q<VisualElement>("Icono").visible = false;
+                var jugadorContainer = jugadorTemplateRadioButton.Instantiate();
+                jugadorContainer.Q<Label>("Jugador").text = name;
+                jugadorContainer.Q<Label>("Jugador").style.fontSize = 14;
+                jugadorContainer.Q<Toggle>("Jugador").value = false;
+                jugadorContainer.Q<Toggle>("Jugador").visible = true;
+
+//                TemplateContainer jugadorContainer = jugadorTemplate.Instantiate();
+//                jugadorContainer.Q<Label>("Nombre").text = player.playerName;
+//                jugadorContainer.Q<Label>("Puntuacion").text = GameState.GetPlayer(id).playerScore.ToString();
+              //jugadorContainer.Q<VisualElement>("Icono").style.color = color;
+//                jugadorContainer.Q<VisualElement>("Icono").visible = false;
                 jugadoresUI.hierarchy.Add(jugadorContainer);
             }
         }
