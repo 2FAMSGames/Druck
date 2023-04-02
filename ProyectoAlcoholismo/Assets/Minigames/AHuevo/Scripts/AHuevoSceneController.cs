@@ -13,6 +13,7 @@ public class AHuevoSceneController : MonoBehaviour {
     void OnEnable()
     {
         GameState.GetMyPlayer().ResetData();
+        GameState.GetMyPlayer().SetReady(false);
         
         IntroAHuevo();
     }

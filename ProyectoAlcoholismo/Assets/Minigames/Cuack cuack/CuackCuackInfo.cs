@@ -14,6 +14,7 @@ public class CuackCuackInfo : MonoBehaviour
     void OnEnable()
     {
         GameState.GetMyPlayer().ResetData();
+        GameState.GetMyPlayer().SetReady(false);
         
         doc = GetComponent<UIDocument>();
 

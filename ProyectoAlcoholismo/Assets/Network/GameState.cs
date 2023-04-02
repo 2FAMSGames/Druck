@@ -265,7 +265,6 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			ResetAllPlayersData();
 			PlayerRegistry.Instance.SetScene(gameName);
 			LoadScene(gameName);
-			ResetReadyFlags();
 		}
 	}
 

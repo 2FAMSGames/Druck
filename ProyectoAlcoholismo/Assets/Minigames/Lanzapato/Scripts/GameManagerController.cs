@@ -33,6 +33,7 @@ public class GameManagerController : MonoBehaviour
     void Start()
     {
         GameState.GetMyPlayer().ResetData();
+        GameState.GetMyPlayer().SetReady(false);
         
         slingshotController = slingshot.GetComponent<SlingshotController>();
         cupsController = cupsContainer.GetComponent<CupsController>();

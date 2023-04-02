@@ -40,14 +40,8 @@ public class ApuestasController : MonoBehaviour
 
     void OnEnable()
     {
-        var player = GameState.GetMyPlayer();
-        if(player.IsUnityNull())
-            Debug.Log("null");
-        else
-        {
-            Debug.Log("Not null");
-            player.ResetData();
-        }
+        GameState.GetMyPlayer().ResetData();
+        GameState.GetMyPlayer().SetReady(false);
 
         yourPlayer = GameState.GetMyPlayer().playerName;
         GameState.Instance.PlayerChangedData += OnPlayerChangedData;
@@ -65,7 +59,6 @@ public class ApuestasController : MonoBehaviour
                 // TODO: comprobar que no sea muchas veces el mismo??
                 var id = Random.Range(0, GameState.CountPlayers);
                 GameState.GetMyPlayer().SetData(0, id);
-                Debug.Log("id " + id);
 
                 ChooseScreen(id);
             }
@@ -78,8 +71,6 @@ public class ApuestasController : MonoBehaviour
 
     private void ChooseScreen(int id)
     {
-        Debug.Log("id " + id);
-
         CurrentPlayer = GameState.GetPlayer(id).playerName;
         if (id == GameState.GetMyPlayer().playerId)
         {
@@ -93,7 +84,6 @@ public class ApuestasController : MonoBehaviour
     
     public void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
     {
-        Debug.Log("result " + id + " " + data[0]);
         if (Votando) return;
         // TODO: protocolo de valores con sentido para el juego
         if (id == 15) // host es GameState.Instance.Runner.SessionInfo.MaxPlayers - 1

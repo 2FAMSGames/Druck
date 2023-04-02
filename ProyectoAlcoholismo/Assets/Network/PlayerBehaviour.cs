@@ -143,6 +143,9 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
                 this.data.Set(i, 0);
                 RpcSetPlayerData(i, 0);
             }
+            
+            this.SetReady(false);
+            RpcSetPlayerReady(false);
         }
     }
    

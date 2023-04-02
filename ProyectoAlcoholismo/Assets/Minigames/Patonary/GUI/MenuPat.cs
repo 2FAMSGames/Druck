@@ -15,6 +15,7 @@ public class MenuPat : MonoBehaviour
     void OnEnable()
     {
         GameState.GetMyPlayer().ResetData();
+        GameState.GetMyPlayer().SetReady(false);
         
         menusController = menusObject.GetComponent<PatonaryMenuController>();
 
