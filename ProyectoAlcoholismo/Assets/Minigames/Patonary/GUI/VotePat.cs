@@ -40,36 +40,36 @@ public class VotePat : MonoBehaviour
         //GameState.Instance.PlayerChangedData += OnPlayerChangedData;
     }
     
-    private void OnPlayerChangedData(int arg1, NetworkDictionary<int, float> arg2)
-    {
-        bool allVoted = true;
-        int yes = 0;
-        int no = 0;
-        foreach (var (key, player) in PlayerRegistry.Instance.ObjectByRef)
-        {
-            var vote = player.data[0];
-            allVoted &= (vote != 0);
-            if (vote != 0)
-            {
-                yes += vote == 1 ? 1 : 0;
-                no += vote == -1 ? 1 : 0;
-            }
-        }
-
-        if (allVoted)
-        {
-            if (yes >= no)
-            {
-                // TODO: asignar valor al ganador por el host, quién ha ganado y qué asignamos para
-                // luego usarlo en PlayerRegistry.sortedScoresData??
-                if (GameState.isServer)
-                {
-                    // id del ganador, score son los puntos.
-                    //GameState.GetPlayer(id).SetData(5, score);
-                }
-            }
-        }
-    }
+    // private void OnPlayerChangedData(int arg1, NetworkDictionary<int, float> arg2)
+    // {
+    //     bool allVoted = true;
+    //     int yes = 0;
+    //     int no = 0;
+    //     foreach (var (key, player) in PlayerRegistry.Instance.ObjectByRef)
+    //     {
+    //         var vote = player.data[0];
+    //         allVoted &= (vote != 0);
+    //         if (vote != 0)
+    //         {
+    //             yes += vote == 1 ? 1 : 0;
+    //             no += vote == -1 ? 1 : 0;
+    //         }
+    //     }
+    //
+    //     if (allVoted)
+    //     {
+    //         if (yes >= no)
+    //         {
+    //             // TODO: asignar valor al ganador por el host, quién ha ganado y qué asignamos para
+    //             // luego usarlo en PlayerRegistry.sortedScoresData??
+    //             if (GameState.isServer)
+    //             {
+    //                 // id del ganador, score son los puntos.
+    //                 //GameState.GetPlayer(id).SetData(5, score);
+    //             }
+    //         }
+    //     }
+    // }
 
     private void YesVoteButtonOnClicked()
     {

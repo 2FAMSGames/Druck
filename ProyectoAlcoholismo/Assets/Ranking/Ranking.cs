@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fusion;
+using Unity.VisualScripting.Dependencies.NCalc;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.UIElements;
 using WebSocketSharp;
@@ -48,12 +50,14 @@ public class Ranking : MonoBehaviour
         GameTitle.visible = !gameName.IsNullOrEmpty();
         if (GameTitle.visible)
         {
-            GameTitle.text = Utils.GameConstants.GameNames[gameName];
+            Utils.GameConstants.GameNames.TryGetValue(gameName, out string nombre);
+            GameTitle.text = nombre;
             boton.text = STARTSTR;
         }
         else
+        {
             boton.text = ENDSTR;
-            boton.text = ENDSTR;
+        }
 
         fillPlayers();
 
@@ -133,7 +137,7 @@ public class Ranking : MonoBehaviour
     {
         if (modo == Modo.Rankings) // GameTitle.visible = true
         {
-            var sufijo = Utils.GameConstants.GameSuffix[gameName];
+            Utils.GameConstants.GameSuffix.TryGetValue(gameName, out string sufijo);
             var scores = GameState.Instance.SortedScores();
             var GameTitle = root.Q<Label>("NombreJuego");
             winnerIndex = scores[0].Item1;

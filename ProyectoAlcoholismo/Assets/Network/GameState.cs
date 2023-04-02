@@ -309,7 +309,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public List<Tuple<int,int>> SortedScores()
 	{
 		List<Tuple<int, int>> result = new List<Tuple<int, int>>();
-		
+		Debug.Log("game " + CurrentGameName);
 		switch (CurrentGameName)
 		{
 			case "AHuevo":
