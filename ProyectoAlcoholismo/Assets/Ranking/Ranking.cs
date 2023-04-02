@@ -40,7 +40,7 @@ public class Ranking : MonoBehaviour
         root = GetComponent<UIDocument>().rootVisualElement;
         jugadoresUI = root.Q<ListView>("Jugadores");
 
-        gameName = GameState.Instance.CurrentGameName;
+        gameName = PlayerRegistry.Instance.CurrentScene;
         var GameTitle = root.Q<Label>("NombreJuego");
         boton = root.Q<Button>("Boton");
         boton.clicked += ReadyButtonOnClicked;

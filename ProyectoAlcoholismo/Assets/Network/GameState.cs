@@ -26,9 +26,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public static bool isServer => Instance != null && Instance.Runner != null && Instance.Runner.IsServer;
 
 	private List<string> CurrentGameList = new List<string>();
-	public string CurrentGameName;
 	private int PlayedGames = 0;	
-	
 	
     // Eventos a los que conectarse:
     // 
@@ -271,7 +269,6 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			var gameIdx = Random.Range(0, CurrentGameList.Count);
 			var gameName = CurrentGameList.ElementAt(gameIdx);
 			CurrentGameList.Remove(gameName);
-			CurrentGameName = gameName;
 			
 			Debug.Log("elegido " + gameIdx);
 			Debug.Log("lanzando " + gameName);
@@ -280,8 +277,8 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				Debug.Log("Game: " + x);
 
 			ResetAllPlayersData();
-			LoadScene(gameName);
 			PlayerRegistry.Instance.SetScene(gameName);
+			LoadScene(gameName);
 			GameState.Instance.ResetReadyFlags();
 		}
 	}
@@ -309,8 +306,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public List<Tuple<int,int>> SortedScores()
 	{
 		List<Tuple<int, int>> result = new List<Tuple<int, int>>();
-		Debug.Log("game " + CurrentGameName);
-		switch (CurrentGameName)
+		switch (PlayerRegistry.Instance.CurrentScene)
 		{
 			case "AHuevo":
 				result = PlayerRegistry.Instance.SortedScoresData0();
@@ -503,9 +499,8 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			if (spawnedObjects.TryGetValue(player, out NetworkObject networkObject))
 			{
 				if (networkObject != null)
-				{
 					runner.Despawn(networkObject);
-				}
+
 				spawnedObjects.Remove(player);
 				Server_Remove(runner, player);
 			}
