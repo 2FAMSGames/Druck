@@ -320,13 +320,13 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				result = PlayerRegistry.Instance.SortedScoresApuestas();
 				break;
 			case "CuakCuak":
-				// TODO:
+				// TODO: dónde se ponen los resultado?
 				break;
 			case "Lanzapato":
 				result = PlayerRegistry.Instance.SortedScoresData0();
 				break;
 			case "Patonary":
-				// TODO:
+				// TODO: dónde se ponen los resultado?
 				break;
 			case "SimonSays":
 				result = PlayerRegistry.Instance.SortedScoresData0();

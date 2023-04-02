@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PatonaryMenuController : MonoBehaviour
@@ -86,6 +84,3 @@ public class PatonaryMenuController : MonoBehaviour
         StartCoroutine(Utils.GameUtils.GoToRankings());
     }
 }
-
-
-

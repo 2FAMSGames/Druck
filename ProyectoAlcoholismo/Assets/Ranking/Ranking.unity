@@ -248,7 +248,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2052500511}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -268,10 +268,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b78c6c3e6df367469cfc8c32fe819f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jugadores:
-  - Jugador 1
-  - Jugador 2
-  - Jugador 3
-  - Jugador 4
-  - Jugador 5
   jugadorTemplate: {fileID: 9197481963319205126, guid: 94aed2cd33e5127458ff9a3f1e129d0a, type: 3}

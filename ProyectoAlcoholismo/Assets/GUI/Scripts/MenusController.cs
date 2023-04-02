@@ -139,15 +139,5 @@ public class MenusController : MonoBehaviour
         roomMenu.SetActive(false);
 
     }
-    public void ChangeNetworkRoomName(string newName)
-    {
-        //photonManager.RoomName = newName;
-    }
-
-    public void ChangeNetworkPlayerName(string newName)
-    {
-        //Todo: Setear donde corresponda el player name para que sea visible por otros jugadores
-    }
-
-    
+   
 }

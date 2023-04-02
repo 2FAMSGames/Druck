@@ -28,10 +28,7 @@ public class RoomJoinMenuController : MonoBehaviour {
         joinRoomButton.clicked += JoinRoomButtonOnClicked;
 
         roomNameField = doc.rootVisualElement.Q<TextField>("RoomName");
-        roomNameField.RegisterValueChangedCallback(OnEnterRoomName);
-
         playerNameField = doc.rootVisualElement.Q<TextField>("PlayerName");
-        playerNameField.RegisterValueChangedCallback(OnEnterRoomName);
     }
 
     private void GoBackButtonOnClicked()
@@ -60,15 +57,5 @@ public class RoomJoinMenuController : MonoBehaviour {
         
         // TODO
         menusController.GoToRoomMenu();
-    }
-
-    private void OnEnterRoomName(ChangeEvent<string> changeEvent)
-    {
-        menusController.ChangeNetworkRoomName(changeEvent.newValue);
-    }
-
-    private void OnEnterPlayerName(ChangeEvent<string> changeEvent)
-    {
-        menusController.ChangeNetworkPlayerName(changeEvent.newValue);
     }
 }
