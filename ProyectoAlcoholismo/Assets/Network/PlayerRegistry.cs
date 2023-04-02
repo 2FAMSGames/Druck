@@ -43,8 +43,6 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
     
     public static void Server_Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
     {
-        Debug.Assert(runner.IsServer);
-
         if (Instance.ObjectByRef.Count < 16)
         {
             Instance.ObjectByRef.Add(pRef, pObj);

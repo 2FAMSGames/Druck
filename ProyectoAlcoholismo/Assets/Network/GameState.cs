@@ -76,7 +76,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 
 	public static void Server_Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
 	{
-		if (runner.IsServer)
+//		if (runner.IsServer)
 		{
 			PlayerRegistry.Server_Add(runner, pRef, pObj);
 		}

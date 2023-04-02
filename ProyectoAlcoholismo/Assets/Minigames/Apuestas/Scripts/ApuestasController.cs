@@ -40,8 +40,15 @@ public class ApuestasController : MonoBehaviour
 
     void OnEnable()
     {
-        GameState.GetMyPlayer().ResetData();
-        
+        var player = GameState.GetMyPlayer();
+        if(player.IsUnityNull())
+            Debug.Log("null");
+        else
+        {
+            Debug.Log("Not null");
+            player.ResetData();
+        }
+
         yourPlayer = GameState.GetMyPlayer().playerName;
         GameState.Instance.PlayerChangedData += OnPlayerChangedData;
 
@@ -72,6 +79,7 @@ public class ApuestasController : MonoBehaviour
     private void ChooseScreen(int id)
     {
         Debug.Log("id " + id);
+
         CurrentPlayer = GameState.GetPlayer(id).playerName;
         if (id == GameState.GetMyPlayer().playerId)
         {
