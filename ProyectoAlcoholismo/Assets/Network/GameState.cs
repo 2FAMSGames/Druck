@@ -310,7 +310,6 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	{
 		List<Tuple<int, int>> result = new List<Tuple<int, int>>();
 		
-		// TODO: Actualizar cuando se añadan los juegos.
 		switch (CurrentGameName)
 		{
 			case "AHuevo":
@@ -320,7 +319,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				result = PlayerRegistry.Instance.SortedScoresApuestas();
 				break;
 			case "CuakCuak":
-				// TODO: dónde se ponen los resultado?
+				result = PlayerRegistry.Instance.SortedScoresData0();
 				break;
 			case "Lanzapato":
 				result = PlayerRegistry.Instance.SortedScoresData0();

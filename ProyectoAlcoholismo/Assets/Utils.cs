@@ -34,7 +34,7 @@ namespace Utils
         {
             {"AHuevo"," puntos"},
             {"Apuestas", ""},
-            {"CuakCuak", ""},
+            {"CuakCuak", " puntos"},
             {"Lanzapato", " aciertos"},
             {"SimonSays", " fallos"},
             {"Patonary", " aciertos"}
