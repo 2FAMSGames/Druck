@@ -106,6 +106,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	
 	public static bool HasPlayer(PlayerRef pRef)
 	{
+		if (!PlayerRegistry.Instance) return false;
 		return PlayerRegistry.Instance.ObjectByRef.ContainsKey(pRef);
 	}
 	
@@ -117,6 +118,8 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	
 	public static PlayerBehaviour GetPlayer(PlayerRef pRef)
 	{
+		if (!pRef.IsValid) return null;
+		
 		if (HasPlayer(pRef))
 			return PlayerRegistry.Instance.ObjectByRef.Get(pRef);
 		return null;
@@ -187,11 +190,9 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public void ResetAllPlayersData()
 	{
 		if (!isServer) return;
-		foreach (var (key, player) in PlayerRegistry.Instance.ObjectByRef)
-		{
-			player.ResetData();
-			player.SetReady(false);
-		}
+		
+		foreach(var (key, player) in PlayerRegistry.Instance.ObjectByRef)
+			player.StateResetData();
 	}
 
 	private void AddToEventCallbacks(in PlayerBehaviour p)

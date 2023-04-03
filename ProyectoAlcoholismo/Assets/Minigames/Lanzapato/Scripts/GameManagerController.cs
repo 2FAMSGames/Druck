@@ -32,9 +32,6 @@ public class GameManagerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameState.GetMyPlayer().ResetData();
-        GameState.GetMyPlayer().SetReady(false);
-        
         slingshotController = slingshot.GetComponent<SlingshotController>();
         cupsController = cupsContainer.GetComponent<CupsController>();
         nTotalLevels = gameLevelList.Count;
@@ -100,7 +97,8 @@ public class GameManagerController : MonoBehaviour
 
     private int GetTotalScore()
     {
-        return scoreToPassLevel * currentLevel + score;
+        var finalScore = scoreToPassLevel * currentLevel + score;
+        return finalScore == 0 ? -1 : finalScore;
     }
 
     private void OnPlayerFinished(int id, NetworkDictionary <int, float> data)

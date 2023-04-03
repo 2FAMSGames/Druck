@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Fusion;
+using UnityEngine;
 using NetworkBehaviour = Fusion.NetworkBehaviour;
 using Vector3 = UnityEngine.Vector3;
 
@@ -148,6 +149,17 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
             RpcSetPlayerReady(false);
         }
     }
+    
+    public void StateResetData()
+    {
+        if (Object.HasStateAuthority)
+        {
+            for (int i = 0; i < 10; ++i)
+                RpcStateSetPlayerData(i, 0);
+            
+            RpcStateSetPlayerReady(false);
+        }
+    }
    
     public override void FixedUpdateNetwork()
     {
@@ -240,5 +252,21 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     private void RpcSetPlayerData(int pos, float value)
     {
         this.data.Set(pos, value);
+    }
+    
+    [Fusion.Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
+    private void RpcStateSetPlayerData(int pos, float value)
+    {
+        Debug.Log("reset data " + pos + " " + value + " player " + this.playerId);
+        this.data.Set(pos, value);
+        RpcSetPlayerData(pos, value);
+    }
+    
+    [Fusion.Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
+    private void RpcStateSetPlayerReady(bool value)
+    {
+        Debug.Log("reset ready " + value + " player " + this.playerId);
+        this.isReady = value;
+        RpcSetPlayerReady(value);
     }
 }

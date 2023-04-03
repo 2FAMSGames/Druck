@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 using Random = System.Random;
 
 namespace Utils
@@ -14,10 +13,10 @@ namespace Utils
         {
 //           "AHuevo",
 //           "Apuestas",
-           "CuakCuak",
-           "Lanzapato",
+//           "CuakCuak",
+           "Lanzapato"
 //           "Patonary",
-           "SimonSays"
+//           "SimonSays"
         };
 
         public static Dictionary<string, string> GameNames = new Dictionary<string, string>

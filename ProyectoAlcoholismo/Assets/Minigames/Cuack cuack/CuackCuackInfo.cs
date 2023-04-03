@@ -13,9 +13,6 @@ public class CuackCuackInfo : MonoBehaviour
 
     void OnEnable()
     {
-        GameState.GetMyPlayer().ResetData();
-        GameState.GetMyPlayer().SetReady(false);
-        
         doc = GetComponent<UIDocument>();
 
         jugarButton = doc.rootVisualElement.Q<Button>("Jugar");

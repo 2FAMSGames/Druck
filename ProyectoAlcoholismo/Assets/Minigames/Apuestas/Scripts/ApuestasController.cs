@@ -40,9 +40,6 @@ public class ApuestasController : MonoBehaviour
 
     void OnEnable()
     {
-        GameState.GetMyPlayer().ResetData();
-        GameState.GetMyPlayer().SetReady(false);
-
         yourPlayer = GameState.GetMyPlayer().playerName;
         GameState.Instance.PlayerChangedData += OnPlayerChangedData;
 

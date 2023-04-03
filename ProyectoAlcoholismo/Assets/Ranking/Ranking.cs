@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Fusion;
 using Unity.VisualScripting;
-using Unity.VisualScripting.Dependencies.NCalc;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.UIElements;
 using WebSocketSharp;
@@ -37,6 +34,8 @@ public class Ranking : MonoBehaviour
     private readonly string STARTSTR = "Continuar!"; // quizá "Siguiente!"
     private readonly string ENDSTR = "Terminar!"; // quizá 2 botones con "Otra ronda!"
 
+    private Dictionary<string, Tuple<int, bool>> selectedPlayers = new Dictionary<string, Tuple<int, bool>>();
+    
     void OnEnable()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
@@ -45,7 +44,7 @@ public class Ranking : MonoBehaviour
         gameName = PlayerRegistry.Instance.CurrentScene;
         var GameTitle = root.Q<Label>("NombreJuego");
         boton = root.Q<Button>("Boton");
-        boton.clicked += ReadyButtonOnClicked;
+        boton.clicked += OnReadyButtonOnClicked;
         boton.text = STARTSTR;
         boton.SetEnabled(false);
 
@@ -64,18 +63,7 @@ public class Ranking : MonoBehaviour
         fillPlayers();
 
         // Castigos
-        jugadoresUI.onSelectionChange += OnSelectionChanged;
-        jugadoresUI.selectionType = SelectionType.None;
         GameState.Instance.PlayerChangedData += OnPlayerChangedData;
-    }
-
-    private void OnSelectionChanged(IEnumerable<object> obj)
-    {
-        if (modo == Modo.Rankings) return;
-
-        var indices = jugadoresUI.selectedIndices;
-        var enabled = indices.Count() == 3;
-        boton.SetEnabled(enabled);
     }
 
     private void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
@@ -137,67 +125,114 @@ public class Ranking : MonoBehaviour
 
     private void fillPlayers()
     {
-        if (modo == Modo.Rankings) // GameTitle.visible = true
+        switch (modo)
         {
-            jugadoresUI.hierarchy.Clear();
-            Utils.GameConstants.GameSuffix.TryGetValue(gameName, out string sufijo);
-            var scores = GameState.Instance.SortedScores();
-            var GameTitle = root.Q<Label>("NombreJuego");
-            winnerIndex = scores[0].Item1;
+            case Modo.Rankings:
+                jugadoresUI.hierarchy.Clear();
+                Utils.GameConstants.GameSuffix.TryGetValue(gameName, out string sufijo);
+                var scores = GameState.Instance.SortedScores();
+                var GameTitle = root.Q<Label>("NombreJuego");
+                winnerIndex = scores[0].Item1;
 
-            foreach (var (id, score) in scores)
-            {
-                var playerValues = GameState.GetPlayer(id);
-                var name = playerValues.playerName;
-                //var color = GetStyledColor(playerValues.playerColor);
+                foreach (var (id, score) in scores)
+                {
+                    var playerValues = GameState.GetPlayer(id);
+                    var name = playerValues.playerName;
+                    //var color = GetStyledColor(playerValues.playerColor);
 
-                var jugadorContainer = jugadorTemplateRadioButton.Instantiate();
-                jugadorContainer.Q<Toggle>("Jugador").text = name;
-                jugadorContainer.Q<Toggle>("Jugador").style.fontSize = 14;
-                jugadorContainer.Q<Toggle>("Jugador").value = false;
-                jugadorContainer.Q<Toggle>("Jugador").visible = false;
+                    var jugadorContainer = jugadorTemplate.Instantiate();
+                    jugadorContainer.Q<Label>("Nombre").text = playerValues.playerName;
+                    jugadorContainer.Q<Label>("Nombre").style.fontSize = 16;
+                    jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString()) + sufijo;
+                    jugadorContainer.Q<Label>("Puntuacion").style.fontSize = 14;
+                    jugadorContainer.Q<Label>("Separador").style.fontSize = 14;
+                    //jugadorContainer.Q<VisualElement>("Icono").style.color = color;
+                    jugadorContainer.Q<VisualElement>("Icono").visible = false;
+                    jugadoresUI.hierarchy.Add(jugadorContainer);
+                }
 
-//                jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString()) + sufijo;
-  //              jugadorContainer.Q<Label>("Puntuacion").style.fontSize = 14;
-    //            jugadorContainer.Q<Label>("Separador").style.fontSize = 14;
-                //jugadorContainer.Q<VisualElement>("Icono").style.color = color;
-      //          jugadorContainer.Q<VisualElement>("Icono").visible = false;
-                jugadoresUI.hierarchy.Add(jugadorContainer);
-            }
+                bool allIn = true;
+                foreach (var (id, score) in scores)
+                {
+                    allIn &= score != 0;
+                }
 
-            bool allIn = true;
-            foreach (var (id, score) in scores)
-            {
-                allIn &= score != 0;
-            }
+                boton.SetEnabled(allIn);
+                break;
+            case Modo.Castigador:
+                if (!PlayerRegistry.Instance || PlayerRegistry.Instance.ObjectByRef.Count == 0) return;
+                jugadoresUI.hierarchy.Clear();
 
-            boton.SetEnabled(allIn);
+                foreach (var (id, player) in PlayerRegistry.Instance.ObjectByRef)
+                {
+                    //var color = GetStyledColor(player.playerColor);
+                    // no me voy a castigar a mi mismo.
+                    if (id == GameState.GetMyPlayer().playerId) continue;
+                    var playerValues = GameState.GetPlayer(id);
+                    var name = playerValues.playerName;
+                
+                    selectedPlayers.Add(name, new Tuple<int, bool>(playerValues.playerId, false));
+
+                    var jugadorContainer = jugadorTemplateRadioButton.Instantiate();
+                    var toggle = jugadorContainer.Q<Toggle>("Jugador");
+                    toggle.label = name;
+                    toggle.style.fontSize = 14;
+                    toggle.value = false;
+                    toggle.RegisterCallback<ChangeEvent<bool>>(OnToggle);
+                    jugadoresUI.hierarchy.Add(jugadorContainer);
+                }
+                break;
+            case Modo.Castigado:
+                return; 
+            case Modo.Fin:
+                jugadoresUI.hierarchy.Clear();
+                var scoresFin = PlayerRegistry.Instance.SortedScores();
+                var GameTitleFin = root.Q<Label>("NombreJuego");
+                GameTitleFin.text = "Generales"; 
+
+                foreach (var (id, score) in scoresFin)
+                {
+                    var playerValues = GameState.GetPlayer(id);
+                    var name = playerValues.playerName;
+                    //var color = GetStyledColor(playerValues.playerColor);
+
+                    var jugadorContainer = jugadorTemplate.Instantiate();
+                    jugadorContainer.Q<Label>("Nombre").text = playerValues.playerName;
+                    jugadorContainer.Q<Label>("Nombre").style.fontSize = 16;
+                    jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString());
+                    jugadorContainer.Q<Label>("Puntuacion").style.fontSize = 14;
+                    jugadorContainer.Q<Label>("Separador").style.fontSize = 14;
+                    //jugadorContainer.Q<VisualElement>("Icono").style.color = color;
+                    jugadorContainer.Q<VisualElement>("Icono").visible = false;
+                    jugadoresUI.hierarchy.Add(jugadorContainer);
+                }
+
+                break;
         }
-        else // Castigos modo = Modo.Castigador || Modo.Fin
+    }
+
+    private void OnToggle(ChangeEvent<bool> evt)
+    {
+        if (modo != Modo.Castigador) return;
+        
+        if (evt.IsUnityNull()) return;
+        evt.StopPropagation();
+        
+        var toggleWidget = (Toggle)evt.currentTarget;
+        var item = selectedPlayers[toggleWidget.label];
+        selectedPlayers[toggleWidget.label] = new Tuple<int, bool>(item.Item1, evt.newValue);
+        
+        int count = 0;
+        foreach (var (name, value) in selectedPlayers)
         {
-            if (!PlayerRegistry.Instance || PlayerRegistry.Instance.ObjectByRef.Count == 0) return;
-
-            jugadoresUI.hierarchy.Clear();
-            foreach (var (id, player) in PlayerRegistry.Instance.ObjectByRef)
-            {
-                //var color = GetStyledColor(player.playerColor);
-                // no me voy a castigar a mi mismo.
-                if (id == GameState.GetMyPlayer().playerId) continue;
-
-                var jugadorContainer = jugadorTemplateRadioButton.Instantiate();
-                jugadorContainer.Q<Toggle>("Jugador").text = name;
-                jugadorContainer.Q<Toggle>("Jugador").style.fontSize = 14;
-                jugadorContainer.Q<Toggle>("Jugador").value = false;
-                jugadorContainer.Q<Toggle>("Jugador").visible = true;
-
-//                TemplateContainer jugadorContainer = jugadorTemplate.Instantiate();
-//                jugadorContainer.Q<Label>("Nombre").text = player.playerName;
-//                jugadorContainer.Q<Label>("Puntuacion").text = GameState.GetPlayer(id).playerScore.ToString();
-              //jugadorContainer.Q<VisualElement>("Icono").style.color = color;
-//                jugadorContainer.Q<VisualElement>("Icono").visible = false;
-                jugadoresUI.hierarchy.Add(jugadorContainer);
-            }
+            if (value.Item2)
+              ++count;
+            Debug.Log(name + " = " + value);
         }
+
+        var limit = Math.Min(3, GameState.CountPlayers - 1);
+        if(count == limit)
+            boton.SetEnabled(true);
     }
 
     private StyleColor GetStyledColor(Vector3 color)
@@ -207,7 +242,7 @@ public class Ranking : MonoBehaviour
             (byte)(color[2] * 255), 255));
     }
 
-    private void ReadyButtonOnClicked()
+    private void OnReadyButtonOnClicked()
     {
         var Texto = root.Q<Label>("Ranking");
         Texto.style.fontSize = 18;
@@ -222,35 +257,45 @@ public class Ranking : MonoBehaviour
 
                 boton.SetEnabled(false);
                 boton.visible = soyCastigador;
+                var limit = Math.Min(3, GameState.CountPlayers - 1);
+                string plural = limit > 1 ? "s" : "";
 
                 if (soyCastigador)
                 {
                     modo = Modo.Castigador;
-                    Texto.text = "Has ganado!!\nSelecciona\nhasta 3 miembros de\nla bandada\npara castigar.";
+                    Texto.text = "Has ganado!!\n\nSelecciona\nhasta " + limit + " miembro" + plural + " de\nla bandada\npara castigar.";
                     jugadoresUI.hierarchy.Clear();
-                    jugadoresUI.selectionType = SelectionType.Multiple;
                     fillPlayers();
                 }
                 else
                 {
                     modo = Modo.Castigado;
+                    jugadoresUI.hierarchy.Clear();
                     jugadoresUI.visible = false;
-                    Texto.text = "No has ganado!!\nPodrías ser\ncastigado!!\n\nTendrás que\nesperar a ver\nqué pasa.\n\nCruza las alas!!";
+                    Texto.text = "No has ganado!!\n\nPodrías ser\ncastigado!!\n\nTendrás que\nesperar a ver\nqué pasa.\n\nCruza las alas!!";
                     // Molaría poner una animación de un pato nervioso dando vueltas.
                 }
                 break;
             case Modo.Castigador:
-                var indices = jugadoresUI.selectedIndices;
-                int idx = 0;
-                foreach (int index in indices)
+                int count = 0;
+                foreach (var (name, value) in selectedPlayers)
+                    count += value.Item2 ? 1 : 0;
+                if (count != Math.Min(3, GameState.CountPlayers)) return;
+
+                int dataIndex = 0;
+                foreach (var (name, value) in selectedPlayers)
                 {
-                    // Castigar jugador index.
-                    GameState.GetMyPlayer().SetData(idx++, index + 1);
-                    if (GameState.isServer)
+                    if (value.Item2)
                     {
-                        var player = GameState.GetMyPlayer();
-                        OnPlayerChangedData(player.playerId, player.data);
+                        GameState.GetMyPlayer().SetData(dataIndex++, value.Item1 + 1);
+                        break;
                     }
+                }
+                
+                if (GameState.isServer)
+                {
+                    var player = GameState.GetMyPlayer();
+                    OnPlayerChangedData(player.playerId, player.data);
                 }
                 modo = Modo.Fin;
                 boton.SetEnabled(true);
@@ -258,8 +303,7 @@ public class Ranking : MonoBehaviour
                 boton.text = GameState.Instance.RemainingGamesCount() > 0 ? STARTSTR : ENDSTR;
                 Texto.text = "La bandada\nHa recibido\nsu castigo!";
                 jugadoresUI.hierarchy.Clear();
-                jugadoresUI.selectionType = SelectionType.None;
-                fillPlayers(); // TODO: Puede que no aparezcan los castigos -> test!    
+                fillPlayers();     
                 break;
             case Modo.Castigado:
                 modo = Modo.Fin;
@@ -269,7 +313,6 @@ public class Ranking : MonoBehaviour
                 Texto.text = haSidoCastigado ? "Has recibido\ntu castigo!" : "Te has librado\nesta vez!";
                 jugadoresUI.hierarchy.Clear();
                 jugadoresUI.visible = true;
-                jugadoresUI.selectionType = SelectionType.None;
                 fillPlayers(); // Mostrar puntuaciones de castigados    
                 break;
             case Modo.Fin:

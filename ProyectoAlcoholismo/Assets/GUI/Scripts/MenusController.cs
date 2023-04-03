@@ -24,12 +24,17 @@ public class MenusController : MonoBehaviour
     [SerializeField]
     private GameObject helpMenu;
 
+    [SerializeField] private SpriteRenderer fondo;
+    
     float delayTime = 5f;
     public Camera newCamera; // La nueva c�mara a la que queremos cambiar para que el fondo de atras sea verde
+    private Color bgColor;
 
     void OnEnable()
     {
         PlayerRegistry.SceneChanged += OnSceneChanged;
+        bgColor = fondo.color;
+        fondo.color = Color.clear;
         Intro();
     }
     void Start()
@@ -41,6 +46,7 @@ public class MenusController : MonoBehaviour
     {
         GoToMainMenu();
         ChangeToNewCamera();
+        fondo.color = bgColor;
     }
 
     private void OnSceneChanged(string sceneName)
