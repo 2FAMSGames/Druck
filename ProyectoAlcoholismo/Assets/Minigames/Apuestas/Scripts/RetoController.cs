@@ -37,7 +37,7 @@ public class RetoController : MonoBehaviour
 
         doc = GetComponent<UIDocument>();
 
-        var i = -1; // TODO: no debería ser 0, usando i++ se coge el valor primero y luego se incrementa,
+        var i = -1; // TODO: no debería ser 0? usando i++ se coge el valor primero y luego se incrementa,
                        // TODO: el primer challenge tendrá id -1
 
         List<Challenge> challengeList = new List<Challenge>();

@@ -21,6 +21,9 @@ public class SimonInfo : MonoBehaviour
 
     private void JugarButtonOnClicked()
     {
+        GameState.GetMyPlayer().ResetData();
+        GameState.GetMyPlayer().SetReady(false);
+
         menusController.Jugar();
     }
 }

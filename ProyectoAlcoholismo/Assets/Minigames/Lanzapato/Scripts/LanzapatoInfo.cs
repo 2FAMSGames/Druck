@@ -19,6 +19,9 @@ public class LanzapatoInfo : MonoBehaviour
 
     private void JugarButtonOnClicked()
     {
+        GameState.GetMyPlayer().ResetData();
+        GameState.GetMyPlayer().SetReady(false);
+
         this.gameObject.SetActive(false);
     }
 }

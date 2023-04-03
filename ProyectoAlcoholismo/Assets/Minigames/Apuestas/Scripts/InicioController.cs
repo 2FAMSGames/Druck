@@ -24,6 +24,9 @@ public class InicioController : MonoBehaviour
 
     private void GoToStart()
     {
+        GameState.GetMyPlayer().ResetData();
+        GameState.GetMyPlayer().SetReady(false);
+
         apuestasController.GoTo("reto");
     }
 

@@ -829,7 +829,7 @@ VideoPlayer:
   m_RenderMode: 0
   m_AspectRatio: 2
   m_DataSource: 0
-  m_PlaybackSpeed: 1
+  m_PlaybackSpeed: 2
   m_AudioOutputMode: 2
   m_TargetAudioSources: []
   m_DirectAudioVolumes: []
@@ -1116,7 +1116,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4da9ab881ea6f3841b3502bd11e1b447, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _state: {fileID: 0}
   mainMenu: {fileID: 1265806942}
   roomCreateMenu: {fileID: 436840941}
   roomJoinMenu: {fileID: 395510933}

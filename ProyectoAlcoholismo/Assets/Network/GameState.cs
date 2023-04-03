@@ -26,7 +26,9 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public static bool isServer => Instance != null && Instance.Runner != null && Instance.Runner.IsServer;
 
 	private List<string> CurrentGameList = new List<string>();
-	private int PlayedGames = 0;	
+	private int PlayedGames = 0;
+
+	public bool AlreadyPlayedIntro = false;
 	
     // Eventos a los que conectarse:
     // 
@@ -190,9 +192,11 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public void ResetAllPlayersData()
 	{
 		if (!isServer) return;
-		
-		foreach(var (key, player) in PlayerRegistry.Instance.ObjectByRef)
+		foreach (var (key, player) in PlayerRegistry.Instance.ObjectByRef)
+		{
+			Debug.Log("clearing player: "+ key);
 			player.StateResetData();
+		}
 	}
 
 	private void AddToEventCallbacks(in PlayerBehaviour p)
@@ -253,20 +257,21 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			{
 				if (PlayedGames > 0) // terminar e ir al menu
 				{
-					LoadScene("Start");
+					Disconnect();
+					LoadScene("StartScreen");
 					return;
 				}
 
 				// Cargar lista y randomizar.
-				CurrentGameList = Utils.GameConstants.GameList;
+				CurrentGameList = new List<string>(Utils.GameConstants.GameList);
 			}
 			
 			var gameIdx = Random.Range(0, CurrentGameList.Count);
 			var gameName = CurrentGameList.ElementAt(gameIdx);
 			CurrentGameList.Remove(gameName);
 			
-			ResetAllPlayersData();
 			PlayerRegistry.Instance.SetScene(gameName);
+			++PlayedGames;
 			LoadScene(gameName);
 		}
 	}
@@ -495,6 +500,9 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				Server_Remove(runner, player);
 			}
 		}
+		
+		if(GameState.CountPlayers == 1)
+			LoadScene("Start");
 	}
 
 	public void OnInput(NetworkRunner runner, NetworkInput input)

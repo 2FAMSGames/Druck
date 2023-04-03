@@ -152,7 +152,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     
     public void StateResetData()
     {
-        if (Object.HasStateAuthority)
+        if (Object.HasStateAuthority || Object.HasInputAuthority)
         {
             for (int i = 0; i < 10; ++i)
                 RpcStateSetPlayerData(i, 0);
@@ -257,7 +257,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     [Fusion.Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
     private void RpcStateSetPlayerData(int pos, float value)
     {
-        Debug.Log("reset data " + pos + " " + value + " player " + this.playerId);
+        Debug.Log("player " + this.playerId + " limpia " + pos + " a " + value);
         this.data.Set(pos, value);
         RpcSetPlayerData(pos, value);
     }
@@ -265,7 +265,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     [Fusion.Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
     private void RpcStateSetPlayerReady(bool value)
     {
-        Debug.Log("reset ready " + value + " player " + this.playerId);
+        Debug.Log("player " + this.playerId + " limpia ready a " + value);
         this.isReady = value;
         RpcSetPlayerReady(value);
     }

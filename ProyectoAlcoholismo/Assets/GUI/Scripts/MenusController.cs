@@ -6,8 +6,6 @@ using WebSocketSharp;
 
 public class MenusController : MonoBehaviour
 {
-    public GameState _state;
-    
     [Header("Menus")]
     [SerializeField]
     private GameObject mainMenu;
@@ -35,7 +33,11 @@ public class MenusController : MonoBehaviour
         PlayerRegistry.SceneChanged += OnSceneChanged;
         bgColor = fondo.color;
         fondo.color = Color.clear;
-        Intro();
+        if (!GameState.Instance.AlreadyPlayedIntro)
+        {
+            Intro();
+            GameState.Instance.AlreadyPlayedIntro = true;
+        }
     }
     void Start()
     {
