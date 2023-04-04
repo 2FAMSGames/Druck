@@ -92,6 +92,8 @@ public class CanvasPat : MonoBehaviour
             {
                 //Debug.Log("Calling Save()...");
                 _DrawLine.Save();
+                
+                // TODO: got to 
                 StartCoroutine(DelayedGoToVotar());
             }
             //else

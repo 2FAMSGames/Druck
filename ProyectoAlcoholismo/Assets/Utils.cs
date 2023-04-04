@@ -14,8 +14,8 @@ namespace Utils
 //           "AHuevo",
 //           "Apuestas",
 //           "CuakCuak",
-           "Lanzapato"
-//           "Patonary",
+//           "Lanzapato",
+           "Patonary"
 //           "SimonSays"
         };
 

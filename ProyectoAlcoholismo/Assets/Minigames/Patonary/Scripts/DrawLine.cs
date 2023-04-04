@@ -97,6 +97,8 @@ public class DrawLine : MonoBehaviour
         // Store the byte array as a string in PlayerPrefs
         string imageString = System.Convert.ToBase64String(Imagedata);
         PlayerPrefs.SetString("TransferredImage", imageString);
+        
+        // TODO: método de enviar la textura.
     }
 
 

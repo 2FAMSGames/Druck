@@ -30,6 +30,8 @@ public class WaitPat : MonoBehaviour
         //menusController.WaitEnded();
         if (WaitngScreen == 1)
         {
+            // TODO: esperar hasta que re haya recibido la imagen para ir a adivinar
+            
             Debug.Log("Everyone have drawn");
             menusController.GoToGuess();
         }
@@ -46,4 +48,7 @@ public class WaitPat : MonoBehaviour
             menusController.GoToRankings();
         }
     }
+    
+    // TODO: A el que dibuja el envía la textura a B, B devuelve la palabra de lo que cree que es
+    // TODO: y A dice que sí o que no, luego finaliza el juego. 
 }
