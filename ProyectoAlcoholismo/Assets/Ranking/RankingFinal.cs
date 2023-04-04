@@ -39,12 +39,15 @@ public class RankingFinal : MonoBehaviour
         {
             var playerValues = GameState.GetPlayer(id);
             var name = playerValues.playerName;
+            if (!Utils.GameConstants.GameSuffix.TryGetValue("General", out string sufijo))
+                throw new Exception("Sufijo inválido.");
+            
             //var color = GetStyledColor(playerValues.playerColor);
 
             var jugadorContainer = jugadorTemplate.Instantiate();
             jugadorContainer.Q<Label>("Nombre").text = playerValues.playerName;
             jugadorContainer.Q<Label>("Nombre").style.fontSize = 16;
-            jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString());
+            jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString() + sufijo);
             jugadorContainer.Q<Label>("Puntuacion").style.fontSize = 14;
             jugadorContainer.Q<Label>("Separador").style.fontSize = 14;
             //jugadorContainer.Q<VisualElement>("Icono").style.color = color;

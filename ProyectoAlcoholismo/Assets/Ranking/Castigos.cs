@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fusion;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -83,26 +82,6 @@ public class Castigos : MonoBehaviour
         var Texto = root.Q<Label>("Ranking");
         Texto.style.fontSize = 14;
 
-        // if (GameState.isServer)
-        // {
-        //     int count = 0;
-        //     for (int i = 0; i < numCastigos; ++i)
-        //     {
-        //         if (data[i] == 0) continue;
-        //         ++count;
-        //     }
-        //
-        //     if (count == numCastigos)
-        //     {
-        //         for (int i = 0; i < numCastigos; ++i)
-        //         {
-        //             var idCastigado = (int)data[i] - 1;
-        //             var score = GameState.GetPlayer(idCastigado).playerScore;
-        //             GameState.GetPlayer(idCastigado).SetScore(score - 10);
-        //         }
-        //     }
-        // }
-        
         if (soyCastigador)
         {
             boton.SetEnabled(!alreadyClicked);
@@ -144,7 +123,10 @@ public class Castigos : MonoBehaviour
     {
         if (!PlayerRegistry.Instance || PlayerRegistry.Instance.ObjectByRef.Count == 0) return;
 
-        jugadoresUI.itemsSource = new List<string>(); //buttons;
+        // Si quitas la siguiente línea jugadoresUI casca con una excepción.
+        // Buscando en Goggle pone que es un error de Unity... raro.
+        jugadoresUI.itemsSource = new List<string>();
+        jugadoresUI.style.color = new StyleColor(new Color(0, 0, 0, 0));
         foreach (var (id, player) in PlayerRegistry.Instance.ObjectByRef)
         {
             //var color = GetStyledColor(player.playerColor);

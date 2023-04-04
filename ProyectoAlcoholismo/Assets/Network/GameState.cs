@@ -5,8 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
+using Photon.Realtime;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Propios
 using Random = UnityEngine.Random;
@@ -257,7 +259,6 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			{
 				if (PlayedGames > 0) // terminar e ir al menu
 				{
-					Disconnect();
 					LoadScene("StartScreen");
 					return;
 				}
@@ -279,7 +280,15 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	private void LoadScene(string sceneName)
 	{
 		++PlayedGames;
-		Runner.SetActiveScene(sceneName);
+		if (Runner.IsUnityNull())
+		{
+			PlayedGames = 0;
+			SceneManager.LoadScene(sceneName);
+		}
+		else
+		{
+			Runner.SetActiveScene(sceneName);
+		}
 	}
 
 	private void ResetReadyFlags()
@@ -449,6 +458,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 
 	public void Disconnect()
 	{
+		PlayedGames = 0;
 		if (Runner == null) return;
 		Runner.Shutdown();
 		Runner = null;
@@ -500,9 +510,12 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				Server_Remove(runner, player);
 			}
 		}
-		
-		if(GameState.CountPlayers == 1)
+
+		if (GameState.CountPlayers == 1)
+		{
 			LoadScene("Start");
+		}
+			
 	}
 
 	public void OnInput(NetworkRunner runner, NetworkInput input)

@@ -30,6 +30,8 @@ public class MenusController : MonoBehaviour
 
     void OnEnable()
     {
+        GameState.Instance?.Disconnect();
+        
         PlayerRegistry.SceneChanged += OnSceneChanged;
         bgColor = fondo.color;
         fondo.color = Color.clear;
