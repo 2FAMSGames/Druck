@@ -532,6 +532,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueID: d99wePKRnZmlK1hQ
   myPlayerName: Nonamed
+  AlreadyPlayedIntro: 0
   gameScene: Assets/Scenes/StartScreen.unity
   runnerPrefab: {fileID: 6688489488419410081, guid: f140c3f40556a7f4fae1b233ef8d0e18, type: 3}
   managerPrefab: {fileID: 6301904675396668821, guid: 740372165788a654a97bc936146bdf1c, type: 3}
@@ -860,7 +861,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1743818663
 Transform:
   m_ObjectHideFlags: 0
