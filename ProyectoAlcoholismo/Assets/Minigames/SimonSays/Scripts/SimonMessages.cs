@@ -57,6 +57,7 @@ public class SimonMessages : MonoBehaviour
             GameState.GetMyPlayer().SetData(1, gameController.totalTime);
             
             StartCoroutine(Utils.GameUtils.GoToRankings());
+            return;
         }
         
         menusController.Jugar();

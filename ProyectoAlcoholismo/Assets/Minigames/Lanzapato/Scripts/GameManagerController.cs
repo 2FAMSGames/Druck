@@ -10,7 +10,7 @@ public class GameManagerController : MonoBehaviour
     int scoreToPassLevel = 3;
     [SerializeField]
     List<Lanzapato_LevelSettings> gameLevelList;
-    
+
     [SerializeField]
     GameObject slingshot;
     SlingshotController slingshotController;
@@ -26,10 +26,8 @@ public class GameManagerController : MonoBehaviour
     [SerializeField]
     public int score = 0;
     [SerializeField]
-    public int currentLevel = 0 ;
+    public int currentLevel = 0;
     int nTotalLevels;
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -45,11 +43,11 @@ public class GameManagerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(score >= scoreToPassLevel)
+        if (score >= scoreToPassLevel)
         {
             DestroyLevel();
             currentLevel++;
-            if(currentLevel < nTotalLevels)
+            if (currentLevel < nTotalLevels)
             {
                 SetupLevel(currentLevel);
             }
@@ -99,13 +97,14 @@ public class GameManagerController : MonoBehaviour
 
     private int GetTotalScore()
     {
-        return scoreToPassLevel * currentLevel + score;
+        var finalScore = scoreToPassLevel * currentLevel + score;
+        return finalScore == 0 ? -1 : finalScore;
     }
 
-    private void OnPlayerFinished(int id, NetworkDictionary <int, float> data)
+    private void OnPlayerFinished(int id, NetworkDictionary<int, float> data)
     {
         GameState.Instance.PlayerChangedData -= OnPlayerFinished;
-        
+
         // Aqui va lo que se ejecuta cuando un jugador termina, se debera editar
         Debug.Log("Un jugador gano");
         GameState.GetMyPlayer().SetData(0, GetTotalScore());

@@ -19,7 +19,6 @@ public class RoomController : MonoBehaviour
     private Button readyButton;
     private ListView playerList;
     private Label warningLabel;
-    private List<string> ConnectedPlayers;
 
     private readonly string WAITSTR = "Esperando...";
     private readonly string STARTSTR = "Empezar!"; 

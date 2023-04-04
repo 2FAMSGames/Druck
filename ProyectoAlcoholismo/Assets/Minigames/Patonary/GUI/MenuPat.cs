@@ -24,6 +24,9 @@ public class MenuPat : MonoBehaviour
 
     private void JugarButtonOnClicked()
     {
+        GameState.GetMyPlayer().ResetData();
+        GameState.GetMyPlayer().SetReady(false);
+
         Debug.Log("Jugar button clicked");
         menusController.GoToTask();
     }

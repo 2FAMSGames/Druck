@@ -6,8 +6,6 @@ using WebSocketSharp;
 
 public class MenusController : MonoBehaviour
 {
-    public GameState _state;
-    
     [Header("Menus")]
     [SerializeField]
     private GameObject mainMenu;
@@ -24,13 +22,24 @@ public class MenusController : MonoBehaviour
     [SerializeField]
     private GameObject helpMenu;
 
+    [SerializeField] private SpriteRenderer fondo;
+    
     float delayTime = 5f;
     public Camera newCamera; // La nueva c�mara a la que queremos cambiar para que el fondo de atras sea verde
+    private Color bgColor;
 
     void OnEnable()
     {
+        GameState.Instance?.Disconnect();
+        
         PlayerRegistry.SceneChanged += OnSceneChanged;
-        Intro();
+        bgColor = fondo.color;
+        fondo.color = Color.clear;
+        if (!GameState.Instance.AlreadyPlayedIntro)
+        {
+            Intro();
+            GameState.Instance.AlreadyPlayedIntro = true;
+        }
     }
     void Start()
     {
@@ -41,6 +50,7 @@ public class MenusController : MonoBehaviour
     {
         GoToMainMenu();
         ChangeToNewCamera();
+        fondo.color = bgColor;
     }
 
     private void OnSceneChanged(string sceneName)

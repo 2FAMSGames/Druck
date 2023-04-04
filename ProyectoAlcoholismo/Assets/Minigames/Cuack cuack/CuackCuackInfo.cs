@@ -21,6 +21,9 @@ public class CuackCuackInfo : MonoBehaviour
 
     private void JugarButtonOnClicked()
     {
+        GameState.GetMyPlayer().ResetData();
+        GameState.GetMyPlayer().SetReady(false);
+        
         juego.SetActive(true);
         this.gameObject.SetActive(false);
     }

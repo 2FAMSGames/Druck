@@ -9,7 +9,6 @@ using Random = UnityEngine.Random;
 
 public class ApuestasController : MonoBehaviour
 {
-
     [SerializeField]
     private GameObject apuestasObject;
     private ApuestasController apuestasController;
@@ -55,7 +54,7 @@ public class ApuestasController : MonoBehaviour
             if (GameState.isServer)
             {
                 // TODO: comprobar que no sea muchas veces el mismo??
-                var id = Random.Range(0, GameState.CountPlayers - 1);
+                var id = Random.Range(0, GameState.CountPlayers);
                 GameState.GetMyPlayer().SetData(0, id);
 
                 ChooseScreen(id);
@@ -86,7 +85,7 @@ public class ApuestasController : MonoBehaviour
         // TODO: protocolo de valores con sentido para el juego
         if (id == 15) // host es GameState.Instance.Runner.SessionInfo.MaxPlayers - 1
         {
-            ChooseScreen(id);
+            ChooseScreen((int)GameState.GetPlayer(15).data[0]);
         }
     }
 
