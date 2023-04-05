@@ -31,6 +31,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	private int PlayedGames = 0;
 
 	public bool AlreadyPlayedIntro = false;
+	public bool playing = false;
 	
     // Eventos a los que conectarse:
     // 
@@ -147,11 +148,13 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public void CreateRoom(string roomName, Action successCallback = null)
 	{
 	    StartCoroutine(HostSessionRoutine(roomName, successCallback));
-    }
+	    new WaitForSeconds(1);
+	}
 
     public void JoinRoom(string roomName, Action successCallback = null)
     {
 	    StartCoroutine(JoinSessionRoutine(roomName, successCallback));
+	    new WaitForSeconds(1);
     }
 
     public void ModifyScore(int value)
@@ -248,12 +251,12 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public void PlayerHasChangedReady(int id, bool ready)
 	{
 		// Only for server.
-		if (!GameState.isServer) return;
+		if (!GameState.isServer || playing) return;
 		
 		// Por si hemos conectado algo a esta señal.
 		PlayerChangedReady?.Invoke(id, ready);
 
-		if (AllReady)
+		if (AllReady && GameState.CountPlayers > 1)
 		{
 			if (CurrentGameList.Count == 0)
 			{
@@ -273,6 +276,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			
 			PlayerRegistry.Instance.SetScene(gameName);
 			++PlayedGames;
+			playing = true;
 			LoadScene(gameName);
 		}
 	}
@@ -323,7 +327,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				result = PlayerRegistry.Instance.SortedScoresData0();
 				break;
 			case "Patonary":
-				result = PlayerRegistry.Instance.SortedScoresData0();
+				result = PlayerRegistry.Instance.SortedScoresPatonary();
 				break;
 			case "SimonSays":
 				result = PlayerRegistry.Instance.SortedScoresData0();
@@ -398,10 +402,10 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		{
 			if (successCallback != null)
 				successCallback.Invoke();
-			else
-			{
-				Runner.SetActiveScene(gameScene);
-			}
+//			else
+//			{
+//				Runner.SetActiveScene(gameScene);
+//			}
 				
 			Debug.Log("Host initiated: " + roomName);
 		}
@@ -442,9 +446,11 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		{
 			if (successCallback != null)
 				successCallback.Invoke();
-			else
-				Runner.SetActiveScene(gameScene);
-			
+//			else
+//			{
+//				Runner.SetActiveScene(gameScene);
+//			}
+
 			Debug.Log("Joined: " + roomName);
 		}
 		else
@@ -489,6 +495,12 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			spawnedObjects.Add(player, networkPlayerObject);
 		}
 		DebugPrint();
+		
+		if (runner.IsServer)
+		{
+			var myPlayer = GameState.GetMyPlayer();
+			PlayerHasChangedReady(myPlayer.playerId, myPlayer.isReady);
+		}
 	}
 
 	public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)

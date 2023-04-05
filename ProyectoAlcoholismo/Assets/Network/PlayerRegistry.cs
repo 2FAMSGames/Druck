@@ -120,7 +120,18 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
         return result;
     }
 
-
+    public List<Tuple<int, int>> SortedScoresPatonary()
+    {
+        var result = new List<Tuple<int, int>>();
+        
+        foreach (var (key, player) in Instance.ObjectByRef)
+        {
+            result.Add(new Tuple<int,int>((int)player.data[1], (int)player.data[0]));
+        }
+        
+        result.Sort((x, y) => y.Item2.CompareTo(x.Item2));
+        return result;
+    }
 
     #region INetworkRunnerCallbacks
 

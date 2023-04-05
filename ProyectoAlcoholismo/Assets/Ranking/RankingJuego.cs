@@ -32,8 +32,10 @@ public class RankingJuego : MonoBehaviour
         boton.SetEnabled(false);
         Utils.GameConstants.GameNames.TryGetValue(rootMenu.gameName, out string nombre);
         GameTitle.text = nombre;
+        
         fillPlayers();
         GameState.Instance.PlayerChangedData += OnPlayerChangedData;
+        GameState.Instance.playing = false;
     }
     
     private void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
@@ -67,7 +69,18 @@ public class RankingJuego : MonoBehaviour
             var jugadorContainer = jugadorTemplate.Instantiate();
             jugadorContainer.Q<Label>("Nombre").text = playerValues.playerName;
             jugadorContainer.Q<Label>("Nombre").style.fontSize = 16;
-            jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString()) + sufijo;
+            
+            // Caso especial Patonary
+            if (PlayerRegistry.Instance.CurrentScene == "Patonary")
+            {
+                if (score == 0) continue;
+                jugadorContainer.Q<Label>("Puntuacion").text = (score > 0) ? "acertó" : ((score < 0) ?  "falló" : "esperando...");
+            }
+            else
+            {
+                jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString()) + sufijo;
+            }
+
             jugadorContainer.Q<Label>("Puntuacion").style.fontSize = 14;
             jugadorContainer.Q<Label>("Separador").style.fontSize = 14;
             //jugadorContainer.Q<VisualElement>("Icono").style.color = color;

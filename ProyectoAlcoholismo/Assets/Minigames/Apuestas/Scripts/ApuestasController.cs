@@ -54,7 +54,9 @@ public class ApuestasController : MonoBehaviour
             if (GameState.isServer)
             {
                 // TODO: comprobar que no sea muchas veces el mismo??
-                var id = Random.Range(0, GameState.CountPlayers);
+                var pos = Random.Range(0, GameState.CountPlayers);
+                var id = PlayerRegistry.Instance.ObjectByRef[pos].playerId;
+                
                 GameState.GetMyPlayer().SetData(0, id);
 
                 ChooseScreen(id);

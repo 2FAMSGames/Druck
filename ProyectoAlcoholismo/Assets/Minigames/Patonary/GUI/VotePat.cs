@@ -7,6 +7,7 @@ public class VotePat : MonoBehaviour
     [SerializeField]
     private GameObject menusObject;
     private PatonaryMenuController menusController;
+    private RPCCalls rpcCalls;
 
     private UIDocument doc;
     private Button YesVoteButton;
@@ -20,6 +21,7 @@ public class VotePat : MonoBehaviour
     void OnEnable()
     {
         menusController = menusObject.GetComponent<PatonaryMenuController>();
+        rpcCalls = menusObject.GetComponent<RPCCalls>();
 
         doc = GetComponent<UIDocument>();
 
@@ -30,60 +32,40 @@ public class VotePat : MonoBehaviour
         GuessWord = doc.rootVisualElement.Q<Label>("Guess");
 
         ///////////////////////////
-        Guess = PlayerPrefs.GetString("Guess");
+        Guess = rpcCalls.m_word;
         GuessWord.text = Guess;
         ///////////////////////////
 
         YesVoteButton.clicked += YesVoteButtonOnClicked;
         NoVoteButton.clicked += NoVoteButtonOnClicked;
-        
-        //GameState.Instance.PlayerChangedData += OnPlayerChangedData;
     }
     
-    // private void OnPlayerChangedData(int arg1, NetworkDictionary<int, float> arg2)
-    // {
-    //     bool allVoted = true;
-    //     int yes = 0;
-    //     int no = 0;
-    //     foreach (var (key, player) in PlayerRegistry.Instance.ObjectByRef)
-    //     {
-    //         var vote = player.data[0];
-    //         allVoted &= (vote != 0);
-    //         if (vote != 0)
-    //         {
-    //             yes += vote == 1 ? 1 : 0;
-    //             no += vote == -1 ? 1 : 0;
-    //         }
-    //     }
-    //
-    //     if (allVoted)
-    //     {
-    //         if (yes >= no)
-    //         {
-    //             // TODO: asignar valor al ganador por el host, quién ha ganado y qué asignamos para
-    //             // luego usarlo en PlayerRegistry.sortedScoresData??
-    //             if (GameState.isServer)
-    //             {
-    //                 // id del ganador, score son los puntos.
-    //                 //GameState.GetPlayer(id).SetData(5, score);
-    //             }
-    //         }
-    //     }
-    // }
-
+    /** \brief Resultados Patonary:
+     * [0] -1 NO, 1 SI acertado
+     * [1] id de quien tenía que acertar.
+     */
     private void YesVoteButtonOnClicked()
     {
         Debug.Log("Yes button clicked");
         GameState.GetMyPlayer().SetData(0, 1);
-
-        StartCoroutine(Utils.GameUtils.GoToRankings());
+        GameState.GetMyPlayer().SetData(1, rpcCalls.m_to);
+        
+        GoToWait();
     }
 
     private void NoVoteButtonOnClicked()
     {
         Debug.Log("No button clicked");
         GameState.GetMyPlayer().SetData(0, -1);
+        GameState.GetMyPlayer().SetData(1, rpcCalls.m_to);
         
-        StartCoroutine(Utils.GameUtils.GoToRankings());
+        GoToWait();
+    }
+
+    private void GoToWait()
+    {
+        PlayerPrefs.SetInt("WaitngScreen", VoteWaiting);
+
+        menusController.GoToWait();
     }
 }

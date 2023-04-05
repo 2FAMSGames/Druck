@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = System.Random;
@@ -79,6 +80,13 @@ namespace Utils
             yield return new WaitForSeconds(1);
             AsyncOperation async = SceneManager.LoadSceneAsync("Ranking");
             yield return async; //Wait for your level to load
+        }
+        
+        public static void Log(string message,
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
+        {
+            Debug.Log(filePath + ":"+ lineNumber + " -> " + message);
         }
     }
 }

@@ -464,6 +464,8 @@ GameObject:
   m_Component:
   - component: {fileID: 504690512}
   - component: {fileID: 504690511}
+  - component: {fileID: 504690514}
+  - component: {fileID: 504690513}
   m_Layer: 0
   m_Name: UIPatMenus
   m_TagString: Untagged
@@ -510,6 +512,48 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &504690513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504690510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectInterest: 1
+  DefaultInterestGroups: []
+  DestroyWhenStateAuthorityLeaves: 0
+  AllowStateAuthorityOverride: 1
+  AoiPositionSource: {fileID: 0}
+  Flags: 2561
+  NetworkGuid:
+    RawGuidValue: 51886c97efbf439bbe14255b49b213a8
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 504690514}
+  SimulationBehaviours: []
+--- !u!114 &504690514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504690510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9eddcf76945336d4295beed001e981fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  waitScreen: {fileID: 1185777844}
+  m_texture: 
+  m_word: 
+  m_from: -1
+  m_to: -1
 --- !u!1 &605775109
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,7 +571,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &605775111
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -591,7 +635,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1082787715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -654,7 +698,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1185777845
 Transform:
   m_ObjectHideFlags: 0
@@ -699,7 +743,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menusObject: {fileID: 504690510}
-  waitngEnded: 1
+  waitngEnded: 0
 --- !u!1 &1325278008
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,7 +761,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1325278009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1009,7 +1053,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1768242489
 MonoBehaviour:
   m_ObjectHideFlags: 0

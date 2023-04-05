@@ -11,6 +11,7 @@ public class CanvasPat : MonoBehaviour
     [SerializeField]
     private GameObject menusObject;
     private PatonaryMenuController menusController;
+    private RPCCalls rpcCalls;
 
     public GameObject WordsRandom;
     private WordsRand _rndWord;
@@ -57,7 +58,14 @@ public class CanvasPat : MonoBehaviour
                 DoneButtonOnClicked();
             }
         }
+
+        if (_DrawLine.savedImage)
+        {
+            _DrawLine.savedImage = false; // to not enter again.
+            StartCoroutine(DelayedGoToVotar());
+        }
     }
+    
     void DisplayTime(float timeToDisplay)
     {
         timeToDisplay += 1;
@@ -72,6 +80,7 @@ public class CanvasPat : MonoBehaviour
         PlayerPrefs.SetInt("WaitngScreen", CanvasWaitng);
 
         menusController = menusObject.GetComponent<PatonaryMenuController>();
+        rpcCalls = menusObject.GetComponent<RPCCalls>();
         _DrawLine = SavePic.GetComponent<DrawLine>();
 
         doc = GetComponent<UIDocument>();
@@ -88,38 +97,32 @@ public class CanvasPat : MonoBehaviour
         {
             _DrawLine = SavePic.GetComponent<DrawLine>();
 
+            doneButton.text = "Espera...";
+            doneButton.SetEnabled(false);
+
             if (_DrawLine != null)
             {
                 //Debug.Log("Calling Save()...");
                 _DrawLine.Save();
-                
-                // TODO: got to 
-                StartCoroutine(DelayedGoToVotar());
             }
-            //else
-            //{
-            //    Debug.LogWarning("SavePic doesn't have a DrawLine component!");
-            //}
+            else
+            {
+                Debug.LogWarning("SavePic doesn't have a DrawLine component!");
+            }
         }
-        //else
-        //{
-        //    Debug.LogWarning("SavePic is not set!");
-        //}
+        else
+        {
+            Debug.LogWarning("SavePic is not set!");
+        }
     }
-
+    
     private IEnumerator DelayedGoToVotar()
     {
         yield return new WaitForSeconds(0.1f);
-        //menusController.GoToGuess();
 
         PlayerPrefs.SetInt("WaitngScreen", CanvasWaitng);
 
-        //if (CanvasWaitngEnded == 1)   //if everyone´s pic/guess/vote is ready then
-        //{
-        //    menusController.GoToGuess();
-        //}
         menusController.GoToWait();
-
     }
 }
 
