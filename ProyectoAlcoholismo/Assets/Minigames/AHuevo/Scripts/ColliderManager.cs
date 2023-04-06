@@ -6,10 +6,22 @@ using UnityEngine;
 public class ColliderManager : MonoBehaviour
 {
     private static int score = 100;
+    public float tiempoDeJuego = 6;
 
     void Start()
     {
-        GameState.Instance.PlayerChangedData += OnPlayerDataChanged;
+        //GameState.Instance.PlayerChangedData += OnPlayerDataChanged;
+    }
+
+    private void Update()
+    {
+        tiempoDeJuego -= Time.deltaTime;
+        if (tiempoDeJuego < 0)
+        {
+            Debug.Log("¡HAS TARDADO MUCHO!");
+            GameState.GetMyPlayer().SetData(0, -1);
+            Ranking();
+        }
     }
 
     private void OnPlayerDataChanged(int id, NetworkDictionary<int, float> data)
@@ -18,11 +30,16 @@ public class ColliderManager : MonoBehaviour
         score -= 10;
     }
 
+
     void OnTriggerEnter(Collider other)
     {
         Debug.Log("¡HAS LLEGADO A LA META!");
         GameState.GetMyPlayer().SetData(0, score);
         GameState.Instance.PlayerChangedData -= OnPlayerDataChanged;
+        Ranking();
+    }
+    private void Ranking()
+    {
 
         StartCoroutine(Utils.GameUtils.GoToRankings());
     }

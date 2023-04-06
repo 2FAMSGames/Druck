@@ -120,7 +120,17 @@ public class Copa : MonoBehaviour
         tiempoDeJuego -= Time.deltaTime;
         if (tiempoDeJuego < 0 && !Empate())
         {
+            if (puntuacion == 0)
+            {
+                GameState.GetMyPlayer().SetData(0, -1);
+            }
             AcabarJuego();
+
+
+        }
+        if (tiempoDeJuego < 0 && Empate())
+        {
+            tiempoDeJuego += 10;
         }
 
         if (tiempoEnTono > 0)
