@@ -14,8 +14,6 @@ public class RankingJuego : MonoBehaviour
     [SerializeField]
     private RankingMenu rootMenu;
 
-    private WaitBarriers barriers;
-
     private VisualElement root;
     private ListView jugadoresUI;
     private Button boton;
@@ -27,8 +25,6 @@ public class RankingJuego : MonoBehaviour
 
     public void OnEnable()
     {
-        barriers = rootMenu.GetComponent<WaitBarriers>();
-        
         root = GetComponent<UIDocument>().rootVisualElement;
         jugadoresUI = root.Q<ListView>("Jugadores");
 
@@ -40,9 +36,10 @@ public class RankingJuego : MonoBehaviour
         Utils.GameConstants.GameNames.TryGetValue(rootMenu.gameName, out string nombre);
         GameTitle.text = nombre;
         
-        fillPlayers();
         GameState.Instance.PlayerChangedData += OnPlayerChangedData;
         GameState.Instance.playing = false;
+        
+        fillPlayers();
     }
     
     private void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
@@ -104,13 +101,13 @@ public class RankingJuego : MonoBehaviour
         boton.text = rootMenu.WAITSTR;
         alreadyClicked = true;
         
-        barriers.IAmInBarrier();
+        rootMenu.IAmInBarrier();
         inBarrier = true;
     }
 
     public void Update()
     {
         if(inBarrier)
-            barriers.CheckBarrier();
+            rootMenu.CheckBarrier();
     }
 }

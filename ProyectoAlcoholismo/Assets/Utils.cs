@@ -15,9 +15,9 @@ namespace Utils
 //           "AHuevo",
 //           "Apuestas",
 //           "CuakCuak",
-           "Lanzapato",
-           "Patonary",
-           "SimonSays"
+//           "Lanzapato",
+           "Patonary"
+//           "SimonSays"
         };
 
         public static Dictionary<string, string> GameNames = new Dictionary<string, string>

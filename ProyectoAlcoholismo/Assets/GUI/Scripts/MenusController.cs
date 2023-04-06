@@ -30,8 +30,6 @@ public class MenusController : MonoBehaviour
 
     void OnEnable()
     {
-        GameState.Instance?.Disconnect();
-        
         bgColor = fondo.color;
         fondo.color = Color.clear;
         if (!GameState.Instance.AlreadyPlayedIntro)
@@ -42,11 +40,20 @@ public class MenusController : MonoBehaviour
     }
     void Start()
     {
-        Invoke("EnablePanelAfterDelay", delayTime);
+        if (!GameState.Instance.AlreadyPlayedIntro)
+        {
+            Invoke("EnablePanelAfterDelay", delayTime);
+        }
+        else
+        {
+            EnablePanelAfterDelay();
+        }
     }
 
     void EnablePanelAfterDelay()
     {
+        GameState.Instance?.Disconnect();
+        
         GoToMainMenu();
         ChangeToNewCamera();
         fondo.color = bgColor;

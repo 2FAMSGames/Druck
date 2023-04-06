@@ -181,7 +181,7 @@ public class RPCCalls : NetworkBehaviour
         switch (currentBarrier)
         {
             case 1:
-                if (m_from != -1 && m_to == -1 && !GameState.isServer)
+                if (m_from != -1 && m_to == -1 && !GameState.isServer && !sentTexture)
                 {
                     SendTexture();
                     Debug.Log("envía textura a " + m_to);

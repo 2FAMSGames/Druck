@@ -37,7 +37,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     [Networked(OnChanged = nameof(OnReadyChanged))]
     public NetworkBool isReady { get; private set; }
     
-    [Networked(OnChanged = nameof(OnPlayerDataChanged)), Capacity(10)]
+    [Networked(OnChanged = nameof(OnPlayerDataChanged)), Capacity(16)]
     public NetworkDictionary<int, float> data { get; } = MakeInitializer(new Dictionary<int, float> {{ 0,0 } });
     
     private void Awake()
@@ -139,7 +139,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
         if (Object.HasInputAuthority)
         {
             this.data.Clear();
-            for (int i = 0; i < 10; ++i)
+            for (int i = 0; i < 16; ++i)
             {
                 this.data.Set(i, 0);
                 RpcSetPlayerData(i, 0);
@@ -150,17 +150,6 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
         }
     }
     
-    public void StateResetData()
-    {
-        if (Object.HasStateAuthority || Object.HasInputAuthority)
-        {
-            for (int i = 0; i < 10; ++i)
-                RpcStateSetPlayerData(i, 0);
-            
-            RpcStateSetPlayerReady(false);
-        }
-    }
-   
     public override void FixedUpdateNetwork()
     {
         // Get input and apply to the object.

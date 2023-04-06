@@ -194,7 +194,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public void PlayerHasChangedReady(int id, bool ready)
 	{
 		// Only for server.
-		if (!GameState.isServer || playing) return;
+		if (!isServer || playing) return;
 		
 		// Por si hemos conectado algo a esta señal.
 		PlayerChangedReady?.Invoke(id, ready);
