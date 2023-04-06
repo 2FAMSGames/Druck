@@ -32,22 +32,16 @@ public class MenusController : MonoBehaviour
     {
         bgColor = fondo.color;
         fondo.color = Color.clear;
+        
         if (!GameState.Instance.AlreadyPlayedIntro)
         {
             Intro();
-            GameState.Instance.AlreadyPlayedIntro = true;
         }
     }
     void Start()
     {
-        if (!GameState.Instance.AlreadyPlayedIntro)
-        {
-            Invoke("EnablePanelAfterDelay", delayTime);
-        }
-        else
-        {
-            EnablePanelAfterDelay();
-        }
+        if (GameState.Instance.AlreadyPlayedIntro) delayTime = 0;
+        Invoke("EnablePanelAfterDelay", delayTime);
     }
 
     void EnablePanelAfterDelay()
@@ -57,6 +51,9 @@ public class MenusController : MonoBehaviour
         GoToMainMenu();
         ChangeToNewCamera();
         fondo.color = bgColor;
+        fondo.enabled = true;
+        
+        GameState.Instance.AlreadyPlayedIntro = true;
     }
 
     public void Intro()
