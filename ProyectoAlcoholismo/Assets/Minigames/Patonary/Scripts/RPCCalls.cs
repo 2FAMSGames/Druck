@@ -26,6 +26,7 @@ public class RPCCalls : NetworkBehaviour
     // To is the chosen player we will send the texture and receive the word. 
     public int m_from = -1;
     public int m_to = -1;
+    public bool sentTexture = false;
     private bool sentWord = false;
         
     [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
@@ -46,14 +47,15 @@ public class RPCCalls : NetworkBehaviour
 
     public void SendWord(string word)
     {
-        if (m_from == -1)
+        if (m_from == -1 || sentWord)
             return;
 
         var myId = GameState.GetMyPlayer().playerId;
         Debug.Log(myId  + " sends word to " + m_from);
-        var player = PlayerRegistry.Instance.ObjectByRef.Where(p => p.Value.playerId == m_from);
-        if (player.Count() == 1)
+        var player = PlayerRegistry.Instance.ObjectByRef.Where(p => p.Value.playerId == m_from).ToList();
+        if (player.Count == 1)
         {
+            sentWord = true;
             Rpc_SendWordTargeted(player.First().Key, word, myId);
             return;
         }
@@ -63,6 +65,8 @@ public class RPCCalls : NetworkBehaviour
 
     public void SendTexture()
     {
+        if (sentTexture) return;
+        
         var myPlayer = GameState.GetMyPlayer();
         var myId = myPlayer.playerId;
         if (m_to == -1)
@@ -76,9 +80,10 @@ public class RPCCalls : NetworkBehaviour
         if (imageString.Length == 0)
             return;
         
-        var player = PlayerRegistry.Instance.ObjectByRef.Where(p => p.Value.playerId == m_to);
-        if (player.Count() == 1)
+        var player = PlayerRegistry.Instance.ObjectByRef.Where(p => p.Value.playerId == m_to).ToList();
+        if (player.Count == 1)
         {
+            sentTexture = true;
             Debug.Log(myId + "sends texture to " + player.First().Key);
             Rpc_SendTextureTargeted(player.First().Key, imageString, myId);
             return;
@@ -167,11 +172,11 @@ public class RPCCalls : NetworkBehaviour
     public void CheckBarrier()
     {
         Debug.Log(GameState.GetMyPlayer().playerId + " checks barrier " + currentBarrier);
-        var players = PlayerRegistry.Instance.ObjectByRef.ToList();
-        players.Where(p  => p.Value.data[currentBarrier + 4] == 1);
-        Debug.Log("barrier " + currentBarrier + " has " + players.Count);
+        var players = PlayerRegistry.Instance.ObjectByRef;
+        var inBarrier = players.Where(p  => p.Value.data[currentBarrier + 4] == 1).ToList();
+        Debug.Log("barrier " + currentBarrier + " has " + inBarrier.Count);
 
-        if (players.Count != GameState.CountPlayers) return;
+        if (inBarrier.Count != GameState.CountPlayers) return;
         
         switch (currentBarrier)
         {
@@ -184,8 +189,8 @@ public class RPCCalls : NetworkBehaviour
 
                 if (m_from != -1 && m_to != -1)
                 {
-                    ++currentBarrier;
                     waitScript.waitngEnded = true;
+                    ++currentBarrier;
                 }
                 break;
             case 2:
@@ -193,14 +198,13 @@ public class RPCCalls : NetworkBehaviour
                 if (guessWord != String.Empty && !sentWord)
                 {
                     SendWord(guessWord);
-                    sentWord = true;
                     Debug.Log("envía palabra a " + m_from);
                 }
 
                 if (sentWord && m_word != String.Empty)
                 {
-                    ++currentBarrier;
                     waitScript.waitngEnded = true;
+                    ++currentBarrier;
                 }
                 break;
             case 3:

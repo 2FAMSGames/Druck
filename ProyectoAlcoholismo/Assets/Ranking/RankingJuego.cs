@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Fusion;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,15 +14,21 @@ public class RankingJuego : MonoBehaviour
     [SerializeField]
     private RankingMenu rootMenu;
 
+    private WaitBarriers barriers;
+
     private VisualElement root;
     private ListView jugadoresUI;
     private Button boton;
 
     private Dictionary<int, bool> pulsados = new Dictionary<int, bool>();
+    
     private bool alreadyClicked = false;
+    private bool inBarrier = false;
 
     public void OnEnable()
     {
+        barriers = rootMenu.GetComponent<WaitBarriers>();
+        
         root = GetComponent<UIDocument>().rootVisualElement;
         jugadoresUI = root.Q<ListView>("Jugadores");
 
@@ -40,12 +47,6 @@ public class RankingJuego : MonoBehaviour
     
     private void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
     {
-        if(data[9] == 1)
-            pulsados[GameState.GetPlayer(id).playerId] = true;
-        
-        if(pulsados.Count == GameState.CountPlayers)
-            rootMenu.ToCastigos();
-
         if (id == GameState.GetMyPlayer().playerId) return;
         
         // Actualizar la lista si alguien "llega a rankings tarde"
@@ -99,12 +100,17 @@ public class RankingJuego : MonoBehaviour
 
     private void OnReadyButtonOnClicked()
     {
-        var player = GameState.GetMyPlayer();
-        player.SetData(9, 1);
         boton.SetEnabled(false);
         boton.text = rootMenu.WAITSTR;
         alreadyClicked = true;
         
-        OnPlayerChangedData(player.playerId, player.data);
+        barriers.IAmInBarrier();
+        inBarrier = true;
+    }
+
+    public void Update()
+    {
+        if(inBarrier)
+            barriers.CheckBarrier();
     }
 }

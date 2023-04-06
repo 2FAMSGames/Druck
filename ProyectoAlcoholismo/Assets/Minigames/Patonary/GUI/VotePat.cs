@@ -1,4 +1,3 @@
-using Fusion;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -40,7 +39,7 @@ public class VotePat : MonoBehaviour
         NoVoteButton.clicked += NoVoteButtonOnClicked;
     }
     
-    /** \brief Resultados Patonary:
+    /** \brief Resultados Patonary en data:
      * [0] -1 NO, 1 SI acertado
      * [1] id de quien tenía que acertar.
      */
@@ -50,7 +49,8 @@ public class VotePat : MonoBehaviour
         GameState.GetMyPlayer().SetData(0, 1);
         GameState.GetMyPlayer().SetData(1, rpcCalls.m_to);
         
-        GoToWait();
+        Debug.Log("vote yes");
+        menusController.GoToWait();
     }
 
     private void NoVoteButtonOnClicked()
@@ -59,13 +59,7 @@ public class VotePat : MonoBehaviour
         GameState.GetMyPlayer().SetData(0, -1);
         GameState.GetMyPlayer().SetData(1, rpcCalls.m_to);
         
-        GoToWait();
-    }
-
-    private void GoToWait()
-    {
-        PlayerPrefs.SetInt("WaitngScreen", VoteWaiting);
-
+        Debug.Log("vote no");
         menusController.GoToWait();
     }
 }

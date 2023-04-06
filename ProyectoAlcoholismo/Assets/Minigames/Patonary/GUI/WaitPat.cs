@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class WaitPat : MonoBehaviour
@@ -25,7 +24,7 @@ public class WaitPat : MonoBehaviour
 
     private void Update()
     {
-        if (WaitngScreen == 1 && GameState.isServer && rpcCalls.m_to == -1)
+        if (WaitngScreen == 1 && GameState.isServer && !rpcCalls.sentTexture)
         {
             rpcCalls.SendTexture();
         }
@@ -34,6 +33,7 @@ public class WaitPat : MonoBehaviour
 
         if (waitngEnded)
         {
+            waitngEnded = false;
             WaitingEnded();
         }
     }

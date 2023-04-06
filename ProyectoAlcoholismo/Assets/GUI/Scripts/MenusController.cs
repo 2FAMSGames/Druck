@@ -32,7 +32,6 @@ public class MenusController : MonoBehaviour
     {
         GameState.Instance?.Disconnect();
         
-        PlayerRegistry.SceneChanged += OnSceneChanged;
         bgColor = fondo.color;
         fondo.color = Color.clear;
         if (!GameState.Instance.AlreadyPlayedIntro)
@@ -51,17 +50,6 @@ public class MenusController : MonoBehaviour
         GoToMainMenu();
         ChangeToNewCamera();
         fondo.color = bgColor;
-    }
-
-    private void OnSceneChanged(string sceneName)
-    {
-        intro.SetActive(sceneName.IsNullOrEmpty());
-        mainMenu.SetActive(false);
-        roomCreateMenu.SetActive(false);
-        roomJoinMenu.SetActive(false);
-        settingsMenu.SetActive(false);
-        helpMenu.SetActive(false);
-        roomMenu.SetActive(false);
     }
 
     public void Intro()
@@ -149,5 +137,4 @@ public class MenusController : MonoBehaviour
         roomMenu.SetActive(false);
 
     }
-   
 }

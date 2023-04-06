@@ -139,14 +139,14 @@ public class SimonGame : MonoBehaviour
 
         var buttonName = item.name;
         var note = CurrentButtonNotes.FirstOrDefault(x => x.Value == buttonName).Key;
-        
-        if(!buttonsDisabled)
+
         if (note != (int)Math.Truncate(CurrentRound[0]))
         {
             ++failedRounds;
             CurrentRound.Clear();
-            messagesController.texto = "Te has\nequivocado\nde nota...\n\nHas perdido\nesta ronda!";
             fondo.color = whitebg;
+            finished = CurrentSong.Count == 0;
+            messagesController.texto = "Te has\nequivocado\nde nota...\n\nHas perdido\nesta ronda!";
             menusController.ShowMessage();
         }
         else
@@ -158,18 +158,9 @@ public class SimonGame : MonoBehaviour
             if (CurrentRound.Count == 0)
             {
                 fondo.color = whitebg;
-                if (CurrentSong.Count == 0)
-                {
-                    // Fin del juego
-                    finished = true;
-                    messagesController.texto = "Enhorabuena!\n\nCanción completada!";
-                    menusController.ShowMessage();
-                }
-                else
-                {
-                    messagesController.texto = "Enhorabuena!\n\nRonda superada!";
-                    menusController.ShowMessage();
-                }
+                finished = CurrentSong.Count == 0;
+                messagesController.texto = "Enhorabuena!\n\nRonda superada!";
+                menusController.ShowMessage();
             }
         }
     }
@@ -202,10 +193,11 @@ public class SimonGame : MonoBehaviour
                 }
                 else
                 {
+                    ++failedRounds;
                     fondo.color = whitebg;
+                    finished = CurrentSong.Count == 0;
                     messagesController.texto = "Se ha\nconsumido\nel tiempo...\n\nHas perdido\nesta ronda!";
                     menusController.ShowMessage();
-                    ++failedRounds;
                 }
             }
         }
@@ -256,10 +248,7 @@ public class SimonGame : MonoBehaviour
     {
         if (CurrentSong.Count == 0)
         {
-            finished = true;
-            messagesController.texto = "Enhorabuena!\n\nCanción completada!";
-            menusController.ShowMessage();
-            yield break;
+            Debug.Assert(false);
         }
 
         ++RoundNumber;
@@ -269,7 +258,7 @@ public class SimonGame : MonoBehaviour
         DisableButtons();
         
         // Randomizar botones.
-        var buttons = ButtonNames.CloneViaSerialization();
+        var buttons = new List<string>(ButtonNames);
         
         CurrentButtonNotes.Clear();
         foreach (var noteAndDuration in CurrentRound)
@@ -292,7 +281,7 @@ public class SimonGame : MonoBehaviour
         foreach (float noteAndDuration in CurrentRound)
         {
             var note = (int)Math.Truncate(noteAndDuration);
-            float duration = (noteAndDuration - note) * 10; // seconds
+            float duration = (noteAndDuration - note) * 10; // duration in seconds
             var button = doc.rootVisualElement.Q<Button>(CurrentButtonNotes[note]);
             ActivateButton(ref button);
             StartCoroutine(PlayNote(note));

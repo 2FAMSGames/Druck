@@ -14,8 +14,7 @@ public class RankingFinal : MonoBehaviour
     private VisualElement root;
     private ListView jugadoresUI;
     private Button boton;
-
-
+    
     public void OnEnable()
     {
         root = GetComponent<UIDocument>().rootVisualElement;
@@ -58,11 +57,11 @@ public class RankingFinal : MonoBehaviour
 
     private void OnReadyButtonOnClicked()
     {
-        GameState.GetMyPlayer().SetReady(true);
-        
         boton.text = rootMenu.WAITSTR;
         boton.SetEnabled(false);
-
+        
+        GameState.GetMyPlayer().SetReady(true);
+        
         // Necesario porque el server no recibe sus propios cambios.
         if (GameState.isServer)
         {

@@ -40,7 +40,7 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
         CurrentScene = sceneName;
     }
     
-    public static void Server_Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
+    public static void Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
     {
         if (Instance.ObjectByRef.Count < 16)
         {
@@ -53,12 +53,7 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    public static void OnSceneChanged(Changed<PlayerRegistry> changedInfo)
-    {
-        SceneChanged?.Invoke(Instance.CurrentScene);	
-    }
-    
-    public static void Server_Remove(NetworkRunner runner, PlayerRef pRef)
+    public static void Remove(NetworkRunner runner, PlayerRef pRef)
     {
         if (!pRef.IsValid || !Instance) return;
 
@@ -66,6 +61,11 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
         {
             Debug.LogWarning("Could not remove player from registry!");
         }
+    }
+    
+    public static void OnSceneChanged(Changed<PlayerRegistry> changedInfo)
+    {
+        SceneChanged?.Invoke(Instance.CurrentScene);	
     }
 
     public List<Tuple<int, int>> SortedScores()

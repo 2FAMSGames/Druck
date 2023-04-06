@@ -47,7 +47,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
     
     public override void Spawned()
     {
-        GameState.Server_Add(Runner, Object.InputAuthority, this);
+        GameState.Add(Runner, Object.InputAuthority, this);
         
         if (Object.HasInputAuthority)
         {
@@ -76,7 +76,7 @@ public class PlayerBehaviour : NetworkBehaviour, IComparable<PlayerBehaviour>
         // Initialized game specific settings
         if (Object.HasStateAuthority)
         {
-            GameState.Server_Remove(Runner, Object.InputAuthority);
+            GameState.Remove(Runner, Object.InputAuthority);
         }
     }
 

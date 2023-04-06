@@ -14,7 +14,6 @@ public class RankingMenu : MonoBehaviour
 
     public string gameName;
     public int winnerIdx = -1;
-    public bool haSidoCastigado = false;
     
     public readonly string WAITSTR = "Esperando...";
     public readonly string STARTSTR = "Continuar!"; // quizá "Siguiente!"
