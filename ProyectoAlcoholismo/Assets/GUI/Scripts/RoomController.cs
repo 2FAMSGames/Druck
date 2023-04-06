@@ -1,7 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Fusion;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -54,7 +51,7 @@ public class RoomController : MonoBehaviour
 
     private void ReadyButtonOnClicked()
     {
-        GameState.FlipReadyFlag();
+        GameState.GetMyPlayer().SetReady(true);
         readyButton.text = WAITSTR;
         readyButton.SetEnabled(false);
         

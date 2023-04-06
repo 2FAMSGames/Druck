@@ -40,7 +40,7 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
         CurrentScene = sceneName;
     }
     
-    public static void Server_Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
+    public static void Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
     {
         if (Instance.ObjectByRef.Count < 16)
         {
@@ -53,12 +53,7 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    public static void OnSceneChanged(Changed<PlayerRegistry> changedInfo)
-    {
-        SceneChanged?.Invoke(Instance.CurrentScene);	
-    }
-    
-    public static void Server_Remove(NetworkRunner runner, PlayerRef pRef)
+    public static void Remove(NetworkRunner runner, PlayerRef pRef)
     {
         if (!pRef.IsValid || !Instance) return;
 
@@ -66,6 +61,11 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
         {
             Debug.LogWarning("Could not remove player from registry!");
         }
+    }
+    
+    public static void OnSceneChanged(Changed<PlayerRegistry> changedInfo)
+    {
+        SceneChanged?.Invoke(Instance.CurrentScene);	
     }
 
     public List<Tuple<int, int>> SortedScores()
@@ -120,7 +120,18 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
         return result;
     }
 
-
+    public List<Tuple<int, int>> SortedScoresPatonary()
+    {
+        var result = new List<Tuple<int, int>>();
+        
+        foreach (var (key, player) in Instance.ObjectByRef)
+        {
+            result.Add(new Tuple<int,int>((int)player.data[1], (int)player.data[0]));
+        }
+        
+        result.Sort((x, y) => y.Item2.CompareTo(x.Item2));
+        return result;
+    }
 
     #region INetworkRunnerCallbacks
 

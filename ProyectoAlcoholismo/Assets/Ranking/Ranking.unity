@@ -252,7 +252,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b19d74e491a18884b98474ab28390604, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jugadorTemplateRadio: {fileID: 9197481963319205126, guid: 929da1a3a9cc4e24384e42b5c9014619, type: 3}
   rootMenu: {fileID: 2052500514}
 --- !u!114 &408442665
 MonoBehaviour:
@@ -547,5 +546,4 @@ MonoBehaviour:
   rankingFinal: {fileID: 562923557}
   gameName: 
   winnerIdx: -1
-  haSidoCastigado: 0
   fondo: {fileID: 682405823}

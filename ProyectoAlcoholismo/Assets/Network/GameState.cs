@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
-using Photon.Realtime;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,8 +18,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public static GameState Instance { get; private set; }
 
 	// Local player data, not networked
-	public string uniqueID = Utils.StringUtils.generateRandomString();
-	public string myPlayerName = "No-named";
+	public string myPlayerName = "Nonamed";
 
 	private static bool AllReady => PlayerRegistry.AllReady;
 	public static int CountPlayers => PlayerRegistry.CountPlayers;
@@ -31,6 +29,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	private int PlayedGames = 0;
 
 	public bool AlreadyPlayedIntro = false;
+	public bool playing = false;
 	
     // Eventos a los que conectarse:
     // 
@@ -52,15 +51,13 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	[SerializeField] private NetworkPrefabRef playerPrefab;
     
     private Dictionary<PlayerRef, NetworkObject> spawnedObjects = new Dictionary<PlayerRef, NetworkObject>();
-
    
     private void Awake()
     {
-	    if (Instance != null) { Destroy(gameObject); return; }
+	    if (Instance != null) { Destroy(this); return; }
 		Instance = this;
 
 		DontDestroyOnLoad(this);
-		Debug.Log("GameState.Awake() -> player unique id: " + uniqueID);
     }
 	
 	private void OnDestroy()
@@ -78,12 +75,9 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		return CurrentGameList.Count;
 	}
 
-	public static void Server_Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
+	public static void Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
 	{
-//		if (runner.IsServer)
-		{
-			PlayerRegistry.Server_Add(runner, pRef, pObj);
-		}
+		PlayerRegistry.Add(runner, pRef, pObj);
 
 		if (!pObj.HasInputAuthority)
 		{
@@ -91,7 +85,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		}
 	}
 	
-	public static void Server_Remove(NetworkRunner runner, PlayerRef pRef)
+	public static void Remove(NetworkRunner runner, PlayerRef pRef)
 	{
 		if(!pRef.IsValid) return;
 
@@ -102,10 +96,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				Instance.RemoveFromEventCallbacks(playerRef);
 		}
 		
-//		if (runner.IsServer)
-		{
-			PlayerRegistry.Server_Remove(runner, pRef);
-		}
+		PlayerRegistry.Remove(runner, pRef);
 	}
 	
 	public static bool HasPlayer(PlayerRef pRef)
@@ -147,59 +138,14 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public void CreateRoom(string roomName, Action successCallback = null)
 	{
 	    StartCoroutine(HostSessionRoutine(roomName, successCallback));
-    }
+	    new WaitForSeconds(1);
+	}
 
     public void JoinRoom(string roomName, Action successCallback = null)
     {
 	    StartCoroutine(JoinSessionRoutine(roomName, successCallback));
+	    new WaitForSeconds(1);
     }
-
-    public void ModifyScore(int value)
-    {
-	    value = Math.Min(100, Math.Max(0, value));
-	    GetMyPlayer().SetScore(value);
-    }
-
-    public void ModifyName(string myName)
-    {
-	    GetMyPlayer().SetName(myName);
-    }
-
-    public void ModifyTime(float time)
-    {
-	    GetMyPlayer().SetTime(time);
-    }
-
-    public static void FlipReadyFlag()
-    {
-	    GetMyPlayer().SetReady(!GetMyPlayer().isReady);
-    }
-
-    public void ModifyColor(Vector3 color)
-    {
-	    GetMyPlayer().SetColor(color);
-    }
-    
-	public void ModifyData(int pos, float value)
-	{
-		GetMyPlayer().SetData(pos, value);
-	}
-    
-	public void ResetPlayerScores()
-	{
-		GetMyPlayer().SetScore(100);
-		GetMyPlayer().SetTime(0);
-	}
-
-	public void ResetAllPlayersData()
-	{
-		if (!isServer) return;
-		foreach (var (key, player) in PlayerRegistry.Instance.ObjectByRef)
-		{
-			Debug.Log("clearing player: "+ key);
-			player.StateResetData();
-		}
-	}
 
 	private void AddToEventCallbacks(in PlayerBehaviour p)
 	{
@@ -248,12 +194,12 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public void PlayerHasChangedReady(int id, bool ready)
 	{
 		// Only for server.
-		if (!GameState.isServer) return;
+		if (!isServer || playing) return;
 		
 		// Por si hemos conectado algo a esta señal.
 		PlayerChangedReady?.Invoke(id, ready);
 
-		if (AllReady)
+		if (AllReady && GameState.CountPlayers > 1)
 		{
 			if (CurrentGameList.Count == 0)
 			{
@@ -273,6 +219,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			
 			PlayerRegistry.Instance.SetScene(gameName);
 			++PlayedGames;
+			playing = true;
 			LoadScene(gameName);
 		}
 	}
@@ -289,12 +236,6 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		{
 			Runner.SetActiveScene(sceneName);
 		}
-	}
-
-	private void ResetReadyFlags()
-	{
-		foreach (var (key, player) in PlayerRegistry.Instance.ObjectByRef)
-			player.SetReady(false);
 	}
 
 	public void PlayerHasChangedData(int id, NetworkDictionary<int,float> data)
@@ -323,7 +264,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				result = PlayerRegistry.Instance.SortedScoresData0();
 				break;
 			case "Patonary":
-				result = PlayerRegistry.Instance.SortedScoresData0();
+				result = PlayerRegistry.Instance.SortedScoresPatonary();
 				break;
 			case "SimonSays":
 				result = PlayerRegistry.Instance.SortedScoresData0();
@@ -333,6 +274,20 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				break;
 		}
 
+		return result;
+	}
+
+	/** \brief Return the list of winners for the current game.
+	 * 
+	 */
+	public List<Tuple<int, int>> Winners()
+	{
+		List<Tuple<int, int>> result = new List<Tuple<int, int>>();
+		
+		// TODO: implementar. Devuelve <id, tragos a repartir> pero no se ha
+		// definido los castigos de los juegos.
+		// switch (PlayerRegistry.Instance.CurrentScene)
+		
 		return result;
 	}
 	
@@ -398,10 +353,6 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		{
 			if (successCallback != null)
 				successCallback.Invoke();
-			else
-			{
-				Runner.SetActiveScene(gameScene);
-			}
 				
 			Debug.Log("Host initiated: " + roomName);
 		}
@@ -442,9 +393,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		{
 			if (successCallback != null)
 				successCallback.Invoke();
-			else
-				Runner.SetActiveScene(gameScene);
-			
+
 			Debug.Log("Joined: " + roomName);
 		}
 		else
@@ -489,6 +438,12 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			spawnedObjects.Add(player, networkPlayerObject);
 		}
 		DebugPrint();
+		
+		if (runner.IsServer)
+		{
+			var myPlayer = GameState.GetMyPlayer();
+			PlayerHasChangedReady(myPlayer.playerId, myPlayer.isReady);
+		}
 	}
 
 	public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
@@ -507,7 +462,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 					runner.Despawn(networkObject);
 
 				spawnedObjects.Remove(player);
-				Server_Remove(runner, player);
+				Remove(runner, player);
 			}
 		}
 

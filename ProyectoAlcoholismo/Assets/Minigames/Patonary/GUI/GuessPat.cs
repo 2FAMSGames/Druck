@@ -8,6 +8,7 @@ public class GuessPat : MonoBehaviour
     [SerializeField]
     private GameObject menusObject;
     private PatonaryMenuController menusController;
+    private RPCCalls rpcCalls;
 
     private UIDocument doc;
     private Button guessButton;
@@ -23,6 +24,7 @@ public class GuessPat : MonoBehaviour
         PlayerPrefs.SetInt("WaitngScreen", GuessWaitng);
 
         menusController = menusObject.GetComponent<PatonaryMenuController>();
+        rpcCalls = menusObject.GetComponent<RPCCalls>();
 
         doc = GetComponent<UIDocument>();
 
@@ -36,8 +38,12 @@ public class GuessPat : MonoBehaviour
 
     private void Start()
     {
+        // Tenemos el id del que nos ha enviado la imagen, podríamos poner
+        // el nombre en pantalla.
+        // id = rpcCalls.m_from
+        
         // Retrieve the string from PlayerPrefs
-        string imageString = PlayerPrefs.GetString("TransferredImage");
+        string imageString = rpcCalls.m_texture;
 
         // Convert the string back to a byte array
         byte[] imageData = System.Convert.FromBase64String(imageString);
@@ -57,14 +63,7 @@ public class GuessPat : MonoBehaviour
         guessWord = guess.text;
         PlayerPrefs.SetString("Guess", guessWord);
         Debug.Log(guessWord);
-
-        //go to next menu
-        //menusController.GoToVote();
-
-        //if (GuessWaitngEnded == 1)        //if everyone�s pic/guess/vote is ready then
-        //{
-        //    menusController.GoToVote();
-        //}
+        
         menusController.GoToWait();
     }
 }

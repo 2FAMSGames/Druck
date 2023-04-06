@@ -30,38 +30,30 @@ public class MenusController : MonoBehaviour
 
     void OnEnable()
     {
-        GameState.Instance?.Disconnect();
-        
-        PlayerRegistry.SceneChanged += OnSceneChanged;
         bgColor = fondo.color;
         fondo.color = Color.clear;
+        
         if (!GameState.Instance.AlreadyPlayedIntro)
         {
             Intro();
-            GameState.Instance.AlreadyPlayedIntro = true;
         }
     }
     void Start()
     {
+        if (GameState.Instance.AlreadyPlayedIntro) delayTime = 0;
         Invoke("EnablePanelAfterDelay", delayTime);
     }
 
     void EnablePanelAfterDelay()
     {
+        GameState.Instance?.Disconnect();
+        
         GoToMainMenu();
         ChangeToNewCamera();
         fondo.color = bgColor;
-    }
-
-    private void OnSceneChanged(string sceneName)
-    {
-        intro.SetActive(sceneName.IsNullOrEmpty());
-        mainMenu.SetActive(false);
-        roomCreateMenu.SetActive(false);
-        roomJoinMenu.SetActive(false);
-        settingsMenu.SetActive(false);
-        helpMenu.SetActive(false);
-        roomMenu.SetActive(false);
+        fondo.enabled = true;
+        
+        GameState.Instance.AlreadyPlayedIntro = true;
     }
 
     public void Intro()
@@ -149,5 +141,4 @@ public class MenusController : MonoBehaviour
         roomMenu.SetActive(false);
 
     }
-   
 }

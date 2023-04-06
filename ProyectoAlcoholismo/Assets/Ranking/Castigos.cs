@@ -7,8 +7,6 @@ using UnityEngine.UIElements;
 
 public class Castigos : MonoBehaviour
 {
-    public VisualTreeAsset jugadorTemplateRadio;
-    
     [SerializeField]
     private RankingMenu rootMenu;
 
@@ -19,14 +17,13 @@ public class Castigos : MonoBehaviour
     private Dictionary<string, Tuple<int, bool>> selectedPlayers = new Dictionary<string, Tuple<int, bool>>();
     private bool castigado = false;
     private bool soyCastigador = false;
-    private int castigos = 3;
-    private int numCastigos = 3;
+    private int maxCastigos = 3;
 
     private Dictionary<int, Tuple<bool, Button>> buttons = new Dictionary<int, Tuple<bool, Button>>();
     private int botonPulsado;
     
-    private Dictionary<int, bool> pulsados = new Dictionary<int, bool>();
     private bool alreadyClicked = false;
+    private bool inBarrier = false;
     
     public void OnEnable()
     {
@@ -48,13 +45,12 @@ public class Castigos : MonoBehaviour
         
         jugadoresUI.visible = soyCastigador;
 
-        castigos = numCastigos = Math.Min(3, GameState.CountPlayers - 1);
-        string plural = castigos > 1 ? "s" : "";
+        maxCastigos = Math.Min(3, GameState.CountPlayers - 1);
+        string plural = maxCastigos > 1 ? "s" : "";
         
         if (soyCastigador)
         {
-
-            Texto.text = "Has ganado!!\n\nSelecciona\nhasta " + castigos + " miembro" + plural + " de\nla bandada\npara castigar.";
+            Texto.text = "Has ganado!!\n\nSelecciona\nhasta " + maxCastigos + " miembro" + plural + " de\nla bandada\npara castigar.";
             fillPlayers();
         }
         else
@@ -68,35 +64,25 @@ public class Castigos : MonoBehaviour
 
     private void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
     {
-        if(data[8] == 1)
-            pulsados[GameState.GetPlayer(id).playerId] = true;
-
-        if (pulsados.Count == GameState.CountPlayers)
-        {
-            if(castigado)
-                GameState.GetMyPlayer().SetScore(GameState.GetMyPlayer().playerScore - 10);
-
-            rootMenu.ToRankingFinal();
-        }
-
         var Texto = root.Q<Label>("Ranking");
         Texto.style.fontSize = 14;
 
+        int castigosDados = 0;
         if (soyCastigador)
         {
-            boton.SetEnabled(!alreadyClicked);
-            castigos = 0;
+            if (!alreadyClicked) return;
+            
             Texto.text = "La bandada\nHa recibido\nsu castigo!";
             jugadoresUI.visible = false;
+            castigosDados = maxCastigos;
         }
         else
         {
-            --castigos;
-            boton.SetEnabled(castigos == 0 && !alreadyClicked);
-
-            for (int i = 0; i < numCastigos; ++i)
+            for (int i = 0; i < maxCastigos; ++i)
             {
-                if (castigado || (int)(data[i] -1) == GameState.GetMyPlayer().playerId)
+                if (data[i + 10] != 0) ++castigosDados;
+                
+                if (castigado || (int)(data[i+10] -1) == GameState.GetMyPlayer().playerId)
                 {
                     castigado = true;
                     Texto.text = "Has sido castigado\npor " + GameState.GetPlayer(rootMenu.winnerIdx).playerName +
@@ -104,7 +90,7 @@ public class Castigos : MonoBehaviour
                 }
                 else
                 {
-                    if (castigos > 0)
+                    if (castigosDados < maxCastigos)
                     {
                         Texto.text = "No has ganado!!\n\nPodrías ser\ncastigado!!\n\nTendrás que\nesperar a ver\nqué pasa.\n\nCruza las alas!!";
                     }
@@ -114,9 +100,13 @@ public class Castigos : MonoBehaviour
                     }
                 }
             }
+
+            
         }
 
-        boton.text = castigos == 0 ? rootMenu.STARTSTR : rootMenu.WAITSTR;
+        alreadyClicked = castigosDados == maxCastigos;
+        boton.text = alreadyClicked ? rootMenu.STARTSTR : rootMenu.WAITSTR;
+        boton.SetEnabled(alreadyClicked);
     }
 
     private void fillPlayers()
@@ -134,13 +124,6 @@ public class Castigos : MonoBehaviour
             if (id == GameState.GetMyPlayer().playerId) continue;
             var name = player.playerName;
 
-//            VisualElement jugador = jugadorTemplateRadio.Instantiate();
-//            var toggle = jugador.Q<Toggle>("Jugador");
-//            toggle.label = name;
-//            toggle.text = "";
-//            toggle.RegisterCallback<ChangeEvent<bool>>(OnValueChanged);
-//            jugadoresUI.hierarchy.Add(jugador);
-            
             var button = new Button();
             button.text = name;
             button.style.color = new Color(1, 1, 1);
@@ -160,55 +143,50 @@ public class Castigos : MonoBehaviour
     {
         var (value, b) = buttons[botonPulsado];
         value = !value;
-        if(value)
-            b.style.backgroundColor = new Color(1, 0.6f, 0);
-        else
-            b.style.backgroundColor = new Color(0.5f, 0.3f, 0);
         
+        b.style.backgroundColor = value ? new Color(1, 0.6f, 0) : new Color(0.5f, 0.3f, 0);
         buttons[botonPulsado] = new Tuple<bool, Button>(value, b);
 
-        int count = 0;
-        foreach(var (key, bot) in buttons.ToList())
-        {
-            if (bot.Item1) ++count;
-        }
-        
-        boton.SetEnabled(count == numCastigos);
+        var pulsados = buttons.Where(t => t.Value.Item1 == true).ToList();
+        boton.SetEnabled(pulsados.Count == maxCastigos);
     }
 
     private void OnReadyButtonOnClicked()
     {
         var player = GameState.GetMyPlayer();
         
-        if (castigos != 0)
-        {
-            if (player.playerId == rootMenu.winnerIdx)
-            {
-                int count = 0;
-                foreach (var (key, value) in buttons)
-                    count += value.Item1 ? 1 : 0;
-                if (count != numCastigos) return;
-
-                castigos = 0;
-                int dataIndex = 0;
-                foreach (var (key, value) in buttons)
-                {
-                    if (value.Item1)
-                    {
-                        player.SetData(dataIndex++, key + 1);
-                    }
-                }
-            }
-        }
-        else
-        {
-            alreadyClicked = true;
-        }
-        
         boton.text = rootMenu.WAITSTR;   
-        player.SetData(8, 1);
         boton.SetEnabled(false);
-        
-        OnPlayerChangedData(player.playerId, player.data);
+       
+        if (soyCastigador && !alreadyClicked)
+        {
+            var botonesPulsados = buttons.Where(t => t.Value.Item1 == true).ToList();
+            if (botonesPulsados.Count != maxCastigos) return;
+
+            int dataIndex = 10; // donde pondremos los castigos (max 3)
+            alreadyClicked = true;
+            foreach (var (key, value) in botonesPulsados) 
+            {
+                player.SetData(dataIndex++, key + 1);
+            }
+            
+            OnPlayerChangedData(player.playerId, player.data);
+            return;
+        }
+
+        if (alreadyClicked)
+        {
+            rootMenu.IAmInBarrier();
+            inBarrier = true;
+            
+            if(castigado)
+                GameState.GetMyPlayer().SetScore(GameState.GetMyPlayer().playerScore - 10);
+        }
+    }
+
+    public void Update()
+    {
+        if(inBarrier)
+            rootMenu.CheckBarrier();
     }
 }

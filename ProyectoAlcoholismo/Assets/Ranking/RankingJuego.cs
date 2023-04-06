@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Fusion;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -18,7 +19,9 @@ public class RankingJuego : MonoBehaviour
     private Button boton;
 
     private Dictionary<int, bool> pulsados = new Dictionary<int, bool>();
+    
     private bool alreadyClicked = false;
+    private bool inBarrier = false;
 
     public void OnEnable()
     {
@@ -32,18 +35,15 @@ public class RankingJuego : MonoBehaviour
         boton.SetEnabled(false);
         Utils.GameConstants.GameNames.TryGetValue(rootMenu.gameName, out string nombre);
         GameTitle.text = nombre;
-        fillPlayers();
+        
         GameState.Instance.PlayerChangedData += OnPlayerChangedData;
+        GameState.Instance.playing = false;
+        
+        fillPlayers();
     }
     
     private void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
     {
-        if(data[9] == 1)
-            pulsados[GameState.GetPlayer(id).playerId] = true;
-        
-        if(pulsados.Count == GameState.CountPlayers)
-            rootMenu.ToCastigos();
-
         if (id == GameState.GetMyPlayer().playerId) return;
         
         // Actualizar la lista si alguien "llega a rankings tarde"
@@ -67,7 +67,18 @@ public class RankingJuego : MonoBehaviour
             var jugadorContainer = jugadorTemplate.Instantiate();
             jugadorContainer.Q<Label>("Nombre").text = playerValues.playerName;
             jugadorContainer.Q<Label>("Nombre").style.fontSize = 16;
-            jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString()) + sufijo;
+            
+            // Caso especial Patonary
+            if (PlayerRegistry.Instance.CurrentScene == "Patonary")
+            {
+                if (score == 0) continue;
+                jugadorContainer.Q<Label>("Puntuacion").text = (score > 0) ? "acertó" : ((score < 0) ?  "falló" : "esperando...");
+            }
+            else
+            {
+                jugadorContainer.Q<Label>("Puntuacion").text = ((score == -1) ? "0" : score.ToString()) + sufijo;
+            }
+
             jugadorContainer.Q<Label>("Puntuacion").style.fontSize = 14;
             jugadorContainer.Q<Label>("Separador").style.fontSize = 14;
             //jugadorContainer.Q<VisualElement>("Icono").style.color = color;
@@ -86,12 +97,17 @@ public class RankingJuego : MonoBehaviour
 
     private void OnReadyButtonOnClicked()
     {
-        var player = GameState.GetMyPlayer();
-        player.SetData(9, 1);
         boton.SetEnabled(false);
         boton.text = rootMenu.WAITSTR;
         alreadyClicked = true;
         
-        OnPlayerChangedData(player.playerId, player.data);
+        rootMenu.IAmInBarrier();
+        inBarrier = true;
+    }
+
+    public void Update()
+    {
+        if(inBarrier)
+            rootMenu.CheckBarrier();
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = System.Random;
@@ -12,11 +13,11 @@ namespace Utils
         public static List<string> GameList = new List<String>
         {
            "AHuevo",
-//           "Apuestas",
+           "Apuestas",
            "CuakCuak",
            "Lanzapato",
-//           "Patonary",
-//           "SimonSays"
+           "Patonary",
+           "SimonSays"
         };
 
         public static Dictionary<string, string> GameNames = new Dictionary<string, string>
@@ -55,23 +56,6 @@ namespace Utils
         }
     }
 
-    public static class StringUtils
-    {
-        public static string generateRandomString(int length = 16)
-        {
-            Random rand = new Random();
-            char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789".ToCharArray();
-
-            var str = "";
-            while(str.Length < 16)
-            {
-                str += chars[rand.Next(0, chars.Length)];
-            }
-            
-            return str;
-        }
-    }
-
     public static class GameUtils
     {
         public static IEnumerator GoToRankings()
@@ -79,6 +63,13 @@ namespace Utils
             yield return new WaitForSeconds(1);
             AsyncOperation async = SceneManager.LoadSceneAsync("Ranking");
             yield return async; //Wait for your level to load
+        }
+        
+        public static void Log(string message,
+            [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
+        {
+            Debug.Log(filePath + ":"+ lineNumber + " -> " + message);
         }
     }
 }

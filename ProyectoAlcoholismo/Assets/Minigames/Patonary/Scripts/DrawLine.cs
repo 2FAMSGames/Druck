@@ -6,7 +6,6 @@ using System.IO;
 
 public class DrawLine : MonoBehaviour
 {
-
     private LineRenderer lineRenderer;
     public GameObject brush;
     public float BrushSize = 5f;
@@ -18,6 +17,8 @@ public class DrawLine : MonoBehaviour
 
     public GameObject RenderCam;
     private RectTransform rTransf;
+
+    public bool savedImage = false;
 
     private void Start()
     {
@@ -76,6 +77,8 @@ public class DrawLine : MonoBehaviour
 
     private IEnumerator CoSave()
     {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+
         //wait for rendering
         yield return new WaitForEndOfFrame();
         //Debug.Log(Application.dataPath + "/savedImage.png");
@@ -97,9 +100,12 @@ public class DrawLine : MonoBehaviour
         // Store the byte array as a string in PlayerPrefs
         string imageString = System.Convert.ToBase64String(Imagedata);
         PlayerPrefs.SetString("TransferredImage", imageString);
+        
+        watch.Stop();
+        var elapsedMs = watch.ElapsedMilliseconds;
+        Debug.Log("pantalla tamaño " + imageString.Length + " en " + elapsedMs + "ms");
+        savedImage = true;
     }
-
-
 
     //plano, devuelva el punto inter
     private Vector3? GetClickPosOnPlane()

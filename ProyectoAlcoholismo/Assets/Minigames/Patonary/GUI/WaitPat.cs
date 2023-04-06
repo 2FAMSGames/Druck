@@ -5,21 +5,35 @@ public class WaitPat : MonoBehaviour
     [SerializeField]
     private GameObject menusObject;
     private PatonaryMenuController menusController;
+    private RPCCalls rpcCalls;
 
-    public bool waitngEnded = true;
+    public bool waitngEnded;
     private int WaitngScreen;
-
+    
     void OnEnable()
     {
         menusController = menusObject.GetComponent<PatonaryMenuController>();
+        rpcCalls = menusObject.GetComponent<RPCCalls>();
+        
         //if everyone´s pic/guess/vote is ready then
+        waitngEnded = false;
         WaitngScreen = PlayerPrefs.GetInt("WaitngScreen");
+        
+        rpcCalls.IAmInBarrier(WaitngScreen);
     }
 
     private void Update()
     {
+        if (WaitngScreen == 1 && GameState.isServer && !rpcCalls.sentTexture)
+        {
+            rpcCalls.SendTexture();
+        }
+
+        rpcCalls.CheckBarrier();
+
         if (waitngEnded)
         {
+            waitngEnded = false;
             WaitingEnded();
         }
     }
@@ -27,7 +41,6 @@ public class WaitPat : MonoBehaviour
     private void WaitingEnded()
     {
         Debug.Log("Waiting ended");
-        //menusController.WaitEnded();
         if (WaitngScreen == 1)
         {
             Debug.Log("Everyone have drawn");
@@ -41,8 +54,6 @@ public class WaitPat : MonoBehaviour
         else if (WaitngScreen == 3)
         {
             Debug.Log("Everyone have voted");
-            
-            // TODO: no debería jugar otro? sino en los rankings sólo 1 va a tener puntuación.
             menusController.GoToRankings();
         }
     }
