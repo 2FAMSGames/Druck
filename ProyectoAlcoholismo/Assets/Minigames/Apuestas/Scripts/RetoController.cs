@@ -30,15 +30,29 @@ public class RetoController : MonoBehaviour
     }
     void OnEnable()
     {
+        List<string> players = new List<string>();
+        if (PlayerRegistry.Instance != null && PlayerRegistry.Instance.ObjectByRef.Count > 0)
+        {
+            foreach (var pl in PlayerRegistry.Instance.ObjectByRef)
+            {
+                players.Add(pl.Value.playerName);
+            }
+
+            //playerList.itemsSource = players;
+        }
         yourPlayer = GameState.GetMyPlayer().playerName;
         GameState.Instance.PlayerChangedData += OnPlayerChangedData;
         
+        if(getRandomPlayer(players) != yourPlayer)
+        {
+            apuestasController.GoTo("espera");
+        }
+
         apuestasController = ApuestasObject.GetComponent<ApuestasController>();
 
         doc = GetComponent<UIDocument>();
 
-        var i = -1; // TODO: no debería ser 0? usando i++ se coge el valor primero y luego se incrementa,
-                       // TODO: el primer challenge tendrá id -1
+        var i = -1; 
 
         List<Challenge> challengeList = new List<Challenge>();
         challengeList.Add(new Challenge { chId = i++, chText = "Enseñar tus tres últimas conversaciones de whatsapp/telegram", chPrize = 1 });
@@ -118,6 +132,11 @@ public class RetoController : MonoBehaviour
     }
 
     private Challenge getRandomObject(List<Challenge> list)
+    {
+        int index = ran.Next(list.Count);
+        return list[index];
+    }
+    private string getRandomPlayer(List<string> list)
     {
         int index = ran.Next(list.Count);
         return list[index];
