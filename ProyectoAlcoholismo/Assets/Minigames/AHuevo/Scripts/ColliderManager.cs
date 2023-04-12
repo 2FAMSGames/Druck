@@ -6,7 +6,7 @@ using UnityEngine;
 public class ColliderManager : MonoBehaviour
 {
     private static int score = 100;
-    public float tiempoDeJuego = 6;
+    public float tiempoDeJuego = 120; //Si en 2 minutos no has terminado termina tu juego
 
     void Start()
     {

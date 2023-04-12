@@ -118,7 +118,7 @@ public class Copa : MonoBehaviour
     private void Update()
     {
         tiempoDeJuego -= Time.deltaTime;
-        if (tiempoDeJuego < 0 && !Empate())
+        if (tiempoDeJuego <= 0 && !Empate())
         {
             if (puntuacion == 0)
             {
@@ -128,7 +128,7 @@ public class Copa : MonoBehaviour
 
 
         }
-        if (tiempoDeJuego < 0 && Empate())
+        if (tiempoDeJuego <= 0 && Empate())
         {
             tiempoDeJuego += 10;
         }
