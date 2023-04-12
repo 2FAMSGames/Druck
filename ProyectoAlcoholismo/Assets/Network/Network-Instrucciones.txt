@@ -1,0 +1,115 @@
+Instrucciones/Tutorial de Fusion para nuestro juego.
+
+Hay tres scripts:
+	- GameState: se usará para recibir los eventos de los cambios de datos de los jugadores y para acceder y cambiar los datos de nuestro jugador (no se pueden
+	modificar los datos de otros)
+	- PlayerRegistry: registro de jugadores, no lo deberíais tocar, usar GameState.
+	- PlayerBehaviour: Datos de los jugadores, usado para modificar los nuestros o consultar los del resto.
+	
+He intentado que la mayoría de métodos fueran estáticos para evitar tener que usar 'Instance' en las llamadas, si veis que hay algo mejorable em lo decís
+o lo modificáis directamente: 
+
+API GameState
+-------------
+
+	No usar: usados internamente por el Host pero necesariamente públicos
+	=======
+	Server_Add
+	Server_Remove
+	(private)AddToEventCallbacks
+	(private)RemoveFromEventCallbacks
+	
+	Métodos Conexión
+	================
+	- CreateRoom(string room): para crear una sala con el nombre dado. El jugador que crea la sala siempre tendrá el id más grande (el límite ahora
+	está puesto a 16 jugadores, así que tendrá el 15.
+	- JoinRoom(string room): para unirse a una sala ya creada. Si la sala no existe intentará hacer Host.
+	- Métodos de INetworkRunnerCallbacks que no usaréis por ahora (excepto OnInput que es necesario para sincronización para objetos 3d).
+	- AllReady: variable estática true/false si todos los jugadores están "ready"
+	- Connected: true/false si está conectado.
+	- isServer: true/false si el jugador es el host. Necesario para diferenciar en el código quién decide/envía qué juego a jugar.
+	
+	Partida
+	=======
+	- HasPlayer(int): true si el jugador con el id está en el registro
+	- HasPlayer(PlayerRef): generalmente no será necesaria, usar la anterior.
+	- GetPlayer(int): Devuelve el objeto PlayerBehaviour con los datos del jugador.
+	- GetPlayer(PlayerRef): generalmente no será necesaria, usar la anterior.
+	- GetMyPlayer(): Devuelve los datos del jugador local (el único que podéis modificar).
+	- ModifyScore(int): cambia la propiedad 'score' de nuestro juegador al valor dado.
+	- ModifyName(string): cambia la propiedad 'name' de nuestro juegador al valor dado.
+	- ModifyTime(float): cambia la propiedad 'time' de nuestro juegador al valor dado.
+	- ModifyReadyFlag(bool): cambia el flag 'ready' al valor dado.
+	- ModifyColor(Vector3): cambia la propiedad 'color' de nuestro juegador al valor dado.
+	- ResetPlayerScores(): Resetea el score a 100 y el time a 0.
+	- ResetPlayerData(): Resetea el diccionario de datos privados todo a 0.
+	- DebugPrint(): Imprime por Debug el listado de jugadores con los atributos.
+	- SortedScores(): Devuelve una lista de tuplas <id,score> ordenada de los jugadores.
+	- SortedTimes(): Devuelve una lista de tuplas <id,time> ordenada de los jugadores.
+	
+	Eventos para conectarse.
+	=======
+	PlayerChangedTime(int, float)
+	PlayerChangedScore(int, int)
+	PlayerChangedColor(int, vector3)
+	PlayerChangedName(int, string)
+	PlayerChangedReady(int, bool)
+	PlayerChangedData(int, NetworkedDictionary<int,float>)
+	
+Cuando un jugador cambie alguno de sus atributos GameState emitirá un evento al que podremos conectarnos para responder en el juego.
+
+API PlayerBehaviour
+-------------------
+Contiene las propiedades del jugador, a saber:
+- nombre
+- puntuación
+- color
+- flag ready
+- id (el mismo usado en las listas)
+- data: Diccionario de datos <int, float> con capacidad 10, para datos temporales durante el transcurso del juego o lo que queráis
+(número de copas rotas, canciones acertadas, apuestas hechas o incluso a quién se envían los castigos). Es de uso libre y hay un método
+de 'reset' que lo pone todo a 0 que se deberia llamar al comienzo de cada juego.
+
+Es preferible usar los métodos de GameState.
+
+API PlayerRegistry
+------------------
+No usar.
+
+Otras cosas
+===========
+
+Hay varios prefabs necasarios para Fusion:
+	- NetworkManager (sólo 1)
+	- NetworkRunner (sólo 1)
+	- PlayerPrefabFusion (objeto "3d" del jugador, inicialmente desactivado, necesario para juegos como el del huevo, uno por jugador).
+	- ObjectPrefab (datos de cada jugador, uno por jugador)
+
+ Los prefabs que se instancian en runtime no tienen parent y van a quedar "colgando" en el arbol de GameObjects.
+ 
+ Conectarse a los eventos.
+ =========================
+ He hecho un pequeño tutorial en el fichero RoomController.cs para conectarse a los eventos del resto de jugadores (no habrá eventos 
+ para el nuestro, obviamente) proporcionando en las clases que tengamos métodos (como 'changedData' o 'changedScore' del ejemplo) para
+ que podamos informar/picar al resto de jugadores.
+ 
+	// Conexión a dos eventos
+    GameState.Instance.PlayerChangedScore += changedScore;
+    GameState.Instance.PlayerChangedData += changedData;
+
+	// acceso y modificación de datos durante el juego.
+    var score = GameState.GetMyPlayer().playerScore;
+    var ready = GameState.GetMyPlayer().isReady;
+    GameState.Instance.ModifyScore(score - 5);
+    GameState.GetMyPlayer().SetData(0, GameState.GetMyPlayer().data.Get(0) + 5);
+    GameState.Instance.ModifyReadyFlag(!ready);
+    GameState.Instance.DebugPrint();
+    var x = PlayerRegistry.Instance.SortedScores();
+    foreach(var x2 in x)
+       Debug.Log("- player " + x2.Item1 + " score " + x2.Item2);
+	   
+	   
+Habrá que hacer modificaciones al todo el tema de 'qué pasa si alguien se cae durante el juego' y demás que se tendrán que resolver
+durante el testing. Si necesitáis cambios en el API por lo que sea me lo decís o lo hacéis, como os convenga. Todavía falta
+sincronización de objetos 3d que habrá que hacer el método OnInput de GameState, pero yo dejaría eso para la etapa de pulir, de
+momento que funcionen los juegos y luego ya añadiremos esas cosas.

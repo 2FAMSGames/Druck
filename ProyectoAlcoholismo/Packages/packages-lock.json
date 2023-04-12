@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.community.netcode.transport.photon-realtime": {
+      "version": "https://github.com/Unity-Technologies/multiplayer-community-contributions.git?path=/Transports/com.community.netcode.transport.photon-realtime",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "6c13abfeb8707da936e1ebc191c621fe41754fd5"
+    },
     "com.unity.2d.animation": {
       "version": "7.0.9",
       "depth": 1,
@@ -95,9 +102,18 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.adaptiveperformance.samsung.android": {
+      "version": "4.0.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.adaptiveperformance": "4.0.1"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.burst": {
       "version": "1.6.6",
-      "depth": 3,
+      "depth": 2,
       "source": "registry",
       "dependencies": {
         "com.unity.mathematics": "1.2.1"
@@ -105,11 +121,19 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "1.17.7",
+      "version": "2.0.1",
       "depth": 0,
       "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.collections": {
+      "version": "1.2.4",
+      "depth": 2,
+      "source": "registry",
       "dependencies": {
-        "com.unity.services.core": "1.0.1"
+        "com.unity.burst": "1.6.6",
+        "com.unity.test-framework": "1.1.31"
       },
       "url": "https://packages.unity.com"
     },
@@ -141,7 +165,7 @@
       "dependencies": {
         "com.unity.mobile.android-logcat": "1.3.2",
         "com.unity.adaptiveperformance": "4.0.1",
-        "com.unity.mobile.notifications": "2.1.0"
+        "com.unity.mobile.notifications": "2.1.1"
       }
     },
     "com.unity.ide.rider": {
@@ -184,7 +208,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.mobile.notifications": {
-      "version": "2.1.0",
+      "version": "2.1.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -192,9 +216,19 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.nuget.newtonsoft-json": {
-      "version": "3.0.2",
-      "depth": 2,
+    "com.unity.netcode.gameobjects": {
+      "version": "1.2.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.nuget.mono-cecil": "1.10.1",
+        "com.unity.transport": "1.3.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.nuget.mono-cecil": {
+      "version": "1.10.2",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -204,17 +238,6 @@
       "depth": 2,
       "source": "registry",
       "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.services.core": {
-      "version": "1.7.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "com.unity.modules.androidjni": "1.0.0"
-      },
       "url": "https://packages.unity.com"
     },
     "com.unity.subsystemregistration": {
@@ -255,6 +278,17 @@
         "com.unity.modules.animation": "1.0.0",
         "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.transport": {
+      "version": "1.3.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.collections": "1.2.4",
+        "com.unity.burst": "1.6.6",
+        "com.unity.mathematics": "1.2.6"
       },
       "url": "https://packages.unity.com"
     },

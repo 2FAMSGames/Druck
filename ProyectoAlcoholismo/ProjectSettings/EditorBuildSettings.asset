@@ -6,6 +6,30 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/StartScreen.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Minigames/AHuevo/AHuevo.unity
+    guid: 6e01904a2d5b5d94cb66a9c32d9a2260
+  - enabled: 1
+    path: Assets/Minigames/Apuestas/Apuestas.unity
+    guid: 2877916c6b1de1e49a2eddf13e694fd4
+  - enabled: 1
+    path: Assets/Minigames/Cuack cuack/CuakCuak.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Minigames/Lanzapato/Lanzapato.unity
+    guid: 9678110210d92ba4da8799ab970adc3d
+  - enabled: 1
+    path: Assets/Minigames/Patonary/Patonary.unity
+    guid: e224279bcb66b5a4d810450f700887cc
+  - enabled: 1
+    path: Assets/Minigames/SimonSays/SimonSays.unity
+    guid: 13a6e8ab4a512fc4c9db68039de4e046
+  - enabled: 1
+    path: Assets/Ranking/Ranking.unity
+    guid: b52ba013bdf12dd4f8746fc76c6b4b25
+  m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 580dcdd2b19d6734797f1a9df9a47adc, type: 2}
+    com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: e8b2278b0a397bd4599defe567ae1448, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: 41e775d50b4c9024c9beb253f39c4f3d, type: 2}

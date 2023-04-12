@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/GUI/MenuStyles.uss?fileID=7433441132597879392&amp;guid=61874ddc3b5661a48bfb874b3fa2c714&amp;type=3#MenuStyles" />
+    <ui:VisualElement name="MainSection" style="justify-content: center; align-items: stretch; flex-grow: 1; width: auto;">
+        <ui:Label text="¿A quién retas?" display-tooltip-when-elided="true" class="text_title" style="margin-left: auto; margin-right: auto; margin-top: 40%; margin-bottom: auto; background-color: rgba(0, 0, 0, 0); color: rgb(255, 255, 255); font-size: 18%; width: 137px; -unity-text-align: middle-center; height: 34px; justify-content: flex-start;" />
+        <ui:ListView focusable="true" name="PlayerList" style="margin-left: auto; margin-right: auto; margin-top: 5%; margin-bottom: auto; width: auto; background-color: rgb(202, 232, 255); border-top-left-radius: 3%; border-bottom-left-radius: 3%; border-top-right-radius: 3%; border-bottom-right-radius: 3%; color: rgb(5, 10, 48); -unity-text-align: upper-center; -unity-font-style: bold; font-size: 40%; min-height: 10%; min-width: 80%;" />
+    </ui:VisualElement>
+</ui:UXML>
