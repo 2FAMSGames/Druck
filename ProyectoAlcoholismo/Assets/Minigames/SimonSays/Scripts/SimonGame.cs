@@ -17,7 +17,6 @@ public class SimonGame : MonoBehaviour
     [SerializeField] private SimonMessages messagesController;
     [SerializeField] private SpriteRenderer fondo;
     private SimonSceneController menusController;
-    private AudioSource audioSource;
     [SerializeField] private AudioClip cuackClip;
 
     [Header("Private gameObject things")]
@@ -42,10 +41,10 @@ public class SimonGame : MonoBehaviour
     // 14 == D
     private static List<List<float>> NeverGonnaGiveYouUp = new Cancion
     {
-        new List<float>{ 4.05f, 5.05f, 7.05f, 5.05f, 11.03f, 11.03f, 9.1f},
-        new List<float>{ 4.05f, 5.05f, 7.05f, 5.05f, 4.05f, 2.1f},
-        new List<float>{ 4.05f, 5.05f, 7.05f, 5.05f, 7.05f, 4.1f},
-        new List<float>{ 7.05f, 11.05f, 9.1f}
+        new List<float>{ 4.01f, 5.01f, 7.01f, 5.01f, 11.005f, 11.005f, 9.05f},
+        new List<float>{ 4.01f, 5.01f, 7.01f, 5.01f, 4.01f, 2.05f},
+        new List<float>{ 4.01f, 5.01f, 7.01f, 5.01f, 7.01f, 4.05f},
+        new List<float>{ 7.01f, 11.01f, 9.05f}
     };
     
     private static readonly Color whitebg = new Color(1, 1, 1);
@@ -66,7 +65,6 @@ public class SimonGame : MonoBehaviour
     {
         fondo.color = new Color(1, 1, 1);
         menusController = menusObject.GetComponent<SimonSceneController>();
-        audioSource = menusObject.GetComponent<AudioSource>();
         doc = GetComponent<UIDocument>();
         
         CurrentSong = NeverGonnaGiveYouUp;
@@ -225,10 +223,10 @@ public class SimonGame : MonoBehaviour
         var transpose = -4;  // transpose in semitones
         if (note >= 0)
         {
-            audioSource.Stop();
-            audioSource.clip = cuackClip;
-            audioSource.pitch =  Mathf.Pow(2, (float)((note+transpose)/12.0));
-            audioSource.Play();
+            GameState.Instance.audioSource.Stop();
+            GameState.Instance.audioSource.clip = cuackClip;
+            GameState.Instance.audioSource.pitch =  Mathf.Pow(2, (float)((note+transpose)/12.0));
+            GameState.Instance.audioSource.Play();
         }
     }
     

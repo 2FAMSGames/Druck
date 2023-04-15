@@ -5,12 +5,12 @@ using UnityEngine.UIElements;
 
 public class SimonMessages : MonoBehaviour
 { 
-    [SerializeField]
-    private GameObject menusObject;
+    [SerializeField] private GameObject menusObject;
+    
     private SimonSceneController menusController;
-    [SerializeField]
-    private SimonGame gameController;
-    private AudioSource audioSource;
+    
+    [SerializeField] private SimonGame gameController;
+    
     [SerializeField] private AudioClip failClip;
     [SerializeField] private AudioClip successClip;
 
@@ -23,7 +23,6 @@ public class SimonMessages : MonoBehaviour
     private void Awake()
     {
         menusController = menusObject.GetComponent<SimonSceneController>();
-        audioSource = menusObject.GetComponent<AudioSource>();
         doc = GetComponent<UIDocument>();
     }
 
@@ -48,13 +47,13 @@ public class SimonMessages : MonoBehaviour
     void OnEnable()
     {
         alreadyClicked = false;
-        audioSource.Stop();
+        GameState.Instance.audioSource.Stop();
         doc.rootVisualElement.Q<Label>("Texto").text = texto;
         
         if (texto.Contains("perdido"))
-            audioSource.clip = failClip;
+            GameState.Instance.audioSource.clip = failClip;
         else
-            audioSource.clip = successClip;
+            GameState.Instance.audioSource.clip = successClip;
         StartCoroutine(PlaySound());
         
         Boton = doc.rootVisualElement.Q<Button>("Boton");
@@ -63,8 +62,9 @@ public class SimonMessages : MonoBehaviour
 
     private IEnumerator PlaySound()
     {
-       audioSource.Play();
-       yield return new WaitForSeconds(audioSource.clip.length);
+        GameState.Instance.audioSource.pitch = 1.0f;
+        GameState.Instance.audioSource.Play();
+        yield return new WaitForSeconds(GameState.Instance.audioSource.clip.length);
     }
 
     private void ButtonOnClicked()

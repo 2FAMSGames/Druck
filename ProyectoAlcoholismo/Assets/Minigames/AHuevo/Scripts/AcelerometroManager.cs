@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class AcelerometroManager : MonoBehaviour
 {
-
-
     private Rigidbody rb;
 
     private float Speed = 30f;

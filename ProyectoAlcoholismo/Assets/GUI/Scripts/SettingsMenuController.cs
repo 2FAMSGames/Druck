@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,6 +10,10 @@ public class SettingsMenuController : MonoBehaviour {
 
     private UIDocument doc;
     private Button goBackButton;
+    private Button salirButton;
+    private Slider volumeSlider;
+
+    [SerializeField] private AudioClip cuak;
 
     void OnEnable()
     {
@@ -18,6 +23,31 @@ public class SettingsMenuController : MonoBehaviour {
 
         goBackButton = doc.rootVisualElement.Q<Button>("GoBackButton");
         goBackButton.clicked += GoBackButtonOnClicked;
+        
+        salirButton = doc.rootVisualElement.Q<Button>("Abandonar");
+        salirButton.clicked += ExitButtonOnClicked;
+        
+        volumeSlider = doc.rootVisualElement.Q<Slider>("Volume");
+        volumeSlider.value = GameState.Instance.audioSource.volume * 100;
+        
+        volumeSlider.RegisterValueChangedCallback(v =>
+        {
+            SliderValueChanged(v.newValue);
+        });
+
+        GameState.Instance.audioSource.clip = cuak;
+    }
+
+    private void ExitButtonOnClicked()
+    {
+        Debug.Log("Salir de la aplicación");
+        Application.Quit();
+    }
+
+    private void SliderValueChanged(float value)
+    {
+        GameState.Instance.audioSource.volume = value/100f;
+        GameState.Instance.audioSource.Play();
     }
 
     private void GoBackButtonOnClicked()

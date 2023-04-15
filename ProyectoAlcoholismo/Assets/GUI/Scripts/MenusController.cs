@@ -52,12 +52,15 @@ public class MenusController : MonoBehaviour
         ChangeToNewCamera();
         fondo.color = bgColor;
         fondo.enabled = true;
+        Debug.Log(fondo.enabled);
         
         GameState.Instance.AlreadyPlayedIntro = true;
     }
 
     public void Intro()
     {
+        GameState.Instance.PlayFanfare();
+        
         intro.SetActive(true);
         mainMenu.SetActive(false);
         roomCreateMenu.SetActive(false);

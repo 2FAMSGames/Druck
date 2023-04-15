@@ -12,11 +12,11 @@ namespace Utils
     {
         public static List<string> GameList = new List<String>
         {
-           "AHuevo",
+           //"AHuevo",
            //"Apuestas",
-           "CuakCuak",
-           "Lanzapato",
-           "Patonary",
+           //"CuakCuak",
+           //"Lanzapato",
+           //"Patonary",
            "SimonSays"
         };
 
