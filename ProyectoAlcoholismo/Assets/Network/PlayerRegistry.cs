@@ -132,6 +132,21 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
         result.Sort((x, y) => y.Item2.CompareTo(x.Item2));
         return result;
     }
+    
+    public List<Tuple<int, int>> SortedScoresSimon()
+    {
+        var result = new List<Tuple<int, int>>();
+        
+        foreach (var (key, player) in Instance.ObjectByRef)
+        {
+            int score = (int)(player.data[1] * 10 - player.data[0]);
+            result.Add(new Tuple<int,int>(player.playerId, score));
+        }
+        
+        result.Sort((x, y) => y.Item2.CompareTo(x.Item2));
+        return result;
+    }
+
 
     #region INetworkRunnerCallbacks
 

@@ -278,7 +278,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				result = PlayerRegistry.Instance.SortedScoresPatonary();
 				break;
 			case "SimonSays":
-				result = PlayerRegistry.Instance.SortedScoresData0();
+				result = PlayerRegistry.Instance.SortedScoresSimon();
 				break;
 			default: // por defecto los scores globales.
 				result = PlayerRegistry.Instance.SortedScores();

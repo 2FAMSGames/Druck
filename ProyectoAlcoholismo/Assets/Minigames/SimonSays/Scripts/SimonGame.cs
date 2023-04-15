@@ -41,10 +41,10 @@ public class SimonGame : MonoBehaviour
     // 14 == D
     private static List<List<float>> NeverGonnaGiveYouUp = new Cancion
     {
-        new List<float>{ 4.01f, 5.01f, 7.01f, 5.01f, 11.005f, 11.005f, 9.05f},
-        new List<float>{ 4.01f, 5.01f, 7.01f, 5.01f, 4.01f, 2.05f},
-        new List<float>{ 4.01f, 5.01f, 7.01f, 5.01f, 7.01f, 4.05f},
-        new List<float>{ 7.01f, 11.01f, 9.05f}
+        new List<float>{ 4.05f, 5.05f, 7.05f, 5.05f, 11.03f, 11.03f, 9.1f},
+        new List<float>{ 4.05f, 5.05f, 7.05f, 5.05f, 4.05f, 2.1f},
+        new List<float>{ 4.05f, 5.05f, 7.05f, 5.05f, 7.05f, 4.1f},
+        new List<float>{ 7.05f, 11.05f, 9.1f}
     };
     
     private static readonly Color whitebg = new Color(1, 1, 1);
@@ -56,10 +56,12 @@ public class SimonGame : MonoBehaviour
     private Dictionary<int, string> CurrentButtonNotes = new Dictionary<int, string>();
     private Cancion CurrentSong = new Cancion();
     private NoteList CurrentRound = new NoteList();
-    public int failedRounds = 0;
+    public int failedButtons = 0;
+    public int successButtons = 0;
     public float totalTime = 0;
     public bool finished = false;
     private int RoundNumber = 0;
+    private const float WAIT_TIME = 0.1f;
 
     private void Awake()
     {
@@ -140,7 +142,7 @@ public class SimonGame : MonoBehaviour
 
         if (note != (int)Math.Truncate(CurrentRound[0]))
         {
-            ++failedRounds;
+            ++failedButtons;
             CurrentRound.Clear();
             fondo.color = whitebg;
             finished = CurrentSong.Count == 0;
@@ -149,6 +151,7 @@ public class SimonGame : MonoBehaviour
         }
         else
         {
+            ++successButtons;
             CurrentRound.RemoveAt(0);
             totalTime += 5.9f - nextEventTime;
             ResetPlayerTime();
@@ -191,7 +194,7 @@ public class SimonGame : MonoBehaviour
                 }
                 else
                 {
-                    ++failedRounds;
+                    ++failedButtons;
                     fondo.color = whitebg;
                     finished = CurrentSong.Count == 0;
                     messagesController.texto = "Se ha\nconsumido\nel tiempo...\n\nHas perdido\nesta ronda!";
@@ -285,7 +288,7 @@ public class SimonGame : MonoBehaviour
             StartCoroutine(PlayNote(note));
             yield return new WaitForSeconds(duration);
             DeactivateButton(ref button);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(WAIT_TIME);
         }
 
         Texto.text = "Ronda " + RoundNumber.ToString() + "\nEs tu turno...";

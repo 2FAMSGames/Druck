@@ -73,15 +73,22 @@ public class SimonMessages : MonoBehaviour
         {
             if (!alreadyClicked)
             {
-                texto = "\n\nCanción completada!\n\nAciertos: " + (4 - gameController.failedRounds);
+                var score = (int)(gameController.successButtons * 10 - gameController.failedButtons);
+                texto = "\nCanción completada!" + 
+                        "\n\nRondas acertadas: " + (4 - gameController.failedButtons) + 
+                        "\nAciertos: " + gameController.successButtons + 
+                        "\nFallos: " + gameController.failedButtons + 
+                        "\n\nPuntuación: " + score;
                 doc.rootVisualElement.Q<Label>("Texto").text = texto;
                 Boton.text = "Terminar";
                 alreadyClicked = true;
             }
             else
             {
-                GameState.GetMyPlayer().SetData(0, gameController.failedRounds == 0 ? -1 : gameController.failedRounds);
-                GameState.GetMyPlayer().SetData(1, gameController.totalTime);
+                GameState.GetMyPlayer().SetData(0, gameController.failedButtons == 0 ? -1 : gameController.failedButtons);
+                GameState.GetMyPlayer().SetData(1, gameController.successButtons);
+                GameState.GetMyPlayer().SetData(2, gameController.totalTime);
+                GameState.Instance.audioSource.pitch = 1.0f;
                 Debug.Log("fin");
            
                 Boton.SetEnabled(false);
@@ -103,7 +110,5 @@ public class SimonMessages : MonoBehaviour
         Debug.Log(GameState.GetMyPlayer().playerId + " is at barrier");
         // 5,6 y 7 son las barreras, no usar para otra cosa.
         GameState.GetMyPlayer().SetData(5, 1);
-        //OnPlayerChangedData(GameState.GetMyPlayer().playerId, GameState.GetMyPlayer().data);
     }
-
 }

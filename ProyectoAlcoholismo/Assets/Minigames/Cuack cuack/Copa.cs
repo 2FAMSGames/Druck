@@ -31,7 +31,6 @@ public class Copa : MonoBehaviour
     float frecuanciaAnterior;
     int puntuacion;
     VisualElement root;
-    AudioSource audioSource;
 
     Vector3 posInicial;
     Vector3 posInicialCamara;
@@ -42,12 +41,11 @@ public class Copa : MonoBehaviour
         copaActiva = false;
         posInicial = transform.position;
 
-        audioSource = GetComponent<AudioSource>();
         if (Microphone.devices.Length > 0)
         {
-            audioSource.clip = Microphone.Start(Microphone.devices[0], true, 1000, 44100); ;
+            GameState.Instance.audioSource.clip = Microphone.Start(Microphone.devices[0], true, 1000, 44100); ;
             while (!(Microphone.GetPosition(null) > 0)) { };
-            audioSource.Play();
+            GameState.Instance.audioSource.Play();
         }
 
         posInicialCamara = camara.transform.position;
@@ -63,7 +61,7 @@ public class Copa : MonoBehaviour
         if (copaActiva)
         {
             float[] spectrum = new float[1024];
-            audioSource.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
+            GameState.Instance.audioSource.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
 
             float frecuenciaTotal = 0;
             for (int i = 1; i < spectrum.Length; i++)

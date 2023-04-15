@@ -10,9 +10,9 @@ public class AcelerometroManager : MonoBehaviour
     private float Speed = 30f;
     private float friction = 0f;
     private float maxHeight= 1f;
-    public AudioSource audioSource;
     public GameObject ground;
-
+    [SerializeField] private AudioClip clip;
+    
     private bool soundOn = false; 
 
     // Start is called before the first frame update
@@ -20,6 +20,7 @@ public class AcelerometroManager : MonoBehaviour
     {
         rb=GetComponent<Rigidbody>();
         rb.drag = friction;
+        GameState.Instance.audioSource.clip = clip;
     }
 
     // Update is called once per frame
@@ -40,15 +41,15 @@ public class AcelerometroManager : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
 
-        if (!audioSource.isPlaying && !soundOn && collision.gameObject != ground)
+        if (!GameState.Instance.audioSource.isPlaying && !soundOn && collision.gameObject != ground)
         {
-            audioSource.Play();
+            GameState.Instance.audioSource.Play();
             soundOn = true;
         }
     }
     private void OnCollisionExit(Collision collision)
     {
-        if (!audioSource.isPlaying && soundOn && collision.gameObject != ground)
+        if (!GameState.Instance.audioSource.isPlaying && soundOn && collision.gameObject != ground)
         {
             soundOn = false;
         }
