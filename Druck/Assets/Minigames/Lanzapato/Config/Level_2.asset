@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Level_2
   m_EditorClassIdentifier: 
   cupRows: 3
-  tableLength: 1.5
+  tableLength: 1.3

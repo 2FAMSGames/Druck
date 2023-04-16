@@ -1038,7 +1038,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectionPlaneObject: {fileID: 1286650750}
-  projectilePrefab: {fileID: 443411542650340771, guid: a192b843089bb304ba7d46037bf1b427, type: 3}
+  projectilePrefab: {fileID: 8183982228288238515, guid: 29a5551d11499b14cb5a23ba3aaebd7e, type: 3}
   projectilePlacer: {fileID: 1025777757}
   arrowPrefab: {fileID: 6261420327228209359, guid: 801653f199eedab42a3f666f43936abd, type: 3}
   shotForceMultiplier: 200
