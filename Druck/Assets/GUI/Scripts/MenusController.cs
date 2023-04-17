@@ -22,6 +22,9 @@ public class MenusController : MonoBehaviour
     [SerializeField]
     private GameObject helpMenu;
 
+    [SerializeField]
+    private GameObject creditsMenu;
+
     [SerializeField] private SpriteRenderer fondo;
     
     float delayTime = 5f;
@@ -68,6 +71,8 @@ public class MenusController : MonoBehaviour
         settingsMenu.SetActive(false);
         helpMenu.SetActive(false);
         roomMenu.SetActive(false);
+        creditsMenu.SetActive(false);
+
     }
     public void GoToMainMenu()
     {
@@ -78,6 +83,8 @@ public class MenusController : MonoBehaviour
         settingsMenu.SetActive(false);
         helpMenu.SetActive(false);
         roomMenu.SetActive(false);
+        creditsMenu.SetActive(false);
+
     }
 
     public void GoToRoomCreateMenu()
@@ -89,6 +96,8 @@ public class MenusController : MonoBehaviour
         settingsMenu.SetActive(false);
         helpMenu.SetActive(false);
         roomMenu.SetActive(false);
+        creditsMenu.SetActive(false);
+
     }
 
     public void GoToRoomJoinMenu()
@@ -100,6 +109,8 @@ public class MenusController : MonoBehaviour
         settingsMenu.SetActive(false);
         helpMenu.SetActive(false);
         roomMenu.SetActive(false);
+        creditsMenu.SetActive(false);
+
     }
 
     public void GoToSettingsMenu()
@@ -111,6 +122,8 @@ public class MenusController : MonoBehaviour
         settingsMenu.SetActive(true);
         helpMenu.SetActive(false);
         roomMenu.SetActive(false);
+        creditsMenu.SetActive(false);
+
     }
 
     public void GoToRoomMenu()
@@ -122,6 +135,8 @@ public class MenusController : MonoBehaviour
         settingsMenu.SetActive(false);
         helpMenu.SetActive(false);
         roomMenu.SetActive(true);
+        creditsMenu.SetActive(false);
+
     }
 
     public void ChangeToNewCamera()
@@ -142,6 +157,18 @@ public class MenusController : MonoBehaviour
         settingsMenu.SetActive(false);
         helpMenu.SetActive(true);
         roomMenu.SetActive(false);
+        creditsMenu.SetActive(false);
+    }
+    public void GoToCreditsMenu()
+    {
+        intro.SetActive(false);
+        mainMenu.SetActive(false);
+        roomCreateMenu.SetActive(false);
+        roomJoinMenu.SetActive(false);
+        settingsMenu.SetActive(false);
+        helpMenu.SetActive(false);
+        roomMenu.SetActive(false);
+        creditsMenu.SetActive(true);
 
     }
 }

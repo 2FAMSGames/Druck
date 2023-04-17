@@ -12,6 +12,8 @@ public class SettingsMenuController : MonoBehaviour {
     private Button goBackButton;
     private Button salirButton;
     private Slider volumeSlider;
+    private Button creditsButton;
+
 
     [SerializeField] private AudioClip cuak;
 
@@ -29,13 +31,18 @@ public class SettingsMenuController : MonoBehaviour {
         
         volumeSlider = doc.rootVisualElement.Q<Slider>("Volume");
         volumeSlider.value = GameState.Instance.audioSource.volume * 100;
-        
+
+        creditsButton = doc.rootVisualElement.Q<Button>("Credits");
+        creditsButton.clicked += CreditsButtonOnClicked;
+
         volumeSlider.RegisterValueChangedCallback(v =>
         {
             SliderValueChanged(v.newValue);
         });
 
         GameState.Instance.audioSource.clip = cuak;
+
+
     }
 
     private void ExitButtonOnClicked()
@@ -55,4 +62,12 @@ public class SettingsMenuController : MonoBehaviour {
         Debug.Log("Go back button clicked");
         menusController.GoToMainMenu();
     }
+
+    private void CreditsButtonOnClicked()
+    {
+        Debug.Log("Go to credits button clicked");
+        menusController.GoToCreditsMenu();
+    }
+
+
 }
