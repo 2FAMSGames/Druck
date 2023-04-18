@@ -18,7 +18,7 @@ public class RoomController : MonoBehaviour
     private Label warningLabel;
 
     private readonly string WAITSTR = "Esperando...";
-    private readonly string STARTSTR = "Empezar!"; 
+    private readonly string STARTSTR = "Empezar"; 
 
     void OnEnable()
     {
