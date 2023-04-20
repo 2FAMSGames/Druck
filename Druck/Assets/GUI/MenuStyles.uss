@@ -1,24 +1,3 @@
-.menu__button {
-    background-color: rgb(246, 185, 59);
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: 24px;
-    -unity-text-align: middle-center;
-    -unity-font-style: bold;
-    color: rgb(0, 0, 0);
-}
-
-
 .apostar__button {
     margin-left: 10%;
     margin-right: 10%;
@@ -52,9 +31,63 @@
     -unity-text-outline-color: rgb(255, 255, 255);
     -unity-text-align: upper-center;
 }
+
 .menu__input-field > Label {
     align-items: stretch;
 }
 
 .menu__input-field > #unity-text-input {
+    border-left-color: rgb(181, 116, 74);
+    border-right-color: rgb(181, 116, 74);
+    border-top-color: rgb(181, 116, 74);
+    border-bottom-color: rgb(181, 116, 74);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.menu__button {
+    background-color: rgb(246, 185, 59);
+    border-top-left-radius: 40px;
+    border-bottom-left-radius: 40px;
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 24px;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    color: rgb(0, 0, 0);
+    flex-wrap: wrap;
+}
+
+.font_style {
+    background-color: rgb(181, 115, 74);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 20%;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+    -unity-font: url('project://database/Assets/Assets/Vanilla%20Caramel.otf?fileID=12800000&guid=ade9ad7d72e3016468358ec6403ec164&type=3#Vanilla Caramel');
+    -unity-font-definition: initial;
+    flex-wrap: wrap;
+    letter-spacing: 5px;
 }
