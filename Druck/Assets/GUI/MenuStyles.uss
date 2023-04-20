@@ -45,6 +45,7 @@
     border-bottom-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
+    letter-spacing: 5px;
 }
 
 .menu__button {
