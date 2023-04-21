@@ -23,15 +23,15 @@ public class WordsRand : MonoBehaviour
     //};
 
     string [] all_words = new string[] {"pato", "pollo", "ganso", "cocodrilo", "copa de vino", "laberinto",
-                                         "huevo", "videoc�mara", "reloj de pared", "serpiente mordi�ndose la cola",
+                                         "huevo", "videocámara", "reloj de pared", "serpiente mordiéndose la cola",
                                          "casa para patos", "casa", "bote", "motocicleta", "enchufe", "langosta",
-                                         "escopeta", "escoba", "pala", "copa de vino", "cine", "autob�s", "escuela",
+                                         "escopeta", "escoba", "pala", "copa de vino", "cine", "autobús", "escuela",
                                          "trono", "zoo", "zumo de naranja", "sistema solar", "camisa", "hamburguesa",
-                                         "ordenador", "Internet", "teclado", "�rbol de Navidad", "escuela", "bar",
-                                         "c�scara de pl�tano", "queso", "granja", "tarta", "flor", "bufanda", "viol�n", 
-                                         "gafas de sol", "ca�a de pescar", "bote de basura", "sandalia", "dedo", "ping pong", 
-                                         "florero", "borrador", "jam�n", "hurac�n", "cepillo", "espantap�jaros", "pilas",
-                                         "astronauta", "ascensor", "costa", "tigre", "escalera", "tienda de campa�a",
+                                         "ordenador", "Internet", "teclado", "árbol de Navidad", "escuela", "bar",
+                                         "cáscara de plátano", "queso", "granja", "tarta", "flor", "bufanda", "violín", 
+                                         "gafas de sol", "caña de pescar", "bote de basura", "sandalia", "dedo", "ping pong", 
+                                         "florero", "borrador", "jamón", "huracán", "cepillo", "espantapájaros", "pilas",
+                                         "astronauta", "ascensor", "costa", "tigre", "escalera", "tienda de campaña",
                                          "Donald Duck"
     };
 
