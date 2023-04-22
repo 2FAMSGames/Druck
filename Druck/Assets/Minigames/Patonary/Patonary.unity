@@ -252,6 +252,7 @@ MonoBehaviour:
   RTexture: {fileID: 8400000, guid: 2111ff2c0f171224291b753602018956, type: 2}
   planoGO: {fileID: 368901196}
   RenderCam: {fileID: 24437879}
+  savedImage: 0
 --- !u!1 &334220829
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,6 +555,7 @@ MonoBehaviour:
   m_word: 
   m_from: -1
   m_to: -1
+  sentTexture: 0
 --- !u!1 &605775109
 GameObject:
   m_ObjectHideFlags: 0

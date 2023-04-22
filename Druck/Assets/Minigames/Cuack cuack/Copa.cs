@@ -43,6 +43,7 @@ public class Copa : MonoBehaviour
         posInicial = transform.position;
 
         audioSource = GetComponent<AudioSource>();
+
         if (Microphone.devices.Length > 0)
         {
             audioSource.clip = Microphone.Start(Microphone.devices[0], true, 1000, 44100); ;

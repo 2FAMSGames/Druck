@@ -61,7 +61,7 @@ public class SlingshotController : MonoBehaviour
             mousePos = GetClickPositionOnPlane().GetValueOrDefault();
 
             //Only detects if mouse position is inside placer bounding sphere
-            if (projectilePlacerCollider.bounds.Contains(mousePos))
+            if (projectilePlacerCollider.bounds.Contains(mousePos) && projectilePlacerCollider.bounds.Contains(projectile.transform.position))
             {
                 arrow = Instantiate(arrowPrefab, projectilePlacer.transform.position, Quaternion.FromToRotation(Vector3.up, transform.forward), gameObject.transform);
                 arrowSprRend = arrow.GetComponent<SpriteRenderer>();

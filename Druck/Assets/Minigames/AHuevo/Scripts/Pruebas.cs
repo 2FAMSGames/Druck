@@ -6,7 +6,6 @@ public class Pruebas : MonoBehaviour
 {
     public float speed = 10f; // Velocidad de movimiento del objeto
     public float friction = 5f; // Fuerza de rozamiento del objeto
-    public AudioSource audioSource;
 
     private Rigidbody rb;
 
@@ -14,7 +13,7 @@ public class Pruebas : MonoBehaviour
     {
         // Obtener el componente Rigidbody del objeto
         rb = GetComponent<Rigidbody>();
-        // Configurar la fricción del Rigidbody
+        // Configurar la fricciï¿½n del Rigidbody
         rb.drag = friction;
     }
 
@@ -30,7 +29,7 @@ public class Pruebas : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-        audioSource.Play();
+        GameState.Instance.audioSource.Play();
     }
 
 }

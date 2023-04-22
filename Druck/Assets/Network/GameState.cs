@@ -31,6 +31,10 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	public bool AlreadyPlayedIntro = false;
 	public bool playing = false;
 	
+	[SerializeField] private AudioClip fanfare_sound;
+
+	public AudioSource audioSource { get; private set; }
+	
     // Eventos a los que conectarse:
     // 
     public event Action<int, int> PlayerChangedScore;
@@ -58,6 +62,13 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		Instance = this;
 
 		DontDestroyOnLoad(this);
+		audioSource = GetComponent<AudioSource>();
+    }
+
+    public void PlayFanfare()
+    {
+	    audioSource.clip = fanfare_sound;
+	    audioSource.Play();
     }
 	
 	private void OnDestroy()
@@ -267,7 +278,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 				result = PlayerRegistry.Instance.SortedScoresPatonary();
 				break;
 			case "SimonSays":
-				result = PlayerRegistry.Instance.SortedScoresData0();
+				result = PlayerRegistry.Instance.SortedScoresSimon();
 				break;
 			default: // por defecto los scores globales.
 				result = PlayerRegistry.Instance.SortedScores();

@@ -17,8 +17,8 @@ public class RoomController : MonoBehaviour
     private ListView playerList;
     private Label warningLabel;
 
-    private readonly string WAITSTR = "Esperando...";
-    private readonly string STARTSTR = "Empezar!"; 
+    private readonly string WAITSTR = "ESPERANDO";
+    private readonly string STARTSTR = "EMPEZAR"; 
 
     void OnEnable()
     {
@@ -34,7 +34,7 @@ public class RoomController : MonoBehaviour
         readyButton.text = STARTSTR;
         
         warningLabel = doc.rootVisualElement.Q<Label>("TextLabel");
-        warningLabel.text = "Espera a que todos los jugadores estén conectados a la sala para empezar.";
+        warningLabel.text = "Espera a que todos los jugadores estén conectados a la sala para empezar";
 
         playerList = doc.rootVisualElement.Q<ListView>("PlayersList");
     }
@@ -80,7 +80,7 @@ public class RoomController : MonoBehaviour
         if (GameState.Instance != null && GameState.Instance.Runner != null && GameState.Instance.Runner.SessionInfo.IsValid)
         {
             warningLabel.text = "Espera a que todos los jugadores estén conectados a la sala \""
-                                + GameState.Instance.Runner.SessionInfo.Name + "\" para empezar.";
+                                + GameState.Instance.Runner.SessionInfo.Name + "\" para empezar";
         }
     }
 }

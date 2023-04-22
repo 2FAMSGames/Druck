@@ -17,7 +17,6 @@ public class SimonGame : MonoBehaviour
     [SerializeField] private SimonMessages messagesController;
     [SerializeField] private SpriteRenderer fondo;
     private SimonSceneController menusController;
-    private AudioSource audioSource;
     [SerializeField] private AudioClip cuackClip;
 
     [Header("Private gameObject things")]
@@ -57,16 +56,17 @@ public class SimonGame : MonoBehaviour
     private Dictionary<int, string> CurrentButtonNotes = new Dictionary<int, string>();
     private Cancion CurrentSong = new Cancion();
     private NoteList CurrentRound = new NoteList();
-    public int failedRounds = 0;
+    public int failedButtons = 0;
+    public int successButtons = 0;
     public float totalTime = 0;
     public bool finished = false;
     private int RoundNumber = 0;
+    private const float WAIT_TIME = 0.1f;
 
     private void Awake()
     {
         fondo.color = new Color(1, 1, 1);
         menusController = menusObject.GetComponent<SimonSceneController>();
-        audioSource = menusObject.GetComponent<AudioSource>();
         doc = GetComponent<UIDocument>();
         
         CurrentSong = NeverGonnaGiveYouUp;
@@ -142,7 +142,7 @@ public class SimonGame : MonoBehaviour
 
         if (note != (int)Math.Truncate(CurrentRound[0]))
         {
-            ++failedRounds;
+            ++failedButtons;
             CurrentRound.Clear();
             fondo.color = whitebg;
             finished = CurrentSong.Count == 0;
@@ -151,6 +151,7 @@ public class SimonGame : MonoBehaviour
         }
         else
         {
+            ++successButtons;
             CurrentRound.RemoveAt(0);
             totalTime += 5.9f - nextEventTime;
             ResetPlayerTime();
@@ -193,7 +194,7 @@ public class SimonGame : MonoBehaviour
                 }
                 else
                 {
-                    ++failedRounds;
+                    ++failedButtons;
                     fondo.color = whitebg;
                     finished = CurrentSong.Count == 0;
                     messagesController.texto = "Se ha\nconsumido\nel tiempo...\n\nHas perdido\nesta ronda!";
@@ -225,10 +226,10 @@ public class SimonGame : MonoBehaviour
         var transpose = -4;  // transpose in semitones
         if (note >= 0)
         {
-            audioSource.Stop();
-            audioSource.clip = cuackClip;
-            audioSource.pitch =  Mathf.Pow(2, (float)((note+transpose)/12.0));
-            audioSource.Play();
+            GameState.Instance.audioSource.Stop();
+            GameState.Instance.audioSource.clip = cuackClip;
+            GameState.Instance.audioSource.pitch =  Mathf.Pow(2, (float)((note+transpose)/12.0));
+            GameState.Instance.audioSource.Play();
         }
     }
     
@@ -287,7 +288,7 @@ public class SimonGame : MonoBehaviour
             StartCoroutine(PlayNote(note));
             yield return new WaitForSeconds(duration);
             DeactivateButton(ref button);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(WAIT_TIME);
         }
 
         Texto.text = "Ronda " + RoundNumber.ToString() + "\nEs tu turno...";
