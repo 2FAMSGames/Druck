@@ -4,6 +4,8 @@ using System.Linq;
 using Fusion;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static RetoController;
+
 
 public class Castigos : MonoBehaviour
 {
@@ -26,9 +28,12 @@ public class Castigos : MonoBehaviour
 
     private bool alreadyClicked = false;
     private bool inBarrier = false;
+    public System.Random ran = new System.Random();
+
 
     public void OnEnable()
     {
+
         ganador.SetActive(false);
         perdedor.SetActive(false);
 
@@ -78,7 +83,7 @@ public class Castigos : MonoBehaviour
         {
             if (!alreadyClicked) return;
 
-            Texto.text = "La bandada\nHa recibido\nsu castigo!";
+            Texto.text = "La bandada\nha recibido\nsu castigo!";
             jugadoresUI.visible = false;
             castigosDados = maxCastigos;
         }
@@ -93,17 +98,31 @@ public class Castigos : MonoBehaviour
                     castigado = true;
                     Texto.text = "Has sido castigado\npor " + GameState.GetPlayer(rootMenu.winnerIdx).playerName +
                                  "\n\nMás suerte la\npróxima vez!!";
+                    var r = -1;
+
+                    List<Challenge> challengeList = new List<Challenge>();
+                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nBebe un chupito", chPrize = 3 });
+                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nEnseña tus tres últimas\n\n conversaciones de\n\n whatsapp/telegram", chPrize = 1 });
+                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nQuitaté un zapato", chPrize = 1 });
+                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nBaila el YMCA", chPrize = 1 });
+                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nCuenta un chiste malo", chPrize = 1 });
+                    challengeList.Add(new Challenge { chId = r++, chText = "\n\n Estate a la pata coja\n\n durante 1 minuto", chPrize = 1 });
+                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nDar 10 vueltas\n\n sobre ti mismo", chPrize = 2 });
+                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nBebe un trago", chPrize = 3 });
+
+                    var r1 = getRandomObject(challengeList.Where(x => x.chPrize == 1).ToList());
+                    Texto.text += r1.chText;
                     perdedor.SetActive(true);
                 }
                 else
                 {
                     if (castigosDados < maxCastigos)
                     {
-                        Texto.text = "No has ganado!!\n\nPodrías ser\ncastigado!!\n\nTendrás que\nesperar a ver\nqué pasa.\n\nCruza las alas!!";
+                        Texto.text = "No has ganado!!\n\nPodrías ser\ncastigado!!\n\nTendrás que\nesperar a ver\nqué pasa.\n\nCruza las patas!!";
                     }
                     else
                     {
-                        Texto.text = "Te has librado!!\n\n";
+                        Texto.text = "Te has librado por las plumas!!\n\n";
                     }
                 }
             }
@@ -114,6 +133,11 @@ public class Castigos : MonoBehaviour
         alreadyClicked = castigosDados == maxCastigos;
         boton.text = alreadyClicked ? rootMenu.STARTSTR : rootMenu.WAITSTR;
         boton.SetEnabled(alreadyClicked);
+    }
+    private Challenge getRandomObject(List<Challenge> list)
+    {
+        int index = ran.Next(list.Count);
+        return list[index];
     }
 
     private void fillPlayers()
