@@ -33,7 +33,6 @@ public class Castigos : MonoBehaviour
 
     public void OnEnable()
     {
-
         ganador.SetActive(false);
         perdedor.SetActive(false);
 

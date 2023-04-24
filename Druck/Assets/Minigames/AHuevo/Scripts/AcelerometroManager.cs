@@ -9,7 +9,9 @@ public class AcelerometroManager : MonoBehaviour
 
     private float Speed = 30f;
     private float friction = 0f;
-    private float maxHeight= 1f;
+    private float maxHeight = 1f;
+    private float lastCollision = 0f;    
+    
     public GameObject ground;
     [SerializeField] private AudioClip clip;
     
@@ -40,11 +42,15 @@ public class AcelerometroManager : MonoBehaviour
     }
     void OnCollisionEnter(Collision collision)
     {
-
         if (!GameState.Instance.audioSource.isPlaying && !soundOn && collision.gameObject != ground)
         {
-            GameState.Instance.audioSource.Play();
-            soundOn = true;
+            lastCollision = Time.time - lastCollision;
+            
+            if (lastCollision > 1f)
+            {
+                GameState.Instance.audioSource.Play();
+                soundOn = true;
+            }
         }
     }
     private void OnCollisionExit(Collision collision)

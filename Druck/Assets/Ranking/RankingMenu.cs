@@ -33,6 +33,7 @@ public class RankingMenu : MonoBehaviour
         color.g += max;
         color.b += max;
         
+        currentBarrier = 1;
         gameName = PlayerRegistry.Instance.CurrentScene;
         fondo.color = color;
         
@@ -74,11 +75,11 @@ public class RankingMenu : MonoBehaviour
         switch (currentBarrier)
         {
             case 1:
-                ++currentBarrier;
+                currentBarrier = 2;
                 ToCastigos();
                 break;
             case 2:
-                ++currentBarrier;
+                currentBarrier = 3;
                 ToRankingFinal();
                 break;
             default:

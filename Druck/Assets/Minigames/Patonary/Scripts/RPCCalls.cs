@@ -161,6 +161,12 @@ public class RPCCalls : NetworkBehaviour
         CheckBarrier(); 
     }
 
+    public void Update()
+    {
+        CheckBarrier();
+    }
+
+
     public void IAmInBarrier(int barrierNum)
     {
         currentBarrier = barrierNum;
@@ -190,7 +196,7 @@ public class RPCCalls : NetworkBehaviour
                 if (m_from != -1 && m_to != -1)
                 {
                     waitScript.waitngEnded = true;
-                    ++currentBarrier;
+                    currentBarrier = 2;
                 }
                 break;
             case 2:
@@ -204,7 +210,7 @@ public class RPCCalls : NetworkBehaviour
                 if (sentWord && m_word != String.Empty)
                 {
                     waitScript.waitngEnded = true;
-                    ++currentBarrier;
+                    currentBarrier = 3;
                 }
                 break;
             case 3:

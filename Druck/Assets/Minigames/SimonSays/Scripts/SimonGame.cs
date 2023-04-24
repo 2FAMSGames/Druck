@@ -41,7 +41,7 @@ public class SimonGame : MonoBehaviour
     // 14 == D
     private static List<List<float>> NeverGonnaGiveYouUp = new Cancion
     {
-        new List<float>{ 4.05f, 5.05f, 7.05f, 5.05f, 11.03f, 11.03f, 9.1f},
+        new List<float>{ 4.05f, 5.05f, 7.05f, 5.05f, 11.03f, 9.1f},
         new List<float>{ 4.05f, 5.05f, 7.05f, 5.05f, 4.05f, 2.1f},
         new List<float>{ 4.05f, 5.05f, 7.05f, 5.05f, 7.05f, 4.1f},
         new List<float>{ 7.05f, 11.05f, 9.1f}
@@ -146,7 +146,7 @@ public class SimonGame : MonoBehaviour
             CurrentRound.Clear();
             fondo.color = whitebg;
             finished = CurrentSong.Count == 0;
-            messagesController.texto = "Te has\nequivocado\nde nota...\n\nHas perdido\nesta ronda!";
+            messagesController.texto = "Te has\nequivocado\nde nota...\n\n¡Has perdido\nesta ronda!";
             menusController.ShowMessage();
         }
         else
@@ -160,7 +160,7 @@ public class SimonGame : MonoBehaviour
             {
                 fondo.color = whitebg;
                 finished = CurrentSong.Count == 0;
-                messagesController.texto = "Enhorabuena!\n\nRonda superada!";
+                messagesController.texto = "Enhorabuena!\n\n¡Ronda superada!";
                 menusController.ShowMessage();
             }
         }
@@ -197,7 +197,7 @@ public class SimonGame : MonoBehaviour
                     ++failedButtons;
                     fondo.color = whitebg;
                     finished = CurrentSong.Count == 0;
-                    messagesController.texto = "Se ha\nconsumido\nel tiempo...\n\nHas perdido\nesta ronda!";
+                    messagesController.texto = "Se ha\nconsumido\nel tiempo...\n\n¡Has perdido\nesta ronda!";
                     menusController.ShowMessage();
                 }
             }
@@ -276,7 +276,7 @@ public class SimonGame : MonoBehaviour
         yield return new WaitForSeconds(1);
         Texto.text = "Ronda " + RoundNumber.ToString() + "\nListo...";
         yield return new WaitForSeconds(1);
-        Texto.text = "Ronda " + RoundNumber.ToString() + "\nAtento!";
+        Texto.text = "Ronda " + RoundNumber.ToString() + "\n¡Atento!";
         yield return new WaitForSeconds(1);
 
         foreach (float noteAndDuration in CurrentRound)
@@ -293,7 +293,7 @@ public class SimonGame : MonoBehaviour
 
         Texto.text = "Ronda " + RoundNumber.ToString() + "\nEs tu turno...";
         yield return new WaitForSeconds(1);
-        Texto.text = "Ronda " + RoundNumber.ToString() + "\nPreparate!";
+        Texto.text = "Ronda " + RoundNumber.ToString() + "\n¡Preparate!";
         yield return new WaitForSeconds(1);
         ResetPlayerTime();
         Texto.text = "Ronda " + RoundNumber.ToString() + "\nRepite en " + ((int)(nextEventTime)).ToString();

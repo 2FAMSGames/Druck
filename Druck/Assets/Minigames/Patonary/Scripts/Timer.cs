@@ -12,6 +12,7 @@ public class Timer : MonoBehaviour
         // Starts the timer automatically
         timerIsRunning = true;
     }
+    
     void Update()
     {
         if (timerIsRunning)

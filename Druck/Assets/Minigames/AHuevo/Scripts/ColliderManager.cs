@@ -16,42 +16,43 @@ public class ColliderManager : MonoBehaviour
 
     void Start()
     {
-        //GameState.Instance.PlayerChangedData += OnPlayerDataChanged;
+        GameState.Instance.PlayerChangedData += OnPlayerDataChanged;
         doc = GetComponent<UIDocument>();
-
     }
 
     private void Update()
     {
-
         tiempoDeJuego -= Time.deltaTime;
         if (tiempoDeJuego < 0)
         {
-            Debug.Log("¡HAS TARDADO MUCHO!");
+            Debug.Log("Â¡HAS TARDADO MUCHO!");
             GameState.GetMyPlayer().SetData(0, -1);
-            Ranking();
-        }
+            GoToRanking();
+        } 
         doc.rootVisualElement.Q<Label>("Tiempo").text = Mathf.Ceil(tiempoDeJuego).ToString();
 
     }
 
     private void OnPlayerDataChanged(int id, NetworkDictionary<int, float> data)
     {
-        // Otro jugador ha llegado antes que tú
+        if (id == GameState.GetMyPlayer().playerId) return;
+        
+        // Otro jugador ha llegado antes que tÃº
         score -= 10;
     }
 
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("¡HAS LLEGADO A LA META!");
-        GameState.Instance.PlayerChangedData += OnPlayerDataChanged;
+        Debug.Log("Â¡HAS LLEGADO A LA META!");
+        
         GameState.GetMyPlayer().SetData(0, score);
-        Ranking();
+        GoToRanking();
     }
-    private void Ranking()
+    
+    private void GoToRanking()
     {
-
+        GameState.Instance.PlayerChangedData -= OnPlayerDataChanged;
         StartCoroutine(Utils.GameUtils.GoToRankings());
     }
 }
