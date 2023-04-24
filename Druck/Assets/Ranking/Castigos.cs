@@ -59,13 +59,13 @@ public class Castigos : MonoBehaviour
 
         if (soyCastigador)
         {
-            Texto.text = "Has ganado!!\n\nSelecciona\nhasta " + maxCastigos + " miembro" + plural + " de\nla bandada\npara castigar.";
+            Texto.text = "¡Has ganado!\n\nSelecciona\nhasta " + maxCastigos + " miembro" + plural + " de\nla bandada\npara castigar.";
             fillPlayers();
             ganador.SetActive(true);
         }
         else
         {
-            Texto.text = "No has ganado!!\n\nPodrías ser\ncastigado!!\n\nTendrás que\nesperar a ver\nqué pasa.\n\nCruza las alas!!";
+            Texto.text = "¡No has ganado!\n\n¡Podrías ser\ncastigado!\n\nTendrás que\nesperar a ver\nqué pasa.\n\n¡Cruza las alas!";
             // Molaría poner una animación de un pato nervioso dando vueltas.
         }
 
@@ -82,7 +82,7 @@ public class Castigos : MonoBehaviour
         {
             if (!alreadyClicked) return;
 
-            Texto.text = "La bandada\nha recibido\nsu castigo!";
+            Texto.text = "¡La bandada\nha recibido\nsu castigo!";
             jugadoresUI.visible = false;
             castigosDados = maxCastigos;
         }
@@ -96,7 +96,7 @@ public class Castigos : MonoBehaviour
                 {
                     castigado = true;
                     Texto.text = "Has sido castigado\npor " + GameState.GetPlayer(rootMenu.winnerIdx).playerName +
-                                 "\n\nMás suerte la\npróxima vez!!";
+                                 "\n\n¡Más suerte la\npróxima vez!";
                     var r = -1;
 
                     List<Challenge> challengeList = new List<Challenge>();
@@ -117,11 +117,11 @@ public class Castigos : MonoBehaviour
                 {
                     if (castigosDados < maxCastigos)
                     {
-                        Texto.text = "No has ganado!!\n\nPodrías ser\ncastigado!!\n\nTendrás que\nesperar a ver\nqué pasa.\n\nCruza las patas!!";
+                        Texto.text = "¡No has ganado!\n\n¡Podrías ser\ncastigado!\n\nTendrás que\nesperar a ver\nqué pasa.\n\n¡Cruza las patas!";
                     }
                     else
                     {
-                        Texto.text = "Te has librado por las plumas!!\n\n";
+                        Texto.text = "¡Te has librado por las plumas!\n\n";
                     }
                 }
             }
