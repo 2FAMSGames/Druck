@@ -50,7 +50,7 @@ public class Castigos : MonoBehaviour
         boton.SetEnabled(false);
 
         soyCastigador = GameState.GetMyPlayer().playerId == rootMenu.winnerIdx;
-        boton.text = soyCastigador ? "Castigar" : rootMenu.WAITSTR;
+        boton.text = soyCastigador ? "CASTIGAR" : rootMenu.WAITSTR;
 
         jugadoresUI.visible = soyCastigador;
 

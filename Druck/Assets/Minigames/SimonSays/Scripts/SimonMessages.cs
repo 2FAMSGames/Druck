@@ -74,13 +74,13 @@ public class SimonMessages : MonoBehaviour
             if (!alreadyClicked)
             {
                 var score = (int)(gameController.successButtons * 10 - gameController.failedButtons);
-                texto = "\nCanción completada!" + 
+                texto = "\n¡Canción completada!" + 
                         "\n\nRondas acertadas: " + (4 - gameController.failedButtons) + 
                         "\nAciertos: " + gameController.successButtons + 
                         "\nFallos: " + gameController.failedButtons + 
                         "\n\nPuntuación: " + score;
                 doc.rootVisualElement.Q<Label>("Texto").text = texto;
-                Boton.text = "Terminar";
+                Boton.text = "TERMINAR";
                 alreadyClicked = true;
             }
             else
@@ -92,7 +92,7 @@ public class SimonMessages : MonoBehaviour
                 Debug.Log("fin");
            
                 Boton.SetEnabled(false);
-                Boton.text = "Esperando...";
+                Boton.text = "ESPERANDO...";
                 
                 IAmInBarrier();
             }

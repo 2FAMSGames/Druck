@@ -160,7 +160,7 @@ public class SimonGame : MonoBehaviour
             {
                 fondo.color = whitebg;
                 finished = CurrentSong.Count == 0;
-                messagesController.texto = "Enhorabuena!\n\n¡Ronda superada!";
+                messagesController.texto = "¡Enhorabuena!\n\n¡Ronda superada!";
                 menusController.ShowMessage();
             }
         }
@@ -293,7 +293,7 @@ public class SimonGame : MonoBehaviour
 
         Texto.text = "Ronda " + RoundNumber.ToString() + "\nEs tu turno...";
         yield return new WaitForSeconds(1);
-        Texto.text = "Ronda " + RoundNumber.ToString() + "\n¡Preparate!";
+        Texto.text = "Ronda " + RoundNumber.ToString() + "\n¡Prepárate!";
         yield return new WaitForSeconds(1);
         ResetPlayerTime();
         Texto.text = "Ronda " + RoundNumber.ToString() + "\nRepite en " + ((int)(nextEventTime)).ToString();
