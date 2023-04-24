@@ -83,7 +83,7 @@
     margin-right: 10%;
     margin-top: 10px;
     margin-bottom: 10px;
-    font-size: 20%;
+    font-size: 22%;
     -unity-text-align: middle-center;
     -unity-font-style: bold;
     color: rgb(255, 255, 255);
