@@ -18,8 +18,8 @@ public class RankingMenu : MonoBehaviour
     public int winnerIdx = -1;
     
     public readonly string WAITSTR = "Esperando...";
-    public readonly string STARTSTR = "Continuar!"; // quizá "Siguiente!"
-    public readonly string ENDSTR = "Terminar!"; // quizá 2 botones con "Otra ronda!"
+    public readonly string STARTSTR = "Continuar"; // quizá "Siguiente!"
+    public readonly string ENDSTR = "Terminar"; // quizá 2 botones con "Otra ronda!"
     
     private int currentBarrier = 1;
 
