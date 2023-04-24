@@ -102,7 +102,7 @@ public class Castigos : MonoBehaviour
                     List<Challenge> challengeList = new List<Challenge>();
                     challengeList.Add(new Challenge { chId = r++, chText = "\n\nBebe un chupito", chPrize = 3 });
                     challengeList.Add(new Challenge { chId = r++, chText = "\n\nEnseña tus tres últimas\n\n conversaciones de\n\n whatsapp/telegram", chPrize = 1 });
-                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nQuitaté un zapato", chPrize = 1 });
+                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nQuítate un zapato", chPrize = 1 });
                     challengeList.Add(new Challenge { chId = r++, chText = "\n\nBaila el YMCA", chPrize = 1 });
                     challengeList.Add(new Challenge { chId = r++, chText = "\n\nCuenta un chiste malo", chPrize = 1 });
                     challengeList.Add(new Challenge { chId = r++, chText = "\n\n Estate a la pata coja\n\n durante 1 minuto", chPrize = 1 });
