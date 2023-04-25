@@ -15,7 +15,7 @@ public class WaitPat : MonoBehaviour
         menusController = menusObject.GetComponent<PatonaryMenuController>();
         rpcCalls = menusObject.GetComponent<RPCCalls>();
         
-        //if everyone´s pic/guess/vote is ready then
+        //if everyoneï¿½s pic/guess/vote is ready then
         waitngEnded = false;
         WaitngScreen = PlayerPrefs.GetInt("WaitngScreen");
         
@@ -24,7 +24,7 @@ public class WaitPat : MonoBehaviour
 
     private void Update()
     {
-        if (WaitngScreen == 1 && GameState.isServer && !rpcCalls.sentTexture)
+        if (WaitngScreen == 1 && GameState.Instance.isServer && !rpcCalls.sentTexture)
         {
             rpcCalls.SendTexture();
         }
@@ -33,7 +33,7 @@ public class WaitPat : MonoBehaviour
 
         if (waitngEnded)
         {
-            waitngEnded = false;
+            //waitngEnded = false;
             WaitingEnded();
         }
     }

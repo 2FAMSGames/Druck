@@ -39,7 +39,7 @@ public class SimonMessages : MonoBehaviour
         var inBarrier = players.Where(p => p.Value.data[5] == 1).ToList();
         Debug.Log("barrier 1 has " + inBarrier.Count);
         
-        if (inBarrier.Count != GameState.CountPlayers) return;
+        if (inBarrier.Count != GameState.Instance.CountPlayers) return;
         
         StartCoroutine(Utils.GameUtils.GoToRankings());
     }

@@ -60,7 +60,7 @@ public class GanadorController : MonoBehaviour
     private void botonPulsado()
     {
         // El host asignará los tragos al perdedor.
-        if (GameState.isServer)
+        if (GameState.Instance.isServer)
         {
             int id = -1;
             foreach (var player in PlayerRegistry.Instance.ObjectByRef)

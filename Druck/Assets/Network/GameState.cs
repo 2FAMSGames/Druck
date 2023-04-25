@@ -20,10 +20,10 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 	// Local player data, not networked
 	public string myPlayerName = "Nonamed";
 
-	private static bool AllReady => PlayerRegistry.AllReady;
-	public static int CountPlayers => PlayerRegistry.CountPlayers;
-	public static bool Connected => Instance != null && Instance.Runner != null;
-	public static bool isServer => Instance != null && Instance.Runner != null && Instance.Runner.IsServer;
+	private bool AllReady => PlayerRegistry.Instance.AllReady;
+	public int CountPlayers => PlayerRegistry.Instance.CountPlayers;
+	public bool Connected => Instance != null && Instance.Runner != null;
+	public bool isServer => Instance != null && Instance.Runner != null && Instance.Runner.IsServer;
 
 	private List<string> CurrentGameList = new List<string>();
 	private int PlayedGames = 0;
@@ -210,7 +210,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 		// Por si hemos conectado algo a esta señal.
 		PlayerChangedReady?.Invoke(id, ready);
 
-		if (AllReady && GameState.CountPlayers > 1)
+		if (AllReady && GameState.Instance.CountPlayers > 1)
 		{
 			if (CurrentGameList.Count == 0)
 			{
@@ -477,7 +477,7 @@ public class GameState : MonoBehaviour, INetworkRunnerCallbacks
 			}
 		}
 
-		if (GameState.CountPlayers == 1)
+		if (GameState.Instance.CountPlayers == 1)
 		{
 			LoadScene("Start");
 		}

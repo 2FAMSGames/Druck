@@ -54,7 +54,7 @@ public class Castigos : MonoBehaviour
 
         jugadoresUI.visible = soyCastigador;
 
-        maxCastigos = Math.Min(3, GameState.CountPlayers - 1);
+        maxCastigos = Math.Min(3, GameState.Instance.CountPlayers - 1);
         string plural = maxCastigos > 1 ? "s" : "";
 
         if (soyCastigador)

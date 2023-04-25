@@ -56,7 +56,7 @@ public class RoomController : MonoBehaviour
         readyButton.SetEnabled(false);
         
         // Necesario porque el server no recibe sus propios cambios.
-        if (GameState.isServer)
+        if (GameState.Instance.isServer)
         {
             GameState.Instance.PlayerHasChangedReady(GameState.GetMyPlayer().playerId, GameState.GetMyPlayer().isReady);
         }

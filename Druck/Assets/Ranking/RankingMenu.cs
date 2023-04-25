@@ -27,15 +27,15 @@ public class RankingMenu : MonoBehaviour
 
     public void OnEnable()
     {
-        var color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
-        var max = Math.Max(color.r, Math.Max(color.g, color.b));
-        color.r += max;
-        color.g += max;
-        color.b += max;
+//        var color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+//        var max = Math.Max(color.r, Math.Max(color.g, color.b));
+//        color.r += max;
+//        color.g += max;
+//        color.b += max;
         
         currentBarrier = 1;
         gameName = PlayerRegistry.Instance.CurrentScene;
-        fondo.color = color;
+//        fondo.color = color;
         
         rankingJuego.SetActive(true);
         castigos.SetActive(false);
@@ -70,7 +70,7 @@ public class RankingMenu : MonoBehaviour
         var inBarrier = players.Where(p  => p.Value.data[currentBarrier + 4] == 1).ToList();
         Debug.Log("barrier " + currentBarrier + " has " + inBarrier.Count);
 
-        if (inBarrier.Count != GameState.CountPlayers) return;
+        if (inBarrier.Count != GameState.Instance.CountPlayers) return;
         
         switch (currentBarrier)
         {

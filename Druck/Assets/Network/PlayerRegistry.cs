@@ -17,8 +17,8 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
     
     public static event Action<string> SceneChanged;
     
-    public static int CountPlayers => Instance != null ? Instance.ObjectByRef.Count : 0;
-    public static bool AllReady => Instance != null && Instance.ObjectByRef.Count(kvp => kvp.Value && kvp.Value.isReady) == CountPlayers;
+    public int CountPlayers => Instance != null ? Instance.ObjectByRef.Count() : 0;
+    public bool AllReady => Instance != null && Instance.ObjectByRef.Count(kvp => kvp.Value && kvp.Value.isReady) == CountPlayers;
 
     public override void Spawned()
     {
@@ -42,7 +42,7 @@ public class PlayerRegistry : NetworkBehaviour, INetworkRunnerCallbacks
     
     public static void Add(NetworkRunner runner, PlayerRef pRef, PlayerBehaviour pObj)
     {
-        if (Instance.ObjectByRef.Count < 16)
+        if (Instance.ObjectByRef.Count() < 16)
         {
             Instance.ObjectByRef.Add(pRef, pObj);
             DontDestroyOnLoad(pObj.gameObject);

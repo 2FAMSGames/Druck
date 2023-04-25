@@ -51,10 +51,10 @@ public class ApuestasController : MonoBehaviour
         if (rondas < NUMRONDAS)
         {
             ++rondas;
-            if (GameState.isServer)
+            if (GameState.Instance.isServer)
             {
                 // TODO: comprobar que no sea muchas veces el mismo??
-                var pos = Random.Range(0, GameState.CountPlayers);
+                var pos = Random.Range(0, GameState.Instance.CountPlayers);
                 var id = PlayerRegistry.Instance.ObjectByRef[pos].playerId;
                 
                 GameState.GetMyPlayer().SetData(0, id);

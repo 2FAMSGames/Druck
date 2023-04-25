@@ -124,7 +124,7 @@ public class RPCCalls : NetworkBehaviour
     public void OnEnable()
     {
         ResetAvailablePlayersData();
-        Debug.Assert(availablePlayers.Count == GameState.CountPlayers);
+        Debug.Assert(availablePlayers.Count == GameState.Instance.CountPlayers);
 
         waitScript = waitScreen.GetComponent<WaitPat>();
         
@@ -147,7 +147,7 @@ public class RPCCalls : NetworkBehaviour
             Debug.Log(id + " escogió a " + other); 
             availablePlayers.Remove(id);
             var myId = GameState.GetMyPlayer().playerId;
-            if (other == myId && !GameState.isServer)
+            if (other == myId && !GameState.Instance.isServer)
             {
                 // El host envía la textura el primero sin necesitar que otro "le señale".
                 availablePlayers.Remove(myId);
@@ -182,12 +182,12 @@ public class RPCCalls : NetworkBehaviour
         var inBarrier = players.Where(p  => p.Value.data[currentBarrier + 4] == 1).ToList();
         Debug.Log("barrier " + currentBarrier + " has " + inBarrier.Count);
 
-        if (inBarrier.Count != GameState.CountPlayers) return;
+        if (inBarrier.Count != GameState.Instance.CountPlayers) return;
         
         switch (currentBarrier)
         {
             case 1:
-                if (m_from != -1 && m_to == -1 && !GameState.isServer && !sentTexture)
+                if (m_from != -1 && m_to == -1 && !GameState.Instance.isServer && !sentTexture)
                 {
                     SendTexture();
                     Debug.Log("envía textura a " + m_to);
