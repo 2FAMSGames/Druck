@@ -30,7 +30,6 @@ public class Castigos : MonoBehaviour
     private bool inBarrier = false;
     public System.Random ran = new System.Random();
 
-
     public void OnEnable()
     {
         ganador.SetActive(false);
@@ -70,6 +69,9 @@ public class Castigos : MonoBehaviour
         }
 
         GameState.Instance.PlayerChangedData += OnPlayerChangedData;
+        
+        // Forzar OnPlayerData porque si al llegar ya nos han castigado..
+        OnPlayerChangedData(GameState.GetMyPlayer().playerId, GameState.GetMyPlayer().data);
     }
 
     private void OnPlayerChangedData(int id, NetworkDictionary<int, float> data)
@@ -88,44 +90,13 @@ public class Castigos : MonoBehaviour
         }
         else
         {
-            for (int i = 0; i < maxCastigos; ++i)
+            if (GameState.GetMyPlayer().playerId == id)
             {
-                if (data[i + 10] != 0) ++castigosDados;
-
-                if (castigado || (int)(data[i + 10] - 1) == GameState.GetMyPlayer().playerId)
-                {
-                    castigado = true;
-                    Texto.text = "Has sido castigado\npor " + GameState.GetPlayer(rootMenu.winnerIdx).playerName +
-                                 "\n\n¡Más suerte la\npróxima vez!";
-                    var r = -1;
-
-                    List<Challenge> challengeList = new List<Challenge>();
-                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nBebe un chupito", chPrize = 3 });
-                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nEnseña tus tres últimas\n\n conversaciones de\n\n whatsapp/telegram", chPrize = 1 });
-                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nQuítate un zapato", chPrize = 1 });
-                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nBaila el YMCA", chPrize = 1 });
-                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nCuenta un chiste malo", chPrize = 1 });
-                    challengeList.Add(new Challenge { chId = r++, chText = "\n\n Estate a la pata coja\n\n durante 1 minuto", chPrize = 1 });
-                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nDar 10 vueltas\n\n sobre ti mismo", chPrize = 2 });
-                    challengeList.Add(new Challenge { chId = r++, chText = "\n\nBebe un trago", chPrize = 3 });
-
-                    var r1 = getRandomObject(challengeList.Where(x => x.chPrize == 1).ToList());
-                    Texto.text += r1.chText;
-                    perdedor.SetActive(true);
-                }
-                else
-                {
-                    if (castigosDados < maxCastigos)
-                    {
-                        Texto.text = "¡No has ganado!\n\n¡Podrías ser\ncastigado!\n\nTendrás que\nesperar a ver\nqué pasa.\n\n¡Cruza las patas!";
-                    }
-                    else
-                    {
-                        Texto.text = "¡Te has librado por las plumas!\n\n";
-                    }
-                }
+                var scores = GameState.Instance.SortedScores();
+                castigosDados = comprobarCastigos(GameState.GetPlayer(scores.First().Item1).data);
             }
-
+            else
+                castigosDados = comprobarCastigos(data);
 
         }
 
@@ -137,6 +108,63 @@ public class Castigos : MonoBehaviour
     {
         int index = ran.Next(list.Count);
         return list[index];
+    }
+
+    private int comprobarCastigos(NetworkDictionary<int, float> data)
+    {
+        int castigosDados = 0;
+        var Texto = root.Q<Label>("Ranking");
+        Texto.style.fontSize = 14;
+        
+        // ya castigado, no cambiar el challenge...
+        if (castigado) return maxCastigos;
+
+        for (int i = 0; i < maxCastigos; ++i)
+        {
+            if (data[i + 10] != 0) ++castigosDados;
+
+            if (castigado || (int)(data[i + 10] - 1) == GameState.GetMyPlayer().playerId)
+            {
+                castigado = true;
+                Texto.text = "Has sido castigado\npor " + GameState.GetPlayer(rootMenu.winnerIdx).playerName +
+                             "\n\n¡Más suerte la\npróxima vez!";
+                var r = -1;
+
+                List<Challenge> challengeList = new List<Challenge>();
+                challengeList.Add(new Challenge { chId = r++, chText = "\n\nBebe un chupito", chPrize = 3 });
+                challengeList.Add(new Challenge
+                {
+                    chId = r++, chText = "\n\nEnseña tus tres últimas\n\n conversaciones de\n\n whatsapp/telegram",
+                    chPrize = 1
+                });
+                challengeList.Add(new Challenge { chId = r++, chText = "\n\nQuítate un zapato", chPrize = 1 });
+                challengeList.Add(new Challenge { chId = r++, chText = "\n\nBaila el YMCA", chPrize = 1 });
+                challengeList.Add(new Challenge { chId = r++, chText = "\n\nCuenta un chiste malo", chPrize = 1 });
+                challengeList.Add(new Challenge
+                    { chId = r++, chText = "\n\nEstate a la pata coja\n\n durante 1 minuto", chPrize = 1 });
+                challengeList.Add(new Challenge
+                    { chId = r++, chText = "\n\nDar 10 vueltas\n\n sobre ti mismo", chPrize = 2 });
+                challengeList.Add(new Challenge { chId = r++, chText = "\n\nBebe un trago", chPrize = 3 });
+
+                var r1 = getRandomObject(challengeList.Where(x => x.chPrize == 1).ToList());
+                Texto.text += r1.chText;
+                perdedor.SetActive(true);
+            }
+            else
+            {
+                if (castigosDados < maxCastigos)
+                {
+                    Texto.text =
+                        "¡No has ganado!\n\n¡Podrías ser\ncastigado!\n\nTendrás que\nesperar a ver\nqué pasa.\n\n¡Cruza las patas!";
+                }
+                else
+                {
+                    Texto.text = "¡Te has librado por las plumas!\n\n";
+                }
+            }
+        }
+
+        return castigosDados;
     }
 
     private void fillPlayers()

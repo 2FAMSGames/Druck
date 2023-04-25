@@ -67,12 +67,11 @@ public class RPCCalls : NetworkBehaviour
     {
         if (sentTexture) return;
         
-        var myPlayer = GameState.GetMyPlayer();
-        var myId = myPlayer.playerId;
+        var myId = GameState.GetMyPlayer().playerId;
         if (m_to == -1)
         {
             m_to = ChooseRandomAvailablePlayer();
-            myPlayer.SetData(2, m_to + 1); // Signal that i've chosen another player.
+            GameState.GetMyPlayer().SetData(2, m_to + 1); // Signal that i've chosen another player.
             Debug.Log(myId  + " will send texture to " + m_to);
         }
         
@@ -147,7 +146,7 @@ public class RPCCalls : NetworkBehaviour
             Debug.Log(id + " escogió a " + other); 
             availablePlayers.Remove(id);
             var myId = GameState.GetMyPlayer().playerId;
-            if (other == myId && !GameState.Instance.isServer)
+            if (other == myId && !GameState.Instance.isServer && !sentTexture)
             {
                 // El host envía la textura el primero sin necesitar que otro "le señale".
                 availablePlayers.Remove(myId);
@@ -166,7 +165,6 @@ public class RPCCalls : NetworkBehaviour
         CheckBarrier();
     }
 
-
     public void IAmInBarrier(int barrierNum)
     {
         currentBarrier = barrierNum;
@@ -180,23 +178,25 @@ public class RPCCalls : NetworkBehaviour
         Debug.Log(GameState.GetMyPlayer().playerId + " checks barrier " + currentBarrier);
         var players = PlayerRegistry.Instance.ObjectByRef;
         var inBarrier = players.Where(p  => p.Value.data[currentBarrier + 4] == 1).ToList();
-        Debug.Log("barrier " + currentBarrier + " has " + inBarrier.Count);
+        Debug.Log("barrier " + currentBarrier + " has " + inBarrier.Count + "-> " + GameState.Instance.CountPlayers);
 
         if (inBarrier.Count != GameState.Instance.CountPlayers) return;
         
         switch (currentBarrier)
         {
             case 1:
+                Debug.Log("1a");
                 if (m_from != -1 && m_to == -1 && !GameState.Instance.isServer && !sentTexture)
                 {
                     SendTexture();
                     Debug.Log("envía textura a " + m_to);
                 }
 
+                Debug.Log("1b" + m_from + " y " + m_to);
                 if (m_from != -1 && m_to != -1)
                 {
+                    
                     waitScript.waitngEnded = true;
-                    currentBarrier = 2;
                 }
                 break;
             case 2:
@@ -210,7 +210,6 @@ public class RPCCalls : NetworkBehaviour
                 if (sentWord && m_word != String.Empty)
                 {
                     waitScript.waitngEnded = true;
-                    currentBarrier = 3;
                 }
                 break;
             case 3:
